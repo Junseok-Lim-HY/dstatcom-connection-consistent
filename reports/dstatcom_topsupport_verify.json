@@ -1,0 +1,153 @@
+{
+  "n_seeds": 16,
+  "budget": {
+    "population": 20,
+    "generations": 40
+  },
+  "supports": [
+    {
+      "support": [
+        "711",
+        "735",
+        "740"
+      ],
+      "n_feasible_seeds": 9,
+      "best_kvar": 1042.9,
+      "median_kvar": 1043.4,
+      "iqr_kvar": [
+        1043.4,
+        1043.8
+      ],
+      "std_kvar": 0.55,
+      "worst_min_v": 0.9568
+    },
+    {
+      "support": [
+        "735",
+        "740",
+        "741"
+      ],
+      "n_feasible_seeds": 8,
+      "best_kvar": 1043.1,
+      "median_kvar": 1043.5,
+      "iqr_kvar": [
+        1043.2,
+        1044.5
+      ],
+      "std_kvar": 1.48,
+      "worst_min_v": 0.9568
+    },
+    {
+      "support": [
+        "735",
+        "738",
+        "740"
+      ],
+      "n_feasible_seeds": 13,
+      "best_kvar": 1045.1,
+      "median_kvar": 1046.1,
+      "iqr_kvar": [
+        1045.7,
+        1046.4
+      ],
+      "std_kvar": 1.68,
+      "worst_min_v": 0.9568
+    },
+    {
+      "support": [
+        "710",
+        "740",
+        "741"
+      ],
+      "n_feasible_seeds": 13,
+      "best_kvar": 1044.9,
+      "median_kvar": 1045.9,
+      "iqr_kvar": [
+        1045.3,
+        1046.0
+      ],
+      "std_kvar": 0.65,
+      "worst_min_v": 0.9568
+    },
+    {
+      "support": [
+        "711",
+        "735",
+        "741"
+      ],
+      "n_feasible_seeds": 10,
+      "best_kvar": 1045.0,
+      "median_kvar": 1045.6,
+      "iqr_kvar": [
+        1045.2,
+        1046.2
+      ],
+      "std_kvar": 0.61,
+      "worst_min_v": 0.9568
+    },
+    {
+      "support": [
+        "710",
+        "711",
+        "741"
+      ],
+      "n_feasible_seeds": 8,
+      "best_kvar": 1047.5,
+      "median_kvar": 1048.2,
+      "iqr_kvar": [
+        1047.7,
+        1048.6
+      ],
+      "std_kvar": 0.75,
+      "worst_min_v": 0.9568
+    },
+    {
+      "support": [
+        "711",
+        "736",
+        "740"
+      ],
+      "n_feasible_seeds": 9,
+      "best_kvar": 1048.1,
+      "median_kvar": 1048.2,
+      "iqr_kvar": [
+        1048.2,
+        1048.8
+      ],
+      "std_kvar": 0.51,
+      "worst_min_v": 0.9568
+    },
+    {
+      "support": [
+        "710",
+        "711",
+        "740"
+      ],
+      "n_feasible_seeds": 11,
+      "best_kvar": 1045.3,
+      "median_kvar": 1045.7,
+      "iqr_kvar": [
+        1045.4,
+        1045.9
+      ],
+      "std_kvar": 0.94,
+      "worst_min_v": 0.9568
+    }
+  ],
+  "best_support": [
+    "711",
+    "735",
+    "740"
+  ],
+  "best_kvar": 1042.9,
+  "runner_up": [
+    "735",
+    "740",
+    "741"
+  ],
+  "runner_up_kvar": 1043.1,
+  "gap_best_to_runnerup_kvar": 0.2,
+  "max_seed_std_kvar": 1.68,
+  "separated": false,
+  "note": "top supports are numerically near-equivalent (gap < seed spread)"
+}

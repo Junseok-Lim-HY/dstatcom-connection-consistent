@@ -1,0 +1,17 @@
+field,value,note
+n_load_terminals,91,total load terminals audited
+n_wye,84,wye (line-to-ground) load terminals
+n_delta,7,delta (line-to-line) load terminals
+n_1ph,89,single-phase load terminals
+n_3ph,2,three-phase load terminals
+delta_load_buses,35 65 76,buses carrying delta loads
+connsec_worst_min_pu,0.9657,worst connection-consistent min voltage
+binding_terminal,63.1,binding terminal (connection-consistent)
+binding_connection,wye,binding terminal connection type
+binding_hour,19,hour of binding condition
+worst_wye_LN_pu,0.9657,"at 63.1, hour 19"
+worst_delta_LL_pu,0.9792,"at 65.ab, hour 19"
+bus65_LN_at_peak_pu,0.9643,bus 65 line-to-ground node voltage at peak
+bus65_LL_at_peak_pu,0.9792,bus 65 line-to-line (delta) voltage at peak
+bus83_LN_at_peak_pu,1.0408,bus 83 line-to-ground node voltage at peak
+bus83_LL_at_peak_pu,1.0371,bus 83 line-to-line voltage at peak

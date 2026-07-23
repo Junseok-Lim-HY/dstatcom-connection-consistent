@@ -1,0 +1,34 @@
+{
+  "ll_best": {
+    "support": [
+      "735",
+      "740",
+      "741"
+    ],
+    "q_kvar": [
+      400.4,
+      443.4,
+      196.6
+    ],
+    "total_kvar": 1040.4,
+    "min_v": 0.9567,
+    "max_v": 1.0418
+  },
+  "lg_best": {
+    "support": [
+      "711",
+      "737",
+      "740"
+    ],
+    "q_kvar": [
+      392.4,
+      446.9,
+      447.8
+    ],
+    "total_kvar": 1287.1,
+    "min_v": 0.9567,
+    "max_v": 1.0372
+  },
+  "relative_increase_pct": 23.7,
+  "note": "fresh-compile-verified two-stage; acceptance clears on a fresh solve"
+}

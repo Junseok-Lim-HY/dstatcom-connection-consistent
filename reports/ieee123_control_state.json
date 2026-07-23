@@ -1,0 +1,37 @@
+{
+  "regulator_taps": {
+    "reg1a": 1.0,
+    "reg2a": 1.0,
+    "reg3a": 1.0,
+    "reg4a": 1.0,
+    "reg3c": 1.0,
+    "reg4b": 1.0,
+    "reg4c": 1.0
+  },
+  "capacitors": {
+    "c83": {
+      "kvar": 600.0,
+      "states": [
+        1
+      ]
+    },
+    "c88a": {
+      "kvar": 50.0,
+      "states": [
+        1
+      ]
+    },
+    "c90b": {
+      "kvar": 50.0,
+      "states": [
+        1
+      ]
+    },
+    "c92c": {
+      "kvar": 50.0,
+      "states": [
+        1
+      ]
+    }
+  }
+}

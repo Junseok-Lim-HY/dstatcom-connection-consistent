@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: "If you use this reproducibility package, please cite the associated article."
+title: "Connection-Consistent Planning and Volt/VAR Control of D-STATCOMs in Unbalanced Delta Feeders — reproducibility package"
+abstract: >-
+  Source code, OpenDSS feeder models, input data, representative outputs, and an
+  automated consistency test that reproduce the results of the associated IEEE Access
+  article on connection-consistent D-STATCOM planning and Volt/VAR control in
+  unbalanced delta distribution feeders.
+type: software
+authors:
+  - family-names: Lim
+    given-names: Junseok
+    orcid: "https://orcid.org/0009-0004-8400-6561"
+    affiliation: "Department of Electrical Engineering, Hanyang University, Seoul, South Korea"
+  - family-names: Bae
+    given-names: Sungwoo
+    orcid: "https://orcid.org/0000-0001-5252-1455"
+    affiliation: "Department of Electrical Engineering, Hanyang University, Seoul, South Korea"
+version: "1.0"
+date-released: "2026-07-24"
+license: MIT
+url: "https://github.com/Junseok-Lim-HY/dstatcom-connection-consistent"
+repository-code: "https://github.com/Junseok-Lim-HY/dstatcom-connection-consistent"
+keywords:
+  - D-STATCOM
+  - unbalanced distribution feeder
+  - delta connection
+  - Volt/VAR control
+  - reactive-power planning
+  - OpenDSS
+preferred-citation:
+  type: article
+  title: "Connection-Consistent Planning and Volt/VAR Control of D-STATCOMs in Unbalanced Delta Feeders"
+  authors:
+    - family-names: Lim
+      given-names: Junseok
+      orcid: "https://orcid.org/0009-0004-8400-6561"
+    - family-names: Bae
+      given-names: Sungwoo
+      orcid: "https://orcid.org/0000-0001-5252-1455"
+  journal: "IEEE Access"
+  year: 2026
+  publisher:
+    name: "IEEE"

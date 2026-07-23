@@ -1,0 +1,1713 @@
+%% ============================================================================
+%%  Connection-Consistent Planning and Volt/VAR Control of D-STATCOMs in
+%%  Unbalanced Delta Feeders -- IEEE Access manuscript (ieeeaccess.cls).
+%% ============================================================================
+\documentclass{ieeeaccess}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{textcomp}
+% --- siunitx-free number/unit macros (ieeeaccess.cls clashes with siunitx) ---
+\providecommand{\percent}{\%}
+\newcommand{\num}[1]{#1}
+\newcommand{\SI}[2]{#1\,\ensuremath{\mathrm{#2}}}
+\newcommand{\numrange}[2]{#1\mbox{--}#2}
+\newcommand{\SIrange}[3]{#1\mbox{--}#2\,\ensuremath{\mathrm{#3}}}
+\makeatletter
+% \SIlist renders a semicolon-separated list of exactly three values as
+% "a, b, and c <unit>", matching siunitx list-units=single output.
+\def\kie@silistiii#1;#2;#3\@nil{#1, #2, and #3}
+\newcommand{\SIlist}[2]{\kie@silistiii#1\@nil\,\ensuremath{\mathrm{#2}}}
+\makeatother
+
+\usepackage{caption}
+\definecolor{ieeecaptionblue}{RGB}{18,52,153}
+\DeclareCaptionFont{ieeecapfont}{\fontsize{7}{8}\selectfont\sffamily\bfseries}
+\DeclareCaptionFont{ieeecaplabelcolor}{\color{ieeecaptionblue}}
+\captionsetup[figure]{font=ieeecapfont,labelfont=ieeecaplabelcolor,labelsep=period,justification=raggedright,singlelinecheck=false}
+\captionsetup[table]{font=ieeecapfont,labelfont=ieeecaplabelcolor,labelsep=period,justification=raggedright,singlelinecheck=false}
+% ieeeaccess.cls's biography environments reference a `biography' counter and a
+% \if@biographyTOCentrynotmade conditional that the class never declares (IEEEtran
+% uses different internal names). Declare both if missing so the no-photo
+% biographies compile.
+\makeatletter
+\@ifundefined{c@biography}{\newcounter{biography}}{}
+\expandafter\ifx\csname if@biographyTOCentrynotmade\endcsname\relax
+  \newif\if@biographyTOCentrynotmade\@biographyTOCentrynotmadetrue\fi
+\makeatother
+
+\graphicspath{{figs/}}
+
+% Convenience macros
+\newcommand{\pu}{\text{ pu}}
+\newcommand{\kvar}{\text{kvar}}
+\newcommand{\Qmax}{Q^{\max}}
+\newcommand{\Imax}{I^{\max}}
+\newcommand{\Iben}{I^{\mathrm{ben}}}
+\newcommand{\Vviol}{V_{\mathrm{viol}}}
+
+% Float-placement tuning: let a float settle at the top of the column near its
+% reference (usually the left column at a subsection start) instead of being
+% deferred to a later right column. LaTeX two-column mode has no key that forces
+% a single-column float into the left column specifically; these parameters bias
+% placement toward the reference column and reduce awkward right-column stranding.
+\setcounter{topnumber}{3}
+\setcounter{totalnumber}{5}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\textfraction}{0.06}
+\renewcommand{\floatpagefraction}{0.75}
+
+\begin{document}
+
+\history{}
+\doi{}
+
+\title{Connection-Consistent Planning and Volt/VAR Control of D-STATCOMs in
+Unbalanced Delta Feeders}
+
+\author{\uppercase{Junseok Lim}\authorrefmark{1}, and
+\uppercase{Sungwoo Bae}\authorrefmark{1}, \IEEEmembership{Member, IEEE}}
+\address[1]{Department of Electrical Engineering, Hanyang University, Seoul 04763, South Korea (e-mail: swbae@hanyang.ac.kr)}
+\tfootnote{This work was supported by the Korea Institute of Energy Technology Evaluation and Planning (KETEP) and the Ministry of Climate, Energy \& Environment (MCEE) of the Republic of Korea (RS-2023-00234563, Development of power system modeling \& analysis and interoperability evaluation technology applied with grid forming based on distributed energy, and RS-2024-00422103, EV Smart Charging Platform Innovation Research Center). ORCID iDs: Junseok Lim, 0009-0004-8400-6561; Sungwoo Bae, 0000-0001-5252-1455.}
+
+\markboth{Lim and Bae: Connection-Consistent Planning and Volt/VAR Control of D-STATCOMs}
+{Lim and Bae: Connection-Consistent Planning and Volt/VAR Control of D-STATCOMs}
+
+\corresp{Corresponding author: Sungwoo Bae (e-mail: swbae@hanyang.ac.kr).}
+
+% ======================= ABSTRACT =======================
+\begin{abstract}
+On an unbalanced three-wire delta feeder, evaluating voltage on the line-to-ground
+node magnitudes returned by the power-flow solver---rather than the line-to-line
+voltages actually applied across the phase-to-phase load and device terminals---can
+distort where a distribution static synchronous compensator (D-STATCOM) is placed
+and how large it must be. This paper applies one connection-consistent voltage
+evaluator---line-to-line at delta terminals and line-to-neutral at grounded-wye
+terminals---uniformly across candidate screening, support selection and sizing, and
+hourly dispatch. On the delta IEEE 37-node feeder the procedure returns a
+verified-feasible three-device design of \SI{1041.3}{\kvar} at buses 735, 740, and
+741 that raises the peak minimum terminal voltage from \num{0.8986} to
+\SI{0.9565}{pu}. Under a matched enumeration-and-sizing protocol, evaluating the
+same feeder on line-to-ground rather than line-to-line magnitudes increases the
+returned installed capacity by \SI{23.6}{\%}, so the connection-domain choice
+changes the design rather than only the reported numbers. A single-evaluator
+24-hour comparison of fixed output, an equal-nominal-kvar capacitor, a
+communication-free local Volt/VAR proxy, and coordinated loss-minimizing references
+shows that controllable reactive dispatch reduces daily loss by
+\SIrange{2.2}{5.1}{\%} relative to fixed output; the scope is steady-state,
+one-quadrant reactive support, and transferability is checked on the mixed IEEE
+123-node feeder.
+\end{abstract}
+
+\begin{IEEEkeywords}
+D-STATCOM, unbalanced distribution feeder, delta connection, Volt/VAR control,
+reactive-power planning, OpenDSS.
+\end{IEEEkeywords}
+
+\titlepgskip=-15pt
+\maketitle
+
+% ======================= NOMENCLATURE =======================
+\section*{Nomenclature}
+\addcontentsline{toc}{section}{Nomenclature}
+\begin{IEEEdescription}[\IEEEsetlabelwidth{$P^0_{L,k},Q^0_{L,k}$~}]
+\item[$i$] Index of candidate D-STATCOM buses.
+\item[$m$] Index of monitored connection voltages (line-to-line for
+delta buses, line-to-neutral for wye buses).
+\item[$b$] Index of candidate buses in the screening stage.
+\item[$t$] Hour index of the daily profile ($t=0,\dots,23$).
+\item[$z_i$] Support-selection indicator, $z_i\in\{0,1\}$.
+\item[$\mathcal C$] Prescreened ten-bus candidate pool.
+\item[$\mathcal S$] A device support (a chosen subset of $\mathcal C$).
+\item[$n_{\min},Q^\ast$] Lexicographic planning target (min count, min capacity).
+\item[$\hat n,\hat{\mathbf Q}$] Smallest feasible count found and its lowest-capacity verified-feasible rating vector.
+\item[$\mathcal M$] Set of monitored connection voltages.
+\item[$\underline I_{i,\phi}$] Per-phase converter conductor current.
+\item[$Q_i(t)$] Dispatched reactive output of the D-STATCOM at bus $i$ (kvar).
+\item[$\Qmax_i$] Installed reactive rating (sizing variable) at bus $i$ (kvar).
+\item[$\bar Q_i$] Per-bus reactive-capacity bound (kvar).
+\item[$\underline V_{i,\phi}$] Complex phase-to-ground voltage phasor at bus $i$.
+\item[$v_m$] Connection-appropriate per-unit voltage magnitude $m$.
+\item[$V_{LL,i},V_{LN,i}$] Line-to-line / line-to-neutral base voltage at bus $i$ (kV).
+\item[$\underline V_{i,n}$] Neutral-potential phasor at grounded-wye bus $i$.
+\item[$\mathcal M_\Delta,\mathcal M_Y$] Delta and grounded-wye subsets of $\mathcal M$.
+\item[$\Iben_i$] Per-device derived current benchmark at bus $i$ (from installed kvar at \SI{0.95}{pu}); a reporting reference, not a hardware limit (A).
+\item[$\mathcal M_i$] Set of line-to-line terminal voltages at device bus $i$.
+\item[$\Delta t$] Dispatch time step ($=\SI{1}{h}$).
+\item[$\rho$] Penalty weight of the coordinated loss-minimizing reference.
+\item[$\mathcal Q_{\mathrm{eval}}(S)$] Continuous rating vectors evaluated for support $S$ in the $\hat v_{\mathrm{best}}$ search.
+\item[$\hat v_{\mathrm{best}}$] Largest worst-terminal minimum voltage found under the stated search.
+\item[$\lambda_s,\varepsilon_s$] Near-peak stress multiplier and its Gaussian error ($\varepsilon_s\sim\mathcal N(0,0.05^2)$).
+\item[$V_1,V_2$] Positive- and negative-sequence voltage magnitudes (sequence VUF).
+\item[$U_{ab},U_{\mathrm{avg}}$] Line-to-line voltage magnitude and its three-phase average (NEMA LVUR).
+\item[$I_\ell,\Imax_\ell$] Line current and normal ampacity of line $\ell$.
+\item[$\lambda(t)$] Hourly load multiplier.
+\item[$P^0_{L,k},Q^0_{L,k}$] Nominal active/reactive load at node $k$.
+\item[$P_{\mathrm{loss}}$] Total feeder active-power loss (kW).
+\item[$\Vviol$] Aggregate connection-voltage violation (pu).
+\item[$m_v$] Planning voltage margin (pu).
+\item[$\varepsilon_{\mathrm{num}}$] Numerical acceptance tolerance (pu).
+\item[$E_v$] Aggregate 24-hour connection-voltage band exceedance (pu$\cdot$h).
+\item[$E_{\mathrm{loss}}$] Total 24-hour energy loss (kWh).
+\item[$V_i^\downarrow,V_i^\uparrow$] Lower/upper knee voltages of the local Volt/VAR proxy (pu).
+\item[$\beta$] Numerical damping factor of the proxy fixed-point iteration.
+\item[$\varepsilon_Q$] Convergence tolerance of the proxy iteration (kvar).
+\item[$B_{\phi\psi},B_\Delta$] Per-branch and total susceptance of an equivalent delta shunt capacitor.
+\item[$S_{i,\phi\psi}$] Complex power injected between phases $\phi,\psi$ at bus $i$.
+\item[$\Lambda$] Screening load-multiplier set\\ $\{0.80,1.00,1.17,1.34\}$.
+\item[$\Lambda_{\mathrm{plan}}$] Canonical planning snapshot\\ $\{1.34\}$ (Eq.~\eqref{eq:milp}).
+\item[$R_b$] Worst-case screening voltage of bus $b$.
+\end{IEEEdescription}
+
+% ======================= INTRODUCTION =======================
+\section{Introduction}
+\label{sec:intro}
+\IEEEPARstart{M}{aintaining} feeder voltages within an acceptable band is a binding
+operational constraint under high penetration of renewable generation and
+electrified demand, particularly on unbalanced feeders where phase asymmetry
+produces uneven voltage stress \cite{keane2013dgplanning,kashem2004dgvoltage}. On a
+three-wire delta feeder the loads and compensators are connected phase-to-phase, so
+the voltage they actually experience is the \emph{line-to-line} magnitude, not the
+line-to-ground node magnitude that a power-flow solver reports by default. When a
+placement or sizing decision is made against the line-to-ground quantity, it can
+misstate both the severity of the undervoltage and the reactive capacity needed to
+correct it. Reactive-power support---fixed capacitors, on-load tap changers, and
+distribution static synchronous compensators \cite{hingorani2000facts,singh2009statcom}---can
+mitigate the voltage deterioration, but its effectiveness depends strongly on
+placement, rating, and time-varying control. Throughout, this study adopts
+$\numrange{0.95}{1.05}~\pu$ as an internal voltage-planning band applied to
+connection-appropriate terminal voltages; it is not asserted to reproduce the
+ANSI~C84.1 service-voltage categories or the IEEE~1547 point-of-common-coupling
+requirements \cite{ansi_c84,ieee1547_2018}.
+
+The device studied here is a distribution static synchronous compensator
+(D-STATCOM): a voltage-source-converter reactive-support device with no
+active-power exchange or energy storage in this planning model. Unlike a fixed
+capacitor bank---whose injected reactive power varies with the square of the bus
+voltage---the converter regulates its reactive output by control
+\cite{singh2009statcom}. Consequently, \emph{installed capacity} and
+\emph{dispatched output} are related but distinct decisions, and on an unbalanced
+delta feeder both must be judged against the voltage the loads actually
+experience---the line-to-line voltage---rather than against line-to-ground node
+magnitudes, which are not the voltages applied across the delta-connected loads.
+Line-to-ground quantities remain relevant to insulation and ground-fault studies,
+which are outside the present voltage-compliance scope. This coupling
+between the connection-appropriate voltage metric, siting, sizing, and hourly
+control is the central engineering problem addressed in this paper.
+
+Existing distribution reactive-support studies frequently treat candidate
+screening, converter sizing, and time-varying control in isolation; they often
+decide placement from a single voltage-stability index, model the converter
+interchangeably with a capacitor, and---on delta feeders---evaluate voltages on
+line-to-ground node magnitudes. This motivates the research question addressed
+here: \emph{does a connection-inappropriate voltage metric materially change the
+selected support location, the installed capacity, and the operating outcome, or is
+it only a reporting inconsistency?} Section~\ref{sec:related} details these gaps
+against recent work; the present paper answers the question within one documented
+workflow on named IEEE benchmark feeders.
+
+\subsection{Contributions}
+The main contributions are as follows.
+\begin{enumerate}
+\item \textbf{A terminal-connection-consistent planning formulation} that applies
+line-to-line voltages to phase-to-phase terminals and line-to-neutral voltages to
+grounded-wye terminals throughout screening, siting, sizing, and dispatch. A
+matched-metric ablation shows that line-to-ground evaluation increases the returned
+installed capacity by \SI{23.6}{\%} on the IEEE 37-node feeder, changing the
+engineering decision rather than only the reported numbers.
+\item \textbf{An enumeration-based support-selection and two-stage sizing procedure}
+that evaluates all \num{120} three-device combinations in a prescreened candidate
+pool using a common full-recompilation feeder model, producing a verified-feasible
+\SI{1041.3}{\kvar} design (buses 735, 740, 741) that raises the peak minimum
+terminal voltage from \num{0.8986} to \SI{0.9565}{pu}.
+\item \textbf{A unified 24-hour operating comparison} of fixed converter output, an
+equal-nominal-kvar capacitor, a communication-free local Volt/VAR proxy, and
+coordinated loss-minimizing references, quantifying \SIrange{2.2}{5.1}{\%} loss
+reductions from controllable reactive-power dispatch.
+\end{enumerate}
+
+Fig.~\ref{fig:overview} summarizes the overall workflow.
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{fig1_overall.pdf}
+\caption{Workflow of the connection-consistent D-STATCOM framework:
+constant-$Q$ system model with a line-to-line voltage metric, worst-case voltage
+screening, support selection by full enumeration of the 120 three-device supports
+with two-stage capacity sizing, and hourly dispatch evaluation against the
+\numrange{0.95}{1.05}~pu band. The \SI{1041.3}{\kvar} vector is the lowest-capacity
+verified-feasible support found under the stated enumeration budget and is carried
+into the operational comparison.}
+\label{fig:overview}
+\end{figure*}
+
+The remainder of the paper is organized as follows.
+Section~\ref{sec:related} reviews related work and states the research gap.
+Section~\ref{sec:model} formulates the system model and the placement, sizing,
+and dispatch framework. Section~\ref{sec:results} reports and discusses the
+simulation results, Section~\ref{sec:ieee123} tests transferability to the IEEE
+123-node feeder, and Section~\ref{sec:conclusion} concludes.
+
+% ======================= RELATED WORK =======================
+\section{Related Work and Research Gap}
+\label{sec:related}
+
+\subsection{Reactive-Power Support in Distribution Systems}
+Voltage-support planning in distribution systems has traditionally relied on
+capacitor placement, on-load tap changers, and distribution STATCOMs
+(D-STATCOMs) \cite{hingorani2000facts,edris1997facts,singh2009statcom}.
+Capacitor banks are inexpensive, but their discrete, voltage-dependent operation
+can be insufficient under rapidly changing load and generation
+\cite{ng2000capacitor}. STATCOM-type converters instead provide fast,
+voltage-independent reactive control, which is attractive for feeders with
+pronounced unbalance \cite{singh2009statcom}. Reviews of D-STATCOM allocation
+\cite{sirjani2017dstatcom} and comparative placement studies
+\cite{taher2014dstatcom,devi2014dstatcom} confirm that the benefit of a
+converter is strongly coupled to its location and rating, motivating a joint
+placement-and-sizing treatment.
+
+\subsection{Placement Criteria: Indices versus Load-Flow Evidence}
+Many placement studies rank weak buses using voltage-stability indices
+\cite{chakravorty2001vsi}, typically built on an efficient radial load-flow
+\cite{haque1996loadflow}. Such indices compress
+voltage-security information into a scalar and are convenient, but they require
+careful derivation and their ranking can be sensitive to the assumed operating
+point. The present work instead uses voltage screening computed directly from
+unbalanced load-flow results across a range of load multipliers, treating
+index-based reasoning as background rather than as the sole placement criterion,
+which makes the siting justification explicit and yields a transparent,
+reproducible candidate set.
+
+\subsection{Metaheuristics for Distribution Planning}
+Metaheuristic optimizers are widely used for distribution planning because the
+objective is non-convex, derivative information is rarely available, and
+constraints are evaluated through external simulators
+\cite{keane2013dgplanning,georgilakis2013dgplacement,kennedy1995pso}. Recent
+(2023--2026) allocation studies have moved toward newer and hybrid metaheuristics
+and richer formulations: multi-metaheuristic STATCOM location/sizing/technology
+selection \cite{statcom2025cmes}, coordinated PV and D-STATCOM compensation under
+fixed versus variable reactive-power modes \cite{pvdstatcom2025fixedvar},
+multi-objective Pareto integration of distributed generation and compensation
+\cite{pareto2024dgcomp}, and uncertainty-aware D-STATCOM sizing
+\cite{estatcom2024egwo}. A metaheuristic ranking alone does not bound the distance
+to the global optimum \cite{wolpert1997nfl}; the present paper therefore selects the
+final design by enumerating and sizing all candidate three-device supports rather
+than by a single solver's global search. An auxiliary five-optimizer
+sensitivity check on the continuous-sizing score is reported only in the
+supplementary material and neither selects nor validates the design.
+
+\subsection{Energy-Storage-Backed Converters}
+Energy-storage-backed converters and coordinated battery/PV reactive control
+have been studied for voltage regulation under high DER penetration
+\cite{zeraati2018bess,kabir2014pvbess,molina2011statcom_ess}. These works
+highlight the value of controllable, storage-capable converters but generally
+emphasize the active-power or dynamic-control layer. The present study does not
+model an energy-storage-backed converter; it isolates the steady-state
+\emph{reactive}-support layer of a D-STATCOM operating in constant-$Q$ mode and
+quantifies how much of the voltage-security benefit is attributable to
+controllability alone. Active-power exchange and state-of-charge dynamics would
+require a separate storage-enabled extension, left to future work.
+
+On the operating side, adaptive reactive dispatch in distribution networks has
+recently been pursued through receding-horizon model predictive control
+\cite{rahman2024mpc,dar2024ccmpc}, multi-agent and safe deep reinforcement
+learning \cite{hua2025safedrl,zheng2025marl}, and measurement-driven online
+feedback optimization \cite{zhan2024ofo}. A recurring lesson from this
+literature is that a time-varying dispatch should be judged against a
+communication-free local baseline, because an offline schedule computed with
+perfect load foresight is an upper bound rather than a deployable controller. This
+paper adopts that discipline directly: in addition to the coordinated reference
+and the fixed-output and capacitor baselines, Section~\ref{sec:droop} evaluates a
+causal local Volt/VAR proxy (a steady-state law, without converter dynamics) so
+that the reported benefit is not an artefact of perfect foresight.
+
+\subsection{Research Gap}
+Building on established distribution-network and power-system modeling
+\cite{baran1989reconfig,sallam2011distribution,kundur1994stability}, three gaps
+motivate this work: (i) when raw node-voltage outputs are used without
+connection-aware post-processing, a three-wire delta feeder can be assessed using
+line-to-ground magnitudes that are not the voltages applied across its phase-to-phase
+loads; (ii) placement, sizing, and
+hourly dispatch are seldom bound into one documented pipeline on an explicitly
+named benchmark feeder; and (iii) the converter is often modeled interchangeably
+with a capacitor, obscuring the role of controllability. The framework below
+addresses these issues through connection-consistent voltage evaluation, support
+selection by full enumeration with numerically constrained continuous sizing in a
+prescreened pool, a device-versus-capacitor comparison, and post-design current and
+thermal checks.
+Table~\ref{tab:related} positions the present work against representative recent
+studies on the two axes that matter here: whether the feeder is modeled as
+explicitly unbalanced, and which voltage quantity the planning or control decision
+is evaluated on. To avoid overclaiming, the voltage-quantity column reports
+``line-to-ground'', ``line-to-line'', or ``not explicitly reported'' according to
+what each source documents; it is \emph{not} asserted that a study using
+line-to-ground magnitudes is in error, only that its connection-domain treatment is
+not stated. The individual ingredients used here---a connection-aware metric,
+support enumeration, metaheuristic sizing, and a local Volt/VAR law---are each
+known; the contribution is their end-to-end integration on a named unbalanced delta
+feeder and, above all, the quantitative evidence that the connection-domain choice
+is not cosmetic: in the matched full-enumeration ablation, evaluating this delta
+feeder on line-to-ground rather than line-to-line magnitudes raises the returned
+installed capacity by \SI{23.6}{\percent} (Section~\ref{sec:certify}). The
+line-to-line quantity is itself standard; what is new is enforcing it consistently
+from screening through dispatch and quantifying the planning consequence of not
+doing so. The source code, the OpenDSS feeder models, the input data, representative
+outputs, and an automated consistency test are publicly available through the
+accompanying GitHub repository (see Data Availability).
+
+\begin{table*}[!t]
+\caption{Positioning Against Representative Recent Reactive-Power Support Studies
+(2024--2026)}
+\label{tab:related}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{5pt}
+\begin{tabularx}{\textwidth}{@{}c L c L c c@{}}
+\toprule
+\textbf{Ref.} & \textbf{Feeder / connection} & \textbf{Unbalanced} &
+\textbf{Voltage quantity} & \textbf{Joint siting/sizing} &
+\textbf{Time-varying dispatch} \\
+\midrule
+\cite{statcom2025cmes}        & Balanced radial test systems      & No  & Bus magnitude (not explicitly reported) & Yes & No \\
+\cite{pvdstatcom2025fixedvar} & Balanced radial distribution      & No  & Bus magnitude (not explicitly reported) & Yes & Yes \\
+\cite{pareto2024dgcomp}       & Balanced radial distribution      & No  & Bus magnitude (not explicitly reported) & Yes & Yes \\
+\cite{estatcom2024egwo}       & Radial distribution, load unc.\   & No  & Bus magnitude (not explicitly reported) & Yes & No \\
+\cite{dar2024ccmpc}           & Active distribution network       & Not explicitly reported & Bus magnitude (not explicitly reported) & No (operation) & Yes \\
+\cite{zhan2024ofo}            & Distribution feeder               & Not explicitly reported & Bus magnitude (not explicitly reported) & No (operation) & Yes \\
+\cite{hua2025safedrl}         & Distribution network              & Not explicitly reported & Bus magnitude (not explicitly reported) & No (operation) & Yes \\
+\cite{zheng2025marl}          & Active distribution network       & Not explicitly reported & Bus magnitude (not explicitly reported) & No (operation) & Yes \\
+\multirow{2}{*}{\textbf{This work}} & IEEE 37 (delta)  & Yes & Terminal-consistent L-L       & Yes & Yes \\
+                                   & IEEE 123 (mixed) & Yes & Terminal-consistent L-L / L-N & No\textsuperscript{$\dagger$} & No\textsuperscript{$\dagger$} \\
+\bottomrule
+\multicolumn{6}{@{}p{\textwidth}}{\footnotesize ``Not explicitly reported'' marks
+attributes not stated in the cited source; entries are compiled from each paper's
+documented feeder model and objective and do not assert an unreported connection
+domain. ``Bus magnitude'' denotes a per-unit nodal voltage evaluated without an
+explicit line-to-line/line-to-neutral connection distinction.
+\textsuperscript{$\dagger$}On the IEEE 123-node feeder this work performs only a
+connection-domain audit and a no-action transferability check under the feeder's
+native controls; joint siting/sizing and D-STATCOM dispatch are carried out on the
+IEEE 37-node feeder alone.} \\
+\end{tabularx}
+\end{table*}
+
+% ======================= SYSTEM MODEL =======================
+\section{System Model, Problem Formulation, and Solution Framework}
+\label{sec:model}
+The IEEE 37-node feeder \cite{ieee37feeder} is a three-wire, delta-connected,
+unbalanced \SI{4.8}{kV} distribution circuit with an open-delta head-of-feeder
+voltage regulator. It is solved in OpenDSS
+\cite{opendss,opendss_platform} through its Python scripting interface,
+using the IEEE 37-node OpenDSS example-circuit files \cite{ieee37dss}. At each
+operating point the circuit is compiled, the load multiplier is applied, the
+candidate reactive sources are set, and a power-flow solution is obtained (with
+the native regulator control active); the connection-appropriate per-unit
+voltages defined next then form the objective terms.
+
+\subsection{Connection-Consistent Voltage Metric}
+\label{sec:connaware}
+Every load, the source, and the compensator on the IEEE 37-node feeder are
+connected phase-to-phase (delta); there is no neutral and no line-to-ground load.
+The physically experienced voltage is therefore the \emph{line-to-line} magnitude,
+and the raw line-to-ground node magnitudes returned by the solver are not the
+voltages applied across the delta-connected loads, so they are not the appropriate
+index for the voltage-compliance objective considered here (they remain relevant to
+insulation and ground-fault studies, which are out of scope). Accordingly, each
+monitored terminal $m$ at bus $i$ is evaluated on the voltage its own connection
+actually applies: a line-to-line difference at delta terminals and a
+line-to-neutral difference at grounded-wye terminals,
+\begin{equation}
+v_m =
+\begin{cases}
+\bigl|\underline V_{i,\phi}-\underline V_{i,\psi}\bigr|/V_{LL,i}, & m\in\mathcal M_\Delta,\\[2pt]
+\bigl|\underline V_{i,\phi}-\underline V_{i,n}\bigr|/V_{LN,i}, & m\in\mathcal M_Y
+\end{cases}
+\label{eq:connaware}
+\end{equation}
+with $\phi\psi\in\{ab,bc,ca\}$ for a delta terminal, $\underline V_{i,n}$ the
+neutral-potential phasor and $V_{LN,i}$ the line-to-neutral base for a grounded-wye
+terminal, and $V_{LL,i}$ the line-to-line base. The monitored set is
+$\mathcal M=\mathcal M_\Delta\cup\mathcal M_Y$, taken over \emph{all energized load and
+device terminals}; the all-delta IEEE 37-node feeder uses only the first case, and
+the same terminal-based rule supplies the line-to-neutral case for the mixed IEEE
+123-node feeder (Section~\ref{sec:ieee123}). The source bus and the head-of-feeder regulator-input
+bus are excluded, since no downstream shunt can raise the regulator-input voltage.
+The same inclusion rule is applied in every screening, sizing, and dispatch
+calculation on both feeders. On the all-delta IEEE 37-node feeder the load and
+device terminals are a subset of the energized downstream buses; a scope ablation
+shows that the choice between the two sets leaves the binding worst minimum
+\emph{unchanged} (\SI{0.9565}{pu} at the peak, since the binding terminal is a load
+bus), and changes only the light-load maximum slightly (\SI{1.032}{pu} over the
+load/device terminals versus \SI{1.042}{pu} over all downstream buses), both well
+inside the band. The load/device-terminal set is used throughout.
+Line-to-ground node magnitudes are not the terminal voltages experienced by the
+phase-to-phase loads; using \eqref{eq:connaware}
+instead replaces a connection-inappropriate line-to-ground worst value of
+\SI{0.88}{pu} with a line-to-line terminal minimum of \SI{0.90}{pu} (two different
+voltage definitions, not the same quantity before and after correction), applied
+consistently to screening, sizing, dispatch, and unbalance.
+
+\subsection{D-STATCOM Model}
+The compensator is a distribution static synchronous compensator (D-STATCOM): a
+converter-interfaced controllable reactive source with no active-power exchange,
+energy storage, or DC-link dynamics in this planning model. The D-STATCOM at bus
+$i$ is modeled as a delta-connected constant reactive-power (Model-1) injection
+with zero active power---a reactive source whose output is independent of the
+local voltage within the normal operating window. In OpenDSS this is realized as a
+three-phase, delta-connected generator with zero active power and a widened
+constant-power voltage window of $[0.7,1.3]~\pu$
+(Table~\ref{tab:settings}). This window contains every terminal voltage encountered in
+screening, sizing, and dispatch---the lowest being the base-case \SI{0.8986}{pu}
+line-to-line minimum---so the model does not revert to a constant-impedance
+representation in any reported case. The
+installed capacity $\Qmax_i$ is the converter rating reserved at bus $i$, and the
+dispatched output $Q_i(t)$ is bounded by
+\begin{equation}
+0 \le Q_i(t) \le \Qmax_i
+\label{eq:qbound}
+\end{equation}
+Because active power is set to zero in this planning model, $\Qmax_i$ is
+interpreted as the available reactive-power rating rather than as a full
+four-quadrant converter capability. Equation~\eqref{eq:qbound} restricts the
+device to \emph{one-quadrant} (capacitive) reactive support; a four-quadrant
+device that could also absorb reactive power ($-\Qmax_i\le Q_i\le\Qmax_i$)
+subject to an apparent-power limit is left to future work. Because $\mathrm{kW}=0$,
+holding a constant reactive output draws more current as the terminal voltage
+falls, so a kvar bound alone does not bound the current. For a balanced
+delta-connected reactive source the total output splits equally over the three
+branches, $\underline S_{i,\phi\psi}(t)=jQ_i(t)/3$, and the per-phase conductor
+currents follow from the branch currents,
+\begin{equation}
+\underline I_{i,\phi\psi}=\bigl(\underline S_{i,\phi\psi}/\underline V_{i,\phi\psi}\bigr)^{\!*},
+\qquad
+\underline I_{i,\phi} = \underline I_{i,\phi\psi}-\underline I_{i,\chi\phi}
+\label{eq:iconv}
+\end{equation}
+where $\chi\phi$ denotes the branch preceding $\phi\psi$ in the cyclic order
+$(a,b,c)$, so that the phase-conductor currents are
+$\underline I_{i,a}=\underline I_{i,ab}-\underline I_{i,ca}$,
+$\underline I_{i,b}=\underline I_{i,bc}-\underline I_{i,ab}$, and
+$\underline I_{i,c}=\underline I_{i,ca}-\underline I_{i,bc}$. These
+are read directly from the solved circuit; the balanced scalar
+$|I_i|=|Q_i|/(\sqrt3\,|V_{LL,i}|)$ is a secondary check. For each device we define a
+\emph{derived current benchmark} from its own installed output,
+$\Iben_i=\Qmax_i/(\sqrt3\,V_{\!\downarrow}V_{LL,i})$ at the lower band edge
+$V_{\!\downarrow}=\SI{0.95}{pu}$. Because the balanced current scales as
+$|Q_i|/(\sqrt3\,V_{LL,i})$, a device sized in kvar satisfies
+$\max_\phi|\underline I_{i,\phi}(t)|\le\Iben_i$ almost automatically at any voltage
+above \SI{0.95}{pu}; the check is therefore a near-trivial post-design sanity
+statement, \emph{not} a binding constraint and not a contribution. Consequently the
+per-device currents reported in this paper are \emph{operating currents} only: no
+independent hardware current or apparent-power limit is imposed in the present
+planning model, and the derived benchmark is \emph{not} a nameplate-rating
+verification. A genuine hardware limit would instead impose a catalog
+apparent-power/current rating,
+$P_i(t)^2+Q_i(t)^2\le (S_i^{\mathrm{rated}})^2$ and
+$\max_\phi|\underline I_{i,\phi}(t)|\le I_i^{\mathrm{rated}}$, as an independent
+\emph{input} to the sizing problem. A device whose nameplate must guarantee its
+reactive rating down to the \SI{0.95}{pu} band edge would carry a nominal
+apparent-power rating $S_i^{\mathrm{rated}}\ge\Qmax_i/0.95$ (for the \SI{398.5}{kvar}
+bus-741 device, about \SI{419.5}{kVA}, i.e.\ \SI{50.5}{A} at the nominal
+\SI{4.8}{kV}); re-sizing on such catalog ratings is the hardware-constrained
+extension noted as future work. Here $P_i\equiv0$, so the reactive bound already
+imposed is the only device constraint enforced.
+
+This constant-$Q$ representation is the defining difference from a shunt
+capacitor bank. A delta-connected capacitor injects, on each branch $\phi\psi$,
+$Q_{\mathrm{cap},\phi\psi}(t)=B_{\phi\psi}\,|V_{\phi\psi}(t)|^2$, so its total
+reactive power
+\begin{equation}
+Q_{\mathrm{cap},3\phi}(t) = \!\!\sum_{\phi\psi\in\{ab,bc,ca\}}\!\! B_{\phi\psi}\,|V_{\phi\psi}(t)|^2 > 0
+\label{eq:cap}
+\end{equation}
+(with $B_{\phi\psi}=B_\Delta/3$ for a balanced bank) scales with the square of the
+line-to-line voltage: it \emph{over}-injects at light load and, crucially,
+\emph{under}-injects at the low-voltage peak; its OpenDSS kvar rating is the
+three-phase total at rated voltage. The unbalanced
+feeder is solved as a steady-state three-phase power-flow problem; for each phase
+node $k$ the injected complex power relates to the nodal voltage phasor and
+current through
+\begin{equation}
+\underline S_k(t) = P_k(t) + jQ_k(t) = \underline V_k(t)\,\underline I_k^{*}(t)
+\label{eq:powerflow}
+\end{equation}
+where $\underline V_k$ is the complex nodal voltage; the voltage-limit and
+screening terms below use the connection-appropriate magnitudes $v_m$ of
+\eqref{eq:connaware} formed from these phasors. The hourly load multiplier
+$\lambda(t)$ scales the nominal active and reactive loads as
+\begin{equation}
+P_{L,k}(t) = \lambda(t)\,P^0_{L,k}, \qquad
+Q_{L,k}(t) = \lambda(t)\,Q^0_{L,k}
+\label{eq:loadscale}
+\end{equation}
+
+\subsection{Objective and Placement-and-Sizing Formulation}
+The voltage-limit violation aggregates the per-unit amount by which the monitored
+connection voltages $v_m$ of \eqref{eq:connaware} fall below \SI{0.95}{pu} or
+exceed \SI{1.05}{pu}:
+\begin{equation}
+\Vviol = \sum_{m}\bigl[\max(0,\,v_m-1.05) + \max(0,\,0.95-v_m)\bigr]
+\label{eq:viol}
+\end{equation}
+The \numrange{0.95}{1.05}~pu band is applied to every monitored connection voltage
+as a conservative internal planning criterion; it is distinct from service-voltage
+requirements (ANSI~C84.1) and from the IEEE~1547 requirements defined at the DER
+point of common coupling. The planning
+\emph{target} is stated in two stages---first the smallest feasible device
+count, then the least capacity at that count,
+\begin{subequations}
+\label{eq:milp}
+\begin{align}
+\text{S1:}\ & n_{\min} = \min_{\mathbf z,\mathbf Q^{\max}}\ \textstyle\sum_{i\in\mathcal C} z_i, \\
+\text{S2:}\ & Q^\ast = \min_{\mathbf z,\mathbf Q^{\max}}\ \textstyle\sum_{i\in\mathcal C} \Qmax_i,\ \ \textstyle\sum_{i\in\mathcal C} z_i = n_{\min}, \\
+\text{s.t.}\ & 0.95 + m_v \le v_m(\lambda) \le 1.05 - m_v, \
+     \forall m\in\mathcal M,\ \lambda\in\Lambda_{\mathrm{plan}}, \\
+   & 0 \le \Qmax_i \le z_i\,\bar Q_i, \quad z_i\in\{0,1\},\ \ i\in\mathcal C
+\end{align}
+\end{subequations}
+with the candidate pool $\mathcal C$ (the prescreened ten-bus set of
+Section~\ref{sec:screening}), peak-planning set $\Lambda_{\mathrm{plan}}=\{1.34\}$,
+planning margin $m_v=\SI{0.006}{pu}$ (band edges \num{0.956}/\num{1.044}), and
+per-bus bound $\bar Q_i=\SI{450}{\kvar}$. Equation~\eqref{eq:milp} defines the
+lexicographic planning \emph{target} $(n_{\min},Q^\ast)$. The numerical procedure
+returned a feasible three-device witness and found no feasible support with
+$|\mathcal S|\le 2$ under the stated search protocol; we therefore report
+$\hat n=3$ as the smallest feasible count found. Feasibility is checked at a
+numerical tolerance $\varepsilon_{\mathrm{num}}=\ensuremath{2\times10^{-4}}~pu$ (comfortably above
+the observed power-flow repeatability of $<10^{-6}$~pu), i.e.\ a design is accepted
+only if $v_m\ge 0.956+\varepsilon_{\mathrm{num}}$ and
+$v_m\le 1.044-\varepsilon_{\mathrm{num}}$ for all $m\in\mathcal M$ at the peak.
+The selected rating vector $\hat{\mathbf Q}$ is the lowest-capacity
+verified-feasible solution found under the common numerical budget and is
+\emph{not} claimed to attain $Q^\ast$. The margin is
+imposed only in this peak sizing problem; the 24-hour operating study
+(Section~\ref{sec:operation}) reports compliance with the original
+\SIrange{0.95}{1.05}{pu} band. Two quantities are deliberately \emph{outside}
+\eqref{eq:milp}: the converter current \eqref{eq:iconv} is a post-design
+consistency check against the derived benchmark $\Iben_i$ (obtained from $\Qmax_i$,
+so it is not an independent constraint), and feeder line ampacity is a separate post-design
+thermal screen (Section~\ref{sec:robust}). The discrete support choice is made by
+full enumeration, but the per-support capacity is sized numerically, so
+Section~\ref{sec:sizing} states the actual enumeration-plus-sizing procedure and
+the scope of what it verifies.
+
+\subsection{Two-Layer Sizing and Dispatch}
+The optimization variables are interpreted in two layers. In the
+\emph{planning layer}, $\Qmax_i$ is the installed converter rating at bus $i$,
+sized once for the peak snapshot $\lambda_{\mathrm{peak}}=1.34$. In the
+\emph{operating layer}, the per-bus dispatched outputs are chosen each hour. The
+coordinated operating benchmark minimizes feeder loss subject to a
+connection-voltage band $[\underline v,\overline v]$,
+\begin{equation}
+\mathbf{Q}(t) = \arg\!\!\min_{0\le Q_i\le \Qmax_i}\ P_{\mathrm{loss}}(t)
+\ \ \text{s.t.}\ \ \underline v\le v_m(t)\le \overline v,\ \forall m
+\label{eq:dispatch}
+\end{equation}
+approximated in implementation by the penalized objective
+$P_{\mathrm{loss}}(t)+\rho\sum_m[(\underline v-v_m)_+ + (v_m-\overline v)_+]$ with
+$\rho=10^{6}$, solved by bounded Powell from three starts
+$\mathbf Q^{\max}\!\cdot\!\{1.0,0.6,0.3\}$ (per-coordinate tolerance $10^{-2}$,
+function tolerance $10^{-3}$); the result is thus feasibility-penalized, not a
+natively hard-constrained solve, and is a coordinated reference rather than a
+global optimum. Because dispatch can only reduce output, the peak-planning design
+is sized so the full-output case satisfies the band at $\lambda_{\mathrm{peak}}$;
+feasible operation at the lighter hours is not assumed but confirmed directly by
+the 24-hour evaluation of Section~\ref{sec:operation}.
+
+\emph{Two coordinated references.}\label{sec:coordrefs}
+Both operating references in this paper instantiate \eqref{eq:dispatch} with the
+\emph{same} full-recompilation evaluator and the \emph{same} Powell multi-start
+settings above; they differ only in the enforced band. The \emph{band-only}
+reference uses the operational study band $[\underline v,\overline v]=[0.95,1.05]$~pu
+introduced in Section~\ref{sec:intro}, which is an internal study band and not an
+ANSI~C84.1 service-voltage category, whereas the \emph{reserve-preserving} reference
+uses the tighter acceptance band $[\underline v,\overline v]=[0.9562,1.0438]$~pu that
+matches the planning reserve. For both instances the final unrounded connection-voltage exceedance is
+checked after optimization; the reserve-preserving reference attains a worst
+connection minimum of exactly \SI{0.9562}{pu} (band exceedance verified zero),
+while the band-only reference relaxes to \SI{0.9526}{pu}. Because the
+communication-free proxy is compared against a constraint-matched target, the
+reserve-preserving reference supplies the capture ratio of
+Section~\ref{sec:operation}; the band-only reference is retained as a less
+conservative operating benchmark.
+
+% ======================= FRAMEWORK (merged into the System Model section) =======================
+\label{sec:framework}
+The remaining subsections turn the model above into the support-selection, sizing,
+and dispatch procedure: candidate screening, support selection by enumeration, continuous
+capacity sizing, exploratory optimizer comparison, post-design engineering checks,
+and hourly dispatch evaluation.
+
+\subsection{Candidate-Bus Screening}
+\label{sec:screening}
+Candidate buses are ranked by the worst connection voltage observed over the load
+multipliers $\Lambda=\{0.80,1.00,1.17,1.34\}$, which span light-to-peak conditions
+for candidate ranking only. The canonical sizing itself uses the single planning
+point $\Lambda_{\mathrm{plan}}=\{1.34\}$ (Table~\ref{tab:settings}, Eq.~\eqref{eq:milp}).
+The source bus and the open-delta regulator-input bus~799
+are excluded, because no downstream shunt can raise the regulator-input voltage.
+The screening score for bus $b$, where $M_b$ is its set of monitored connection
+voltages, is
+\begin{equation}
+R_b = \min_{\lambda\in\Lambda}\ \min_{m\in M_b} v_m(\lambda)
+\label{eq:screen}
+\end{equation}
+Table~\ref{tab:screening} lists the leading downstream candidates and
+Fig.~\ref{fig:screening} visualizes them. The weakest buses (740, 741, 711, 738,
+735, 737, and 736) form a compact low-voltage cluster with worst-case line-to-line
+minima of \numrange{0.899}{0.902}~pu, below the \SI{0.95}{pu} limit; the ranking
+is tight and the eighth-ranked bus~710 (\SI{0.9025}{pu}) is nearly tied, so the
+number of devices actually installed is decided by the support selection of
+Section~\ref{sec:sizing} rather than by a fixed cutoff. The ten weakest buses form
+the candidate pool $\mathcal C$ from which the support selection draws. The pool
+size ten is the low-voltage cluster itself: these are the only buses whose
+worst-case minimum falls below \SI{0.91}{pu}, and the next-ranked bus is
+electrically farther from the binding terminals. Enlarging the candidate pool cannot
+worsen the best attainable solution and may reduce either the minimum feasible device
+count or the installed capacity. Accordingly, the reported three-device result should
+be interpreted as the smallest feasible count found within the prescreened ten-bus
+pool under the stated search protocol; the sensitivity of the canonical capacity to
+the pool size is noted as future work.
+
+\subsection{Support Selection and Sizing Optimization}
+\label{sec:sizing}
+The canonical design is selected by enumerating all 120 three-device supports in
+the ten-bus candidate pool. Because the pool has ten buses and the smallest
+feasible count found is three (Section~\ref{sec:sensitivity}), there are only
+$\binom{10}{3}=120$ three-device supports. Each fixed support is sized by a
+two-stage procedure evaluated with a \emph{full feeder recompilation at every
+objective evaluation}, so all 120 supports---and both voltage metrics in the
+ablation of Section~\ref{sec:certify}---are compared under one identical evaluator,
+the same used by the 24-hour operation. The free variables are the installed
+ratings $\mathbf Q^{\max}=\{\Qmax_i\}_{i\in\mathcal S}$ of the three devices on the
+fixed support $\mathcal S$ (with $\Qmax_i=0$ for $i\notin\mathcal S$), not the hourly
+dispatch $Q_i(t)$. Let $[v^{\mathrm L}_s,v^{\mathrm U}_s]=[0.9567,1.0433]$~pu be the
+internal search band and $[v^{\mathrm L}_a,v^{\mathrm U}_a]=[0.9562,1.0438]$~pu the
+final acceptance band (a \SI{5e-4}{pu} inset on each edge). Stage~A searches for a
+feasible rating vector by minimizing a quadratic penalty on \emph{both} search-band
+edges,
+\begin{equation}
+\Phi_A(\mathbf Q^{\max})=\sum_{m\in\mathcal M}\Big[(v^{\mathrm L}_s-v_m)_+^2
++(v_m-v^{\mathrm U}_s)_+^2\Big]
+\label{eq:stageA}
+\end{equation}
+with $v_m=v_m(\mathbf Q^{\max})$, so an over- or under-voltage start is handled
+symmetrically. Stage~B, warm-started from the Stage~A point, minimizes the installed
+capacity subject to the acceptance band,
+\begin{equation}
+\begin{aligned}
+\min_{\mathbf Q^{\max}}\ &\sum_{i\in\mathcal S}\Qmax_i\\
+\text{s.t.}\ &v^{\mathrm L}_a\le v_m(\mathbf Q^{\max})\le v^{\mathrm U}_a,
+\quad \forall m\in\mathcal M,\\
+&0\le\Qmax_i\le\SI{450}{\kvar},\ \ i\in\mathcal S,\\
+&\Qmax_i=0,\ \ i\notin\mathcal S
+\end{aligned}
+\label{eq:stageB}
+\end{equation}
+Equation~\eqref{eq:stageB} states the constrained planning target; in implementation
+it is \emph{numerically approximated} by the penalized objective
+\begin{equation}
+J_B(\mathbf Q^{\max})=\sum_{i\in\mathcal S}\Qmax_i
++\rho_V\!\sum_{m\in\mathcal M}\big[(v^{\mathrm L}_s-v_m)_+ + (v_m-v^{\mathrm U}_s)_+\big]
+\label{eq:stageBimpl}
+\end{equation}
+with $\rho_V=10^{5}$; the penalty uses the \emph{buffered search band}, so the design
+clears the acceptance band after the final \SI{0.1}{\kvar} rounding of
+$\mathbf Q^{\max}$. Both stages use differential evolution (population size~8
+over the three free ratings, Sobol initialization, two seeds per support; Stage~A 10
+generations, Stage~B 18 generations, with local polishing). Acceptance is decided
+only after that rounding and a full feeder recompilation against
+$[v^{\mathrm L}_a,v^{\mathrm U}_a]$; a non-converged solve is rejected as infeasible
+(none occurred in the reported runs). The lowest-capacity accepted support is $\{735,740,741\}$ at
+\SI{1041.3}{\kvar}, adopted as the representative operational case by the fixed
+secondary criterion of least total installed kvar among the verified-feasible
+supports (ties broken by the first support returned under that rule); its nearest
+rivals fall within a few kvar of this total (Section~\ref{sec:finaldesign}), so the
+exact ordering among the top supports is not numerically resolved, and the
+near-equivalent family is retained in Table~S3 of the supplementary material.
+Enumerating the discrete supports removes any dependence on a support-search
+heuristic; because each per-support capacity is sized numerically, the reported
+design is the lowest-capacity verified-feasible solution found under the common
+numerical budget, not a certified global optimum. As a fast cross-check, a greedy
+forward selection (add the bus that most reduces the peak violation, re-sizing at
+each step) recovers the same three-device count. An auxiliary five-optimizer
+cross-check on the continuous-sizing score is reported only in Supplementary
+Section~S-I and is not used to select the design.
+
+\subsection{Hourly Dispatch}
+The selected design is validated over a synthetic normalized 24-hour load
+profile (multipliers \numrange{0.54}{1.34}) by solving the per-bus dispatch
+\eqref{eq:dispatch} at each hour. The 24 operating points are solved
+\emph{independently}: no intertemporal state, ramp, or switching-history constraint
+is imposed, so the operational layer is an hourly steady-state dispatch evaluation
+rather than an intertemporally coupled scheduling problem. The dispatch is
+contrasted with two baselines:
+(i) holding the same installed rating at full output every hour, and (ii)
+replacing the constant-$Q$ converter with a fixed delta-connected capacitor using the
+same nominal three-phase kvar parameter at \SI{1.0}{pu}. These baselines isolate, respectively, the value of
+hourly controllability and the value of the constant-$Q$ device model.
+
+\subsection{Computational Aspects}
+The canonical enumeration dominates the computational cost. Each objective evaluation solves one peak-snapshot
+($\lambda=1.34$) power flow; the enumeration sizes all 120 supports by the two-stage procedure
+(Section~\ref{sec:sizing}) with two differential-evolution seeds each (population
+size~8 over the three free ratings, i.e.\ a population of 24 vectors per
+generation; Stage~A 10 generations, Stage~B 18 generations, plus local polishing),
+which is on the order of $10^5$--$10^6$ power-flow solves per metric; the
+line-to-line enumeration completed in about 45~minutes and the line-to-ground
+enumeration in a comparable time on the reference workstation. The direct
+minimum-count search and the 24-hour operating comparison add smaller amounts.
+Recompiling the feeder from source at every evaluation makes the power flow a
+deterministic function of the inputs, independent of evaluation order (confirmed by
+re-evaluating identical inputs before and after long runs and recovering the same
+voltages). The framework is implemented in Python and solves each snapshot in
+OpenDSS; on a standard single-threaded workstation each full-recompile power-flow
+solve takes on the order of ten milliseconds. The load-flow-based evaluation is
+appropriate here precisely because placement and rating are decided before
+detailed controller design, where many fast steady-state evaluations are more
+valuable than a few high-fidelity dynamic simulations.
+
+% ======================= RESULTS =======================
+\section{Simulation Results and Discussion}
+\label{sec:results}
+The results are organized in four blocks: (A) the connection-consistent base-case
+audit and candidate screening; (B) support selection and two-stage sizing; (C) the
+matched line-to-ground versus line-to-line metric ablation; and (D) the 24-hour
+operating comparison with its practical (unbalance, capacity-margin, and thermal)
+checks. Each block is anchored on one table or figure, and quantities established in
+an earlier block are not re-derived later.
+
+\subsection{Block A: Simulation Settings and Base-Case Audit}
+\label{sec:blockA}
+
+\subsubsection{Simulation Settings}
+The complete simulation settings---candidate-screening load set, the canonical
+planning snapshot, the enumeration-sizing budget, and the daily operating
+profile---are summarized in
+Table~\ref{tab:settings}. The daily load profile is synthetic and represents
+light-, mid-, and peak-load conditions; it is not measured feeder data and could
+be replaced by public load data in future work. It nonetheless exposes the key
+planning quantities---the peak undervoltage that sets the rating and the
+off-peak hours over which controllability reduces loss.
+
+\begin{table}[!t]
+\caption{Simulation Settings}
+\label{tab:settings}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\columnwidth}{@{}l L@{}}
+\toprule
+\textbf{Item} & \textbf{Setting} \\
+\midrule
+Feeder & IEEE 37-node unbalanced \SI{4.8}{kV} delta distribution feeder \\
+Power-flow engine & OpenDSS (Python scripting interface) \\
+D-STATCOM model & Delta-connected constant-$Q$ source ($\mathrm{kW}=0$) \\
+Constant-power window & $[0.7,1.3]~\pu$ \\
+Monitored set $\mathcal M$ & Load/device terminals, line-to-line \eqref{eq:connaware}; source, bus~799 excluded \\
+Candidate pool $\mathcal C$ & 740, 741, 711, 738, 735, 737, 736, 710, 734, 733 \\
+Capacity bound $\bar Q_i$ & \SI{450}{\kvar} per bus \\
+Screening load set & $\lambda=\{0.80,1.00,1.17,1.34\}$ \\
+Canonical planning set $\Lambda_{\mathrm{plan}}$ & $\lambda=\{1.34\}$ (peak snapshot, Eq.~\eqref{eq:milp}) \\
+Canonical enum.\ sizing & 120 supports; two-stage DE (Stage A 10 gen $+$ Stage B 18 gen), population 8, Sobol init, seeds 1--2/support; full feeder recompile per evaluation; \SI{0.1}{\kvar} rounding; $\varepsilon_{\mathrm{num}}=\ensuremath{2\times10^{-4}}~pu$ \\
+Min-count search & 1-D $\Delta Q=\SI{15}{\kvar}$; 2-D coarse/fine grids; final $\Delta Q=\SI{5}{\kvar}$; three Nelder--Mead cross-checks \\
+Voltage limits, margin & \numrange{0.95}{1.05}~pu, $m_v=\SI{0.006}{pu}$ \\
+Daily profile & Synthetic normalized 24-hour multiplier (\numrange{0.54}{1.34}) \\
+Local proxy (production) & knee $(V_\downarrow,V_\uparrow)=(1.00,1.03)$~pu, $\beta=0.4$, $\varepsilon_Q=\SI{0.05}{\kvar}$, up to 400 sweeps \\
+Proxy sensitivity & 27 parameter settings (9 knee $(V_\downarrow,V_\uparrow)$ pairs $\times$ 3 numerical damping $\beta$ values) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Candidate-Bus Screening}
+Table~\ref{tab:screening} and Fig.~\ref{fig:screening} report the worst-case
+line-to-line screening voltages of \eqref{eq:connaware}. The ten candidate buses
+share a tight low-voltage band (\numrange{0.899}{0.909}~pu), with bus~740 the
+weakest at \SI{0.8986}{pu}. Because the ranking is numerically tight (the ten
+worst-case minima span only \SI{0.010}{pu}), the number of devices is set by the support selection of
+Section~\ref{sec:sizing} rather than by a fixed candidate count; the ten weakest
+buses form the pool, from which the support-selection procedure of
+Section~\ref{sec:sizing} selects three (735, 740, and 741). All candidate buses
+lie in a contiguous downstream cluster fed through the regulator.
+
+Two points fix the reference frame. First, the feeder-wide worst line-to-line
+voltage over the day, \SI{0.8986}{pu}, occurs at bus~740, a placeable candidate;
+the head-of-feeder regulator-input bus~799 is excluded because the regulator holds
+its \emph{output} (bus~799r), so no downstream shunt can raise the regulator-input
+voltage. Second, all magnitudes are line-to-line \eqref{eq:connaware}: with the
+native regulator already at its boost limit (tap $+16$) at the peak, bus~740 still
+sags to \SI{0.8986}{pu}, which is the undervoltage the D-STATCOMs address.
+
+\begin{table}[!t]
+\caption{Connection-Consistent Candidate-Bus Screening (Base Case, No Device;
+Line-to-Line pu)}
+\label{tab:screening}
+\centering
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{@{}C C C C@{}}
+\toprule
+\textbf{Rank} & \textbf{Bus} & \textbf{Worst min.\ $v$ (pu)} & \textbf{Mean min.\ $v$ (pu)} \\
+\midrule
+1 & 740 & 0.8986 & 0.9348 \\
+2 & 741 & 0.8989 & 0.9351 \\
+3 & 711 & 0.8993 & 0.9354 \\
+4 & 738 & 0.9005 & 0.9364 \\
+5 & 735 & 0.9018 & 0.9375 \\
+6 & 737 & 0.9019 & 0.9376 \\
+7 & 736 & 0.9020 & 0.9377 \\
+8 & 710 & 0.9025 & 0.9381 \\
+9 & 734 & 0.9045 & 0.9397 \\
+10 & 733 & 0.9086 & 0.9432 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{Fig2.pdf}
+\caption{Worst-case minimum line-to-line voltages of the ten-bus candidate pool.
+The hatched bars denote the canonical support $\{735,740,741\}$.}
+\label{fig:screening}
+\end{figure*}
+
+\subsection{Block B: Support Selection and Sizing}
+\label{sec:blockB}
+
+\subsubsection{Canonical Installed Design}
+\label{sec:finaldesign}
+\emph{Canonical-design selection rule.} The greedy search, the multi-seed
+repetition, and the metric ablation (Section~\ref{sec:certify}) are all
+\emph{exploratory} sensitivity studies; the single design carried into the
+operational comparison is fixed by one rule stated in advance. Because the smallest
+feasible count found is three (Section~\ref{sec:sensitivity}) and only
+$\binom{10}{3}=120$ three-device supports
+exist, \emph{all} 120 are sized by the two-stage procedure of
+Section~\ref{sec:sizing} (feasible point, then kvar minimization; seeds 1--2), with a
+full feeder recompilation at every evaluation;
+feasibility is judged \emph{after} the \SI{0.1}{\kvar} rounding
+($v_{\min}\ge0.956+\varepsilon_{\mathrm{num}}$,
+$v_{\max}\le1.044-\varepsilon_{\mathrm{num}}$, power flow converged), and
+among the supports that met the
+\numrange{0.9562}{1.0438}~pu acceptance the one with the lowest verified total
+is taken as the representative operational case.
+This yields three D-STATCOMs at buses 735, 740, and 741, listed with their derived
+current benchmarks in Table~\ref{tab:design},
+for a total of \SI{1041.3}{\kvar}---the lowest-capacity verified vector
+found under the stated enumeration budget (population~8, two seeds per support),
+narrowly ahead of its near-equivalent rivals (the next verified support $\{711,735,740\}$
+sits only \SI{0.1}{\kvar} higher, and the rest within about \SI{2}{\kvar}; the exact ranking among the top
+supports is not numerically resolved, Section~\ref{sec:certify}), and not a certified
+global minimum. The
+design raises the peak line-to-line minimum from \num{0.899} to \SI{0.9565}{pu},
+i.e.\ \SI{0.0065}{pu} above the \SI{0.95}{pu} study-band lower limit, meeting the
+\SI{0.006}{pu} planning reserve even after the installed capacities are rounded to
+\SI{0.1}{\kvar}. The selected solution meets the \SI{0.006}{pu} planning reserve
+with little additional slack because it is the lowest-capacity verified-feasible
+design found under the stated numerical budget; here, \SI{0.95}{pu} is the lower
+edge of the internal study band, not a service-voltage limit. It is a nominal
+deterministic design at $\lambda=1.34$. Its sensitivity to load
+uncertainty is characterized separately by an exploratory near-peak scalar-load stress (a Gaussian scalar-load stress of \SI{5}{\percent} standard deviation yields
+band violations in \SI{7}{\percent} of realizations, Section~\ref{sec:robust}), so a
+deployment margin would use scenario-based sizing or a larger reserve; this is noted
+as future work. As a
+reporting reference, the per-phase terminal operating currents at the peak
+(\SIlist{48.2;30.6;48.8}{A}) are listed against the benchmark currents each device
+would draw delivering its rating at the \SI{0.95}{pu} band edge
+(\SIlist{49.8;31.6;50.5}{A}); these are operating currents, and no independent
+hardware current limit is imposed in the planning model (Section~\ref{sec:model}). The direct minimum-count search
+(Table~\ref{tab:sizesens}, Section~\ref{sec:sensitivity}) shows that no one- or
+two-device support reached the \SI{0.9562}{pu} acceptance under the stated protocol,
+so $\hat n=3$ is the smallest feasible count found under that protocol.
+
+\begin{table}[!t]
+\caption{Representative D-STATCOM Design (Verified-Feasible Three-Support Found Under the Stated Enumeration Budget):
+Per-Bus Reactive Rating and Peak Operating Current}
+\label{tab:design}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\columnwidth}{@{}l *{4}{C}@{}}
+\toprule
+\textbf{Bus} & 735 & 740 & 741 & \textbf{Total} \\
+\midrule
+$\Qmax_i$ (kvar)          & 393.6 & 249.2 & 398.5 & \textbf{1041.3} \\
+Peak $|I_i|$ (A)          & 48.2  & 30.6  & 48.8  & --- \\
+\bottomrule
+\multicolumn{5}{@{}p{0.97\columnwidth}}{\footnotesize $|I_i|$ is the peak per-phase
+\emph{operating} current; no independent hardware current limit is imposed. For
+reference only, the current each device would draw delivering its rating at the
+\SI{0.95}{pu} band edge is $\Iben_i=\SIlist{49.8;31.6;50.5}{A}$, which the operating
+currents clear---a reporting reference, not a nameplate verification.} \\
+\end{tabularx}
+\end{table}
+The per-bus ratings are the sizing output rounded to \SI{0.1}{\kvar} (the sizing
+resolution); a deployed converter would be procured at the nearest catalog rating,
+and re-sizing on a discrete rating set is the natural discrete-rating extension noted
+as future work. The total equals \SI{1041.3}{\kvar}.
+
+\subsubsection{Minimum Device Count}
+\label{sec:sensitivity}
+The smallest feasible count is assessed by a direct numerical search rather than a
+single full-output point, so it does not rest on a monotonicity assumption that a
+regulator-controlled feeder need not satisfy. For every one- and two-device support
+the theoretical target is the reactive dispatch that \emph{maximizes} the worst
+line-to-line minimum,
+\begin{equation}
+v_{\mathrm{best}}(S) = \max_{0\le Q_i\le\SI{450}{\kvar}}\ \min_{m\in\mathcal M}
+v_m(\mathbf Q,\lambda=1.34)
+\label{eq:vbest}
+\end{equation}
+the search returns the largest value \emph{found} over the evaluated dispatches,
+$\hat v_{\mathrm{best}}(S)=\max_{\mathbf Q\in\mathcal Q_{\mathrm{eval}}(S)}
+\min_{m\in\mathcal M} v_m(\mathbf Q,\lambda=1.34)$, which lower-bounds
+$v_{\mathrm{best}}(S)$. We compare $\hat v_{\mathrm{best}}$ against the planning
+target \SI{0.956}{pu} (band edge \SI{0.95}{pu} plus margin $m_v$) rather than the
+bare limit. One-device supports are swept on a one-dimensional grid
+($\Delta Q=\SI{15}{\kvar}$, 31 points); two-device supports on a $10\times10$ coarse
+grid ($\Delta Q=\SI{50}{\kvar}$) refined around the best cell to
+$\Delta Q=\SI{6.2}{\kvar}$, and the single best pair is refined further to
+$\Delta Q=\SI{5}{\kvar}$ and cross-checked by three independent Nelder--Mead
+maximizations. Every grid point and local-search evaluation in this one- and
+two-device study used the same full feeder recompilation and connection-voltage
+extraction procedure as the canonical enumeration. The result (Table~\ref{tab:sizesens}) is that no $\le 2$-device
+support reached the \SI{0.9562}{pu} acceptance under this grid-and-local-search
+protocol: the largest value found for a single device (bus~711) was
+\SI{0.9266}{pu}, and for the best pair $\{737,740\}$ only \SI{0.9490}{pu}. The best
+pair's continuous cross-check returns \SI{0.9490}{pu} and its power-flow value is
+repeatable to $<10^{-6}$~pu over five fresh compiles; for the one-device sweeps the
+head regulators stay saturated at tap $+16$ across the whole $Q$ range. Since
+$\max_S \hat v_{\mathrm{best}}(S)=\SI{0.9490}{pu}<\SI{0.956}{pu}$ for all $|S|\le2$
+(a \SI{0.007}{pu} shortfall, far above the numerical resolution), no feasible
+support with $|S|\le2$ was found within the candidate pool and per-bus bound under
+the stated search, so three is the smallest feasible count found. The three-device canonical
+design of Section~\ref{sec:finaldesign} then provides the feasibility witness
+(operating minimum \SI{0.9565}{pu}; this is its dispatch value, not a
+$v_{\mathrm{best}}$). Figure~\ref{fig:w4bars} summarizes the largest
+worst-terminal minimum found for the one- and two-device searches and visually
+distinguishes these numerical-search values from the three-device feasibility
+witness. At the installed design the per-phase converter currents
+are reported against the corresponding derived benchmarks (Table~\ref{tab:design});
+these are operating currents, not a hardware-limit check, and the device count is set
+by the voltage band.
+
+\begin{table}[!t]
+\caption{Largest Worst-Terminal Minimum Voltage $\hat v_{\mathrm{best}}$
+\emph{Found Under the Stated Search} for One- and Two-Device Supports at
+$\lambda=1.34$}
+\label{tab:sizesens}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\columnwidth}{@{}C L C C C@{}}
+\toprule
+\textbf{$n$} & \textbf{Best support} & \textbf{$\hat v_{\mathrm{best}}$ (pu)} & \textbf{$Q$ (kvar)} & \textbf{Meets \SI{0.9562}{pu}?} \\
+\midrule
+1 & 711      & 0.9266 & 450 & no \\
+2 & 737, 740 & 0.9490 & 450, 450 & no \\
+\bottomrule
+\multicolumn{5}{@{}p{0.97\columnwidth}}{\footnotesize $\hat v_{\mathrm{best}}$ is the
+largest value found under the grid-and-local-search protocol (a lower bound on the
+true $v_{\mathrm{best}}$); $\max_{|S|\le2}\hat v_{\mathrm{best}}(S)=0.9490<0.9562$.
+The separate canonical sizing yields $v_{\min}=\SI{0.9565}{pu}$ with three devices.} \\
+\end{tabularx}
+\end{table}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{Fig6.pdf}
+\caption{Largest worst line-to-line minimum $\hat v_{\mathrm{best}}$ found under the
+stated search \eqref{eq:vbest} for one- and two-device supports (bars): neither
+reached the \SI{0.9562}{pu} planning target. The three-device point (diamond) is the
+canonical design's \emph{operating} minimum---a feasibility witness, not a
+$\hat v_{\mathrm{best}}$, so the two quantities are shown with distinct markers.}
+\label{fig:w4bars}
+\end{figure}
+
+
+\subsection{Block C: Metric Ablation and Selection Robustness}
+\label{sec:certify}
+Three exploratory studies probe the design's sensitivity and isolate the effect of
+the connection-consistent metric.
+
+\emph{Selection robustness.} The canonical support is chosen by enumeration
+(Section~\ref{sec:finaldesign}), not by a single stochastic run. Two facts frame the
+value of the enumeration and the stability of the exact winner. First, the
+enumeration is worthwhile: over the \num{120} supports for which a verified-feasible
+two-stage solution was found under the stated budget, the total rating has a median of \SI{1064.2}{\kvar}, a 95th
+percentile of \SI{1157.4}{\kvar}, and a maximum of \SI{1167.4}{\kvar}, so the adopted
+support at \SI{1041.3}{\kvar} is about \SI{2.2}{\percent} below the median and roughly
+a tenth below the worst feasible support---a saving that a feasibility-only screen
+would miss. Second, the exact capacity of a support is budget-sensitive at the
+\SI{0.1}{\kvar} level and the exact ranking of the top supports is \emph{not
+numerically resolved}. Every support is sized with a full feeder recompilation at
+each objective evaluation (Section~\ref{sec:sizing}), so the ranking is not an
+artefact of a faster surrogate evaluator; under this single evaluator the
+lowest-capacity accepted support is $\{735,740,741\}$ at \SI{1041.3}{\kvar}
+(\SIlist{393.6;249.2;398.5}{\kvar}, $v_{\min}=\SI{0.9565}{pu}$), with the next
+accepted supports (e.g.\ $\{711,735,740\}$ and $\{710,740,741\}$) within about
+\SI{2}{\kvar}. The top supports are therefore numerically \emph{and practically
+near-equivalent}---the few-kvar spread among them is below typical converter catalog
+steps---so the reported support is retained as a representative operational case, not
+because a \SI{0.1}{\kvar} numerical difference establishes engineering superiority,
+and the \SI{1041.3}{\kvar} vector is the single operational source from which all
+downstream results are computed.
+
+\emph{Metric ablation.} To show that the connection-consistent metric changes the
+engineering decision rather than only the reported numbers, the \emph{same} full
+enumeration used for the canonical design was repeated under both metrics: all 120
+three-device supports were sized under an identical per-support numerical budget
+(two-stage differential evolution, seeds 1--2, full feeder recompilation per
+evaluation), \SI{0.1}{\kvar} rounding, and the same
+\SI{0.9562}{pu} acceptance (verified after \SI{0.1}{\kvar} rounding), once driving
+feasibility on line-to-ground (LG) node magnitudes and once on line-to-line (LL)
+terminal voltages (Table~\ref{tab:ablation}). The connection-inappropriate
+line-to-ground diagnostic reports a \SI{0.018}{pu} lower base minimum
+(\SI{0.880}{} versus \SI{0.899}{pu}), thereby \emph{overstating the apparent
+undervoltage severity}. Under the matched full-enumeration and continuous-sizing
+protocol, the lowest verified-feasible capacity found with the line-to-ground
+objective was \SI{1287.4}{\kvar} at buses $\{711,737,740\}$
+(a verified-feasible vector was found for \num{98} supports under the stated budget),
+against \SI{1041.3}{\kvar}
+at $\{735,740,741\}$ (\num{120} supports) with the line-to-line objective---a
+\SI{23.6}{\percent} increase
+($100(Q_{\mathrm{LG}}-Q_{\mathrm{LL}})/Q_{\mathrm{LL}}$). This is a
+protocol-specific numerical comparison, not a global optimality certificate; because
+the stochastic continuous sizing is held to a common budget, the \SI{23.6}{\percent}
+difference is attributed to the evaluation metric under this matched protocol rather
+than proven to isolate it exactly. As a useful check, the line-to-line enumeration
+returns \emph{exactly} the canonical design. Each design satisfies its own-metric
+acceptance after rounding (LG: min \SI{0.9567}{pu}, max \SI{1.0372}{pu}; LL: min
+\SI{0.9565}{pu}, max \SI{1.0418}{pu}, both inside \numrange{0.9562}{1.0438}~pu),
+and cross-evaluation separates over-provisioning from genuine feasibility: the
+LG-metric design reaches \SI{0.9652}{pu} on the connection-consistent LL
+metric---roughly \SI{0.009}{pu} of additional margin on the LL metric---while the LL
+design meets the LL target at \SI{0.9565}{pu}. Evaluating the connection-inappropriate
+metric therefore over-provisions the feeder by about a fifth under this protocol.
+
+\emph{Proxy sensitivity.} The reported 24-hour local-proxy results
+(Table~\ref{tab:canonical}, Figs.~\ref{fig:envelope}--\ref{fig:minv}) use the
+production setting $\varepsilon_Q=\SI{0.05}{\kvar}$ with up to 400 fixed-point sweeps
+\eqref{eq:proxy}; at every hour the fixed point is \emph{initialization-independent}
+(starting from $Q_i^{(0)}\in\{0,\,0.5\Qmax_i,\,\Qmax_i\}$ converges to the same
+dispatch within the tolerance). The knee $(V_\downarrow,V_\uparrow)$ and the damping
+$\beta$ play different roles and are analyzed separately. The damping $\beta$ is used
+only to stabilize the fixed-point iteration and is \emph{not} a controller parameter:
+re-running $\beta\in\{0.2,0.4,0.6\}$ at the reported knee and tolerance leaves the
+converged daily loss unchanged to within \SI{0.1}{\percent} of the daily total, so
+the converged dispatch and loss are $\beta$-invariant in absolute terms; the
+loss-\emph{capture ratio} is more sensitive only because it divides this
+sub-\SI{0.1}{\percent} absolute difference by a small (\SI{170}{kWh}) denominator.
+The \emph{loss capture is set by the knee}, which defines the droop curve:
+sweeping $V_\downarrow\in\{0.99,1.00,1.01\}$ and $V_\uparrow\in\{1.02,1.03,1.04\}$
+(all \num{27} $(V_\downarrow,V_\uparrow,\beta)$ combinations) moves the capture over
+\SIrange{9.7}{79.7}{\percent} (\SI{44}{\percent} at the reported knee
+$(1.00,1.03)$). All 27 settings hold the band over the whole day ($E_v=0$), so the
+\emph{feasibility} conclusion is tuning-invariant while the reported capture
+percentage is knee-specific.
+
+\begin{table}[!t]
+\caption{Full-Enumeration Metric Ablation: Line-to-Ground vs.\ Line-to-Line
+Evaluation (Same 120-Support Enumeration Under Each Metric)}
+\label{tab:ablation}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\columnwidth}{@{}L C C C C@{}}
+\toprule
+\textbf{Objective} & \textbf{Support / kvar} & \textbf{Own-metric} & \textbf{Cross-metric} & \textbf{V-feas.} \\
+ & & \textbf{min/max $v$} & \textbf{min/max $v$} & \textbf{found} \\
+\midrule
+Line-to-ground & $\{711,737,740\}$ / 1287.4 & 0.9567 / 1.0372 & 0.9652 / 1.0390 & 98 \\
+Line-to-line & $\{735,740,741\}$ / 1041.3 & 0.9565 / 1.0418 & 0.9407 / 1.0355 & 120 \\
+\bottomrule
+\multicolumn{5}{@{}p{0.97\columnwidth}}{\footnotesize Both objectives enumerate all
+120 supports under an identical per-support budget and the same
+\numrange{0.9562}{1.0438}~pu acceptance (verified after \SI{0.1}{\kvar} rounding).
+The last column is the number of supports for which a rounded verified-feasible
+vector was \emph{found} (an algorithmic success count under the common budget, not a
+certificate that the remaining supports are infeasible). Own-metric columns confirm
+each design is feasible on the metric it was sized for. Relative increase
+$100(Q_{\mathrm{LG}}{-}Q_{\mathrm{LL}})/Q_{\mathrm{LL}}=\SI{23.6}{\percent}$;
+protocol-specific, not a global-optimality certificate.} \\
+\end{tabularx}
+\end{table}
+
+\subsection{Block D: 24-Hour Operating Comparison and Practical Checks}
+\label{sec:blockD}
+
+\subsubsection{Operational Comparison of Control Strategies}
+\label{sec:operation}
+The installed \SI{1041.3}{\kvar} design is evaluated over the 24-hour profile by a
+\emph{single} function that computes every strategy on the same model, with the
+same connection-consistent violation metric \eqref{eq:viol}, and---for the coordinated
+case---the same operating objective \eqref{eq:dispatch}. Five strategies are
+compared: the base feeder; the design held at fixed full output; an equivalent
+fixed delta-connected capacitor using the same nominal kvar parameter at \SI{1.0}{pu}; a communication-free
+local voltage-droop steady-state proxy in which each converter sets its own output
+from its local line-to-line terminal minimum $v_i(\mathbf Q)=\min_{m\in\mathcal M_i}
+v_m(\mathbf Q)$, where $\mathcal M_i$ is the set of line-to-line terminal voltages at
+device bus $i$, through the damped fixed-point iteration
+\begin{equation}
+Q_i^{(r+1)} = (1-\beta)\,Q_i^{(r)} + \beta\,\Qmax_i\,
+\mathrm{clip}\!\left(\frac{V_i^{\uparrow}-v_i(\mathbf Q^{(r)})}{V_i^{\uparrow}-V_i^{\downarrow}},0,1\right)
+\label{eq:proxy}
+\end{equation}
+with $V_i^{\downarrow}=1.00$ and $V_i^{\uparrow}=1.03$~pu, damping $\beta=0.4$,
+initialization $Q_i^{(0)}=\Qmax_i$, the clip applied after the ratio is formed, and
+the iteration stopped when $\max_i|Q_i^{(r+1)}-Q_i^{(r)}|\le\varepsilon_Q=\SI{0.05}{\kvar}$
+(up to 400 sweeps); and a \emph{centrally coordinated reference}
+that minimizes the feeder loss subject to the connection-voltage band
+\eqref{eq:dispatch} each hour by a bounded multistart Powell search with the band
+enforced by penalty (a coordinated feasibility-penalized reference, not claimed
+globally optimal). The coordinated reference is evaluated in the two band forms of
+Section~\ref{sec:coordrefs} (band-only and reserve-preserving), giving the six rows
+of Table~\ref{tab:canonical}.
+The daily violation is the connection-voltage band exceedance
+$E_v=\Delta t\sum_t\sum_m[(v_m(t)-1.05)_+ + (0.95-v_m(t))_+]$ (pu$\cdot$h, $\Delta t=1$~h) and the
+energy loss is $E_{\mathrm{loss}}=\Delta t\sum_t P_{\mathrm{loss}}(t)$.
+
+Table~\ref{tab:canonical} and Figs.~\ref{fig:envelope}--\ref{fig:cap} report the
+outcome; three findings stand out.
+
+\emph{The design satisfies the study voltage band without creating overvoltage.} The constant-$Q$
+design removes the base-case undervoltage: the worst line-to-line minimum rises
+from \num{0.899} to \SI{0.9565}{pu} and the daily violation from $E_v=\num{4.21}$
+to \num{0} (Fig.~\ref{fig:minv}). For this feeder and the selected rating, the
+full-output case remained below \SI{1.05}{pu} over the evaluated light-load hours
+(maximum \SI{1.032}{pu}, Fig.~\ref{fig:maxv}); this is an observed outcome of the
+selected capacity and the native controls, not a general consequence of peak-based
+sizing. The native regulator, already active, absorbs part of the residual excursion.
+
+\emph{Controllability reduces losses.} With feasibility already met, the value of
+hourly control is efficiency: the daily energy loss falls from \SI{2995}{kWh} at
+fixed output to \SI{2928}{kWh} under droop ($-\SI{2.2}{\%}$) and \SI{2843}{kWh}
+under the coordinated loss-minimizing reference ($-\SI{5.1}{\%}$), because both
+inject only the reactive power each hour requires rather than full output
+continuously. To keep the comparison voltage-matched, the coordinated reference is
+also evaluated in a \emph{reserve-preserving} form that minimizes loss subject to the
+same \numrange{0.9562}{1.0438}~pu acceptance (Section~\ref{sec:coordrefs}); its worst
+minimum is \SI{0.9562}{pu} (reserve-band exceedance verified zero) versus
+\SI{0.9526}{pu} for the band-only \numrange{0.95}{1.05}~pu form. The two references
+are \emph{not} the same solution---their voltage and head-line-loading trajectories
+differ (Table~\ref{tab:canonical})---but their unrounded daily losses agree to within
+\SI{0.01}{kWh} (\SI{2843.47}{kWh} band-only versus \SI{2843.48}{kWh}
+reserve-preserving). Relative to the reserve-preserving reference, and computing the
+ratio from unrounded hourly losses, the local Volt/VAR proxy---using only local
+measurements---recovers \SI{44.2}{\%} of the loss reduction (for the selected
+$(1.00,1.03)$ knee), a substantial but less-than-half share available without
+communication (Table~\ref{tab:canonical}).
+
+\emph{The constant-$Q$ device outperforms the capacitor under the idealized device
+models here.} At the same nominal three-phase kvar parameter (defined at
+\SI{1.0}{pu}) the fixed capacitor \emph{satisfies the operational
+\numrange{0.95}{1.05}~pu band but fails the \SI{0.006}{pu} planning reserve}
+($\min v=\SI{0.9502}{pu}$, reproducible to six digits over repeated fresh
+compiles---a \SI{0.0002}{pu} margin above the \SI{0.95}{pu} edge), whereas the
+constant-$Q$ converter keeps \SI{0.9565}{pu}. This is because the capacitor output scales with $V^2$ (see \eqref{eq:cap}) and
+\emph{under}-injects exactly when the voltage is low; it also incurs the higher
+daily loss (\SI{3024}{kWh} versus \SI{2995}{kWh}, Fig.~\ref{fig:cap}) and the
+higher voltage unbalance (Section~\ref{sec:vuf}). Because no independent converter
+current or apparent-power limit is imposed, this is an \emph{idealized device-model}
+comparison at equal nominal kvar rather than a hardware equal-nameplate test: under
+that modeling assumption the voltage-independent constant-$Q$ source produces a
+larger minimum-voltage margin in this feeder and profile; the comparison does not
+account for a converter current limit, capacitor cost, staged switching, or step
+control.
+
+\begin{table}[!t]
+\caption{Canonical 24-Hour Comparison of Control Strategies on the IEEE 37-Node
+Feeder (\SI{1041.3}{\kvar} Design; Single Evaluator, Connection-Consistent Metric).
+The worst minima occur at the peak hour (h19) and the maxima at light-load hours
+(h4--h6); all binding terminals are line-to-line. Under the constant-$Q$ design the
+worst-minimum terminal is the line-to-line pair (phases $c$--$a$) at bus~740; every
+one of the 24 power flows converged (residual $<10^{-6}$~pu) and the local-proxy
+iteration converged within \num{40} sweeps (of the 400 allowed) at every hour.}
+\label{tab:canonical}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\footnotesize
+\begin{tabularx}{\columnwidth}{@{}L *{5}{C}@{}}
+\toprule
+\textbf{Strategy} & \textbf{Worst} & \textbf{Max.} & \textbf{$E_v$} & \textbf{Energy} & \textbf{Head-line} \\
+                  & \textbf{min.\ $v$} & \textbf{$v$ (pu)} & \textbf{(pu$\cdot$h)} & \textbf{loss (kWh)} & \textbf{load.\ (\%)} \\
+\midrule
+Base (no device)          & 0.8986 & 1.031 & 4.213 & 3331 & 122.1 \\
+Fixed max.\ output        & 0.9565 & 1.032 & 0.000 & 2995 & 114.8 \\
+Capacitor (same kvar)     & 0.9502 & 1.031 & 0.000 & 3024 & 116.3 \\
+Local Volt/VAR proxy      & 0.9565 & 1.031 & 0.000 & 2928 & 114.8 \\
+Coordinated (band-only)   & 0.9526 & 1.032 & 0.000 & 2843 & 115.0 \\
+Coordinated (reserve-pres.) & 0.9562 & 1.031 & 0.000 & 2843 & 114.8 \\
+\bottomrule
+\multicolumn{6}{@{}p{0.97\columnwidth}}{\footnotesize The band-only coordinated
+reference enforces the operational \numrange{0.95}{1.05}~pu band \eqref{eq:dispatch}
+(worst min.\ \SI{0.9526}{pu}); the reserve-preserving reference enforces the
+\numrange{0.9562}{1.0438}~pu planning acceptance (worst min.\ \SI{0.9562}{pu}). The
+two coordinated formulations produce different voltage and loading trajectories;
+their unrounded daily losses are \SI{2843.47}{kWh} and \SI{2843.48}{kWh},
+respectively, both rounding to \SI{2843}{kWh} here, so the reserve-preserving case
+gives a nearly identical, voltage-matched basis for the local-proxy capture ratio.
+Head-line loading is the peak-hour maximum line current as a percentage of normal
+ampacity.} \\
+\end{tabularx}
+\end{table}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{Fig8.pdf}
+\caption{24-hour line-to-line voltage envelope and dispatched reactive power under
+the band-only coordinated loss-minimizing reference D-STATCOM operation. The
+reserve-preserving reference, used for the constraint-matched capture ratio, is
+summarized in Table~\ref{tab:canonical}.}
+\label{fig:envelope}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{Fig9.pdf}
+\caption{Maximum line-to-line voltage at the same nominal kvar parameter (fixed converter and
+capacitor) versus the band-only coordinated reference. In this case study, all
+compared strategies remain below \SI{1.05}{pu} over the evaluated light-load hours;
+this is an observed result of the selected rating and feeder controls, not a general
+consequence of peak-based sizing.}
+\label{fig:maxv}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{Fig10.pdf}
+\caption{Hourly minimum line-to-line voltage of the base feeder (worst-case
+\SI{0.8986}{pu}) and of the band-only coordinated loss-minimizing reference, whose
+worst minimum is \SI{0.9526}{pu} (both curves shown). The reserve-preserving
+coordinated reference instead holds \SI{0.9562}{pu}, and the fixed-output and
+local-proxy worst minima (\SI{0.9565}{pu}) are listed in
+Table~\ref{tab:canonical}.}
+\label{fig:minv}
+\end{figure*}
+
+\subsubsection{Constant-$Q$ Converter Versus Fixed Capacitor}
+The capacitor and constant-$Q$ rows of Table~\ref{tab:canonical} isolate the
+device model at full output. The two devices carry the \emph{same nominal
+three-phase kvar parameter} (defined at \SI{1.0}{pu}); because no independent
+converter current or apparent-power limit is imposed, this is an \emph{idealized
+device-model} comparison rather than a hardware equal-nameplate test. The distinction
+is sharper than magnitude alone suggests: the capacitor satisfies the operational
+\numrange{0.95}{1.05}~pu band but fails the \SI{0.006}{pu} planning reserve
+(\SI{0.9502}{pu}, only \SI{0.0002}{pu} above the \SI{0.95}{pu} edge) where the
+constant-$Q$ converter keeps a comfortable
+\SI{0.9565}{pu}, because the capacitor output $B_\Delta|V_{LL}|^2$ shrinks with the
+square of the voltage and so \emph{under}-injects at the low-voltage peak while
+\emph{over}-injecting at the high-voltage light-load hours (Fig.~\ref{fig:cap}). The
+capacitor also incurs the higher daily loss (\SI{3024}{kWh} versus \SI{2995}{kWh}).
+The numerical advantage therefore reflects the effect of the two steady-state device
+models on this feeder and profile under the idealized constant-$Q$ assumption; it does
+not account for a converter current limit, capacitor cost, staged switching, or step
+control.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{Fig11.pdf}
+\caption{Maximum line-to-line voltage at the same nominal kvar parameter for a fixed capacitor and a
+constant-$Q$ converter over the daily profile.}
+\label{fig:cap}
+\end{figure}
+
+\subsubsection{Local Volt/VAR Proxy Versus the Coordinated Reference}
+\label{sec:droop}
+The coordinated reference minimizes loss with full knowledge of the hourly load,
+so it is an offline coordinated operating reference with perfect hourly-load
+information---not a deployable controller and not a planning-layer optimization; recent
+distribution voltage-control work \cite{rahman2024mpc,zhan2024ofo,hua2025safedrl}
+stresses that such a schedule must be checked against a causal local law. The
+local Volt/VAR law defined above serves that role: it is evaluated as a
+communication-free \emph{steady-state} proxy---each converter output is the damped
+fixed point (damping $\beta=0.4$, tolerance $\varepsilon_Q=\SI{0.05}{\kvar}$, up to
+400 sweeps allowed; every hour converged within 40 sweeps from each tested
+initialization) of its own line-to-line terminal minimum, without
+measurement delay, filtering, ramp limits, or converter inner-loop dynamics, which
+are outside the present steady-state scope. As Table~\ref{tab:canonical} and
+Fig.~\ref{fig:droop} show, the proxy matches the coordinated reference on
+feasibility---both hold $E_v=0$ over the whole day---from local measurements alone,
+so the security benefit is not an artefact of perfect foresight. Coordination
+retains a residual advantage in efficiency: its daily loss (\SI{2843}{kWh}) is
+below the proxy's (\SI{2928}{kWh}), and, measured against the constraint-matched
+reserve-preserving reference, the local law captures about \SI{44}{\%} of
+the coordinated loss reduction relative to fixed output, quantifying the value of
+communication. A small $(V_\downarrow,V_\uparrow,\beta)$ sensitivity
+(Section~\ref{sec:certify}) confirms this share is tuning-specific but that the
+feasibility conclusion is unchanged across the tested settings.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{Fig12.pdf}
+\caption{Aggregate hourly dispatched reactive power $\sum_i Q_i(t)$ over the
+24-hour profile for fixed full output, the local Volt/VAR proxy, and the band-only
+coordinated loss-minimizing reference; the controlled strategies inject only what
+each hour requires, lowering daily loss.}
+\label{fig:droop}
+\end{figure}
+
+\subsubsection{Voltage-Unbalance Impact}
+\label{sec:vuf}
+Because the feeder is unbalanced, voltage magnitude alone does not fully capture
+power quality. Table~\ref{tab:vuf} therefore adds the maximum voltage-unbalance
+factor, computed from the symmetrical-component (sequence) voltages as
+$\mathrm{VUF}=|V_2|/|V_1|$ from the positive- and negative-sequence voltages,
+evaluated only at the energized three-phase buses (single- and two-phase buses,
+where the sequence VUF is undefined, are excluded). The base feeder is strongly
+unbalanced, with a worst sequence-based VUF (also termed the voltage unbalance
+factor in IEEE~1159 \cite{ieee1159}) of \SI{5.27}{\percent}. Table~\ref{tab:vuf}
+reports the negative-to-positive sequence ratio $|V_2|/|V_1|$ as the sequence VUF.
+The NEMA~MG-1 line-voltage-unbalance rate (LVUR) is a \emph{different} metric---the
+maximum line-voltage deviation from the average, divided by the average
+\cite{nema_mg1}---so it is calculated and reported separately from the
+line-to-line rms \emph{magnitudes} $U_{\phi\psi}=|\underline V_{\phi\psi}|$,
+$\phi\psi\in\{ab,bc,ca\}$,
+\begin{equation}
+\begin{aligned}
+U_{\mathrm{avg}}&=\tfrac13\bigl(U_{ab}+U_{bc}+U_{ca}\bigr),\\
+\mathrm{LVUR}&= \frac{100\,\max_{\phi\psi}\bigl|U_{\phi\psi}-U_{\mathrm{avg}}\bigr|}
+{U_{\mathrm{avg}}}
+\end{aligned}
+\label{eq:lvur}
+\end{equation}
+Because the two are not identical outside the small-unbalance regime, the
+NEMA~MG-1 derating guidance is applied only to the calculated LVUR, not directly to
+$|V_2|/|V_1|$, and the sequence VUF is interpreted only under the IEEE~1159
+definition. NEMA~MG-1 recommends derating polyphase motors once the LVUR exceeds
+about \SI{1}{\percent}; if polyphase motors were connected at the binding terminal,
+the base-case LVUR of \SI{5.14}{\percent} (Table~\ref{tab:vuf}) would lie in the
+range for which NEMA~MG-1 recommends derating---the present feeder model does not
+explicitly simulate motor thermal derating---and the sequence VUF of
+\SI{5.27}{\percent} is reported alongside it as the distinct IEEE~1159 quantity. As
+Table~\ref{tab:vuf} shows, every device strategy reduces both the worst VUF (to
+\SI{4.27}{\percent} at fixed output and under the local proxy, \SI{4.56}{\percent}
+for the capacitor, and \SI{4.31}{\percent} under the coordinated reference) and the
+worst LVUR (to \SI{4.17}{\percent}, \SI{4.42}{\percent}, and \SI{4.20}{\percent}
+respectively); in this case study every device strategy was associated with a lower
+maximum sequence VUF and LVUR than the base feeder, the sequence ratio falling
+through network coupling rather than through direct per-phase compensation. The
+slightly smaller reduction under the capacitor reflects its lower injection at the
+binding hour. The residual is structural, not incidental: even at best the worst
+LVUR stays near \SI{4.17}{\percent}, still far above the \SI{1}{\percent} NEMA~MG-1
+guidance, because a balanced three-phase device injects equally on all phases and
+cannot equalize an inherently asymmetric feeder. Removing it would require per-phase
+(independently controlled) reactive support, which is outside the balanced
+constant-$Q$ scope of this study.
+
+\begin{table}[!t]
+\caption{Maximum Sequence VUF and NEMA Line-Voltage-Unbalance Rate (LVUR) over the
+24-Hour Profile (IEEE 37-Node, \SI{1041.3}{\kvar} Design)}
+\label{tab:vuf}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\columnwidth}{@{}l C C C@{}}
+\toprule
+\textbf{Strategy} & \textbf{Seq.\ VUF (\%)} & \textbf{NEMA LVUR (\%)} & \textbf{Worst min.\ $v$ (pu)} \\
+\midrule
+Base (no device)      & 5.27 & 5.14 & 0.8986 \\
+Fixed max.\ output    & 4.27 & 4.17 & 0.9565 \\
+Fixed capacitor       & 4.56 & 4.42 & 0.9502 \\
+Local Volt/VAR proxy  & 4.27 & 4.17 & 0.9565 \\
+Coordinated (band-only) & 4.31 & 4.20 & 0.9526 \\
+\bottomrule
+\multicolumn{4}{@{}p{0.94\columnwidth}}{\footnotesize Sequence VUF $=|V_2|/|V_1|$
+(IEEE~1159); NEMA LVUR from \eqref{eq:lvur}. The two are distinct metrics; NEMA
+derating guidance applies only to the LVUR column.} \\
+\end{tabularx}
+\end{table}
+
+\subsubsection{Near-Peak Capacity-Margin Sensitivity and Thermal Screening}
+\label{sec:robust}
+Two post-design screens probe the planning assumptions. First, a near-peak
+\emph{capacity-margin} sensitivity draws 200 realizations of a single scalar load
+multiplier $\lambda_s=1.28\,(1+\varepsilon_s)$, $\varepsilon_s\sim\mathcal
+N(0,0.05^2)$ (seed 2026, untruncated; all 200 power flows converged). The center
+$\lambda=1.28$ is a near-peak forecast multiplier (the evening shoulder just below
+the deterministic planning snapshot at $\lambda_{\mathrm{peak}}=1.34$, at which the
+design gives \SI{0.9565}{pu}); this test is distinct from that planning snapshot and
+is intended only to characterize margin sensitivity around the forecast. At this
+stressed snapshot the local proxy reaches full output, so this experiment primarily
+probes the installed \emph{capacity margin} against forecast error rather than
+differences among the operating laws (which coincide when saturated). The design tolerates the error with a
+residual band violation in \SI{7}{\percent} of realizations (14/200; Wilson
+\SI{95}{\percent} CI \SIrange{3.7}{10.9}{\percent}); \SI{93}{\percent} of
+realizations have zero violation, so the distribution is strongly right-skewed---the
+95th-percentile single-snapshot $\Vviol$ (\SI{0.002}{pu}) sits just inside the
+violating tail while the mean (\SI{0.003}{pu}) is lifted by a few large exceedances
+(worst \SI{0.184}{pu}; these are per-snapshot band exceedances summed over the
+violating terminals at that realization, e.g.\ several terminals a few hundredths
+of a pu below the limit at the most stressed draw, not a daily energy).
+Because $\varepsilon_s$ scales the whole feeder uniformly, this is a single-scalar
+sensitivity, not a full stochastic validation---correlated, phase-specific, and
+held-out scenarios are left to future work---so it bounds the peak-load capacity
+margin rather than guaranteeing robustness. Second, a thermal screen confirms that voltage
+feasibility does not imply thermal feasibility: at the peak ($\lambda=1.34$) the
+most-loaded element is the head-of-feeder line~L35 (bus~799r to~701). It carries
+\SI{488}{A} (\SI{122}{\percent} of its \SI{400}{A} normal ampacity, taken from the
+feeder conductor data in the released OpenDSS model) in the base
+case and \SI{459}{A} (\SI{115}{\percent}) with the D-STATCOM design held at full
+output at the peak---so the reactive support reduces but does not eliminate the
+pre-existing overload at this \num{1.34}$\times$ stress load. The residual head-line
+loading is strategy-dependent but stays above ampacity across all operating cases
+(\SIrange{114.8}{116.3}{\percent}, Table~\ref{tab:canonical}). Each installed
+converter's peak per-phase terminal current (\SIlist{48.2;30.6;48.8}{A}) is
+reported against its own derived benchmark (Table~\ref{tab:design}); no independent
+hardware current limit is imposed. Line reinforcement is
+thus a distinct, complementary planning action, treated separately from the
+reactive-support design.
+
+\subsection{Discussion}
+\subsubsection{Practical Implications}
+The results give two operational messages for feeder planners. First, for
+phase-to-phase load-terminal voltage compliance on a delta feeder, the assessment
+should use connection-appropriate line-to-line voltages: the line-to-ground node
+magnitudes overstate the apparent undervoltage severity by about \SI{0.02}{pu},
+reporting \SI{0.88}{pu} instead of the \SI{0.90}{pu} line-to-line terminal minimum,
+and would push the sizing toward a larger design---a controlled
+full-enumeration ablation (Section~\ref{sec:certify}) confirms this under the
+matched enumeration-and-sizing protocol, the
+connection-inappropriate line-to-ground objective returning a larger sized capacity by
+about \SI{23.6}{\percent} under the matched protocol. On the corrected metric a compact \SI{1041.3}{\kvar},
+three-device support---the smallest feasible count found under the stated
+grid-and-local-search protocol---meets the study voltage band at
+the peak (\SIrange{0.899}{0.9565}{pu}), with the per-device operating currents
+reported against their derived benchmarks (no hardware current limit is modeled);
+it is a \emph{voltage-feasible} reactive-support design, not a
+complete network-feasible plan, because the peak head-line loading remains at
+\SI{115}{\percent} of normal ampacity. Second, once the rating meets the
+band, the \emph{control law} governs efficiency rather than feasibility: controlled
+operation (local proxy or coordinated loss minimization) lowers the daily loss by
+\SIrange{2.2}{5.1}{\percent} relative to fixed output, and the communication-free
+proxy captures about \SI{44}{\%} (a tuning-specific share) of the
+coordinated loss benefit. Because reconductoring
+would change both impedance and voltage sensitivity, the reactive-support design
+and any line reinforcement should be assessed jointly or re-optimized in sequence.
+
+\subsubsection{Positioning Relative to the Literature}
+The framework combines choices that are individually established but seldom
+integrated on one named benchmark: an explicitly identified IEEE test system
+solved by unbalanced load flow; a connection-consistent voltage-security metric for the
+delta feeder; an enumeration-based support-selection and sizing procedure with post-design per-device
+converter-current checks and separate thermal screening; and a constant-$Q$
+device whose behavior is quantitatively separated from a capacitor. The placement
+is returned by exhaustive support enumeration rather than by a single stochastic
+solver; an auxiliary five-optimizer sensitivity check on the continuous-sizing
+score (Supplementary Section~S-I) neither selects nor validates the design.
+
+\subsubsection{Limitations and Threats to Validity}
+Several limitations are stated explicitly, each pointing to a concrete extension
+consistent with current practice \cite{dar2024ccmpc,pvdstatcom2025fixedvar,statcom2025cmes}.
+\emph{Device model.} The study is limited to steady-state, reactive-support
+(STATCOM-mode) operation; active-power dispatch, the voltage- and
+active-power-dependent $P$--$Q$ capability curve, DC-link state of charge, and
+converter dynamics are not modeled, so the constant-$Q$ device is a lower-fidelity
+proxy for a full four-quadrant energy-storage converter. \emph{Uncertainty.} A
+single deterministic 24-hour profile scaled by one scalar multiplier is used, so
+it omits phase-specific, spatial, and load/PV-correlated variation; the absolute
+violation magnitudes are illustrative, and a stochastic treatment with correlated,
+held-out scenarios is the natural next step. The voltage dependence $Q_{\mathrm{cap}}\propto V^2$ in \eqref{eq:cap} is a general
+device-model property; however, the comparative voltage margins, loss reductions,
+and control benefits reported here remain specific to the feeder, load profile,
+device ratings, and native control states used in this case study.
+\emph{Data scope.} The profile is synthetic rather than measured; measured
+load/PV data would broaden external validity. The IEEE 123-node study is a
+transferability check under native controls (Section~\ref{sec:ieee123}), not an
+independent second validation.
+\emph{Controller tuning.} The local-proxy knee $(V_\downarrow,V_\uparrow)=(1.00,1.03)$
+is a conventional Volt/VAR setting evaluated on the same profile; a held-out knee
+tuning and a $(V_\downarrow,V_\uparrow,\beta)$ sensitivity are left for future work,
+as are measurement delay, filtering, and converter inner-loop dynamics.
+\emph{Optimality bound.} The support choice is exhaustive over the discrete space
+(all 120 three-device supports), but each per-support capacity is sized by
+differential evolution, so the design does not bound the distance to the global
+mixed-integer optimum; a mixed-integer convex (e.g., MISOCP) relaxation would
+provide such a bound.
+\emph{Objective.} The installed design is fixed by the hard constraints of the
+sizing problem \eqref{eq:milp}---the connection-voltage band and the per-bus kvar
+bound---not by a weighted cost score; a formal multi-objective (Pareto) treatment
+of the cost--security trade-off is left for future work. The auxiliary composite
+score used only for the optimizer-sensitivity check is defined in Supplementary
+Section~S-I.
+\emph{Second feeder.} As shown next, the IEEE 123-node result is a transferability
+case study conditioned on the existing regulator/capacitor controls, not an
+independent generalization claim.
+
+% ======================= IEEE 123 TRANSFERABILITY =======================
+\section{Transferability to the IEEE 123-Node Feeder}
+\label{sec:ieee123}
+To test how the method transfers, the connection-consistent terminal audit and
+voltage-security evaluation were applied to the unbalanced \SI{4.16}{kV} IEEE
+123-node feeder \cite{ieee123feeder}, which has seven single-phase regulators (four
+locations) and four shunt capacitors left \emph{active}
+(native controls enabled), so the assessment reflects the feeder as operated. A
+code audit of the released case file (Table~\ref{tab:ieee123terminals}) finds
+\num{91} loads---\num{84} grounded-wye (line-to-neutral) and \num{7} delta
+(line-to-line, buses 35, 65, 76)---so the connection-consistent set of
+\eqref{eq:connaware} is applied \emph{per element} on this mixed feeder: the
+monitored set $\mathcal M_{123}$ is the load terminals, each on its own connection
+type, with the source and regulator buses 150/150r excluded.
+
+Over the 24-hour profile, $\mathcal M_{123}$ shows \emph{no undervoltage}: the worst
+connection-consistent minimum is \SI{0.9657}{pu} at wye bus~63 (line-to-neutral,
+h19), well above \SI{0.95}{pu}, with the regulators at intermediate (not saturated)
+taps and worst VUF only \SI{1.49}{\percent}; the worst delta terminal (bus~65) sees
+a line-to-line minimum of \SI{0.9792}{pu}. This is therefore a \emph{no-action
+transfer case}: because the existing regulation already holds the band, no
+placement or sizing is triggered---the honest counterpart to a frozen-regulator
+analysis, which would have manufactured an apparent \SI{0.898}{pu} undervoltage by
+disabling the controls that resolve it. The feeder is \emph{not} fully two-sided
+secure, however: a residual light-load maximum of \SI{1.052}{pu} at wye bus~83
+exceeds \SI{1.05}{pu}, driven by the always-on shunt capacitors; a one-quadrant
+capacitive device cannot correct it, so no complete two-sided security conclusion is
+drawn. Tables~\ref{tab:ieee123} and \ref{tab:ieee123terminals} summarize the case
+and the terminal-connection audit.
+
+\begin{table*}[!t]
+\begin{minipage}[t]{0.485\textwidth}
+\centering
+\caption{IEEE 123-Node Feeder Under Native Controls (Connection-Consistent Metric,
+24-Hour Profile)}
+\label{tab:ieee123}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{@{}L C@{}}
+\toprule
+\textbf{Quantity} & \textbf{Value} \\
+\midrule
+Worst min.\ voltage (conn.-consistent) & \SI{0.9657}{pu} L-N (bus 63, wye, h19) \\
+Worst max.\ voltage & \SI{1.052}{pu} L-N (bus 83, wye, h20) \\
+Aux.\ node diagnostic (excluded) & \SI{0.9643}{pu} L-N node at delta bus 65 \\
+Worst VUF           & \SI{1.49}{\percent} (bus 160, h19) \\
+Regulator taps (7 units, 4 loc.) & range $-1$ to $+13$ (not saturated) \\
+Shunt capacitors (4 units) & all in service \\
+Additional D-STATCOM (undervoltage) & none indicated \\
+\bottomrule
+\end{tabularx}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.485\textwidth}
+\centering
+\caption{IEEE 123-Node Terminal-Connection Audit and Per-Class Minimum (Released
+Case File, Native Controls)}
+\label{tab:ieee123terminals}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{@{}L C C@{}}
+\toprule
+\textbf{Terminal class} & \textbf{Count} & \textbf{Min.\ $v$ (pu)} \\
+\midrule
+Grounded-wye loads (L-N) & 84 & 0.9657 (bus 63) \\
+Delta loads (L-L; buses 35, 65, 76) & 7 & 0.9792 (bus 65) \\
+Single-phase / three-phase loads & 89 / 2 & --- \\
+Three-phase buses (VUF, seq.\ $V_2/V_1$) & 69 & --- \\
+Excluded (source, 150, 150r) & 3 & --- \\
+\bottomrule
+\end{tabularx}
+\end{minipage}
+\end{table*}
+
+Two points follow. First, the connection-consistent metric transfers across feeder
+types---line-to-line on the delta IEEE 37-node feeder, line-to-neutral on the wye
+IEEE 123-node feeder---selecting the physically experienced voltage in each case.
+Second, because the recommendations are conditioned on the existing controls, the
+output is configuration-specific: reactive support is prescribed where the controls
+cannot hold the band (IEEE 37, whose regulator saturates at the peak) and declined
+where they can (IEEE 123). This is a transferability and discipline check, not a
+feeder-independent generalization claim; the native regulator and capacitor controls
+are converged per hourly snapshot and do not reproduce chronological tap/switching
+history.
+
+% ======================= CONCLUSION =======================
+\section{Conclusion}
+\label{sec:conclusion}
+This paper presented a connection-consistent planning and Volt/VAR-control framework
+for D-STATCOMs on unbalanced delta feeders. Its central correction is that, on a
+three-wire delta feeder, line-to-ground node magnitudes are not the terminal
+voltages of the phase-to-phase loads, so voltage security is evaluated on
+line-to-line terminal magnitudes from screening through dispatch; this replaces a
+connection-inappropriate \SI{0.88}{pu} node-to-ground minimum with a \SI{0.90}{pu}
+line-to-line terminal minimum. The consequence is quantitative, not cosmetic: under a
+matched full-enumeration and two-stage sizing protocol, driving feasibility on
+line-to-ground rather than line-to-line magnitudes raised the returned installed
+capacity by \SI{23.6}{\percent}, so the connection-domain choice changes the design.
+On the corrected metric, no one- or two-device support reached the \SI{0.9562}{pu}
+acceptance within the ten-bus pool and \SI{450}{\kvar} per-bus bound, and enumerating
+all 120 three-device supports returned a verified-feasible \SI{1041.3}{\kvar} design
+at buses 735, 740, and 741 that raises the peak line-to-line minimum from \num{0.899}
+to \SI{0.9565}{pu}. This is the lowest-capacity verified-feasible support found under
+the stated budget, not a certified global minimum.
+
+Once the rating meets the band, hourly controllability governs efficiency rather than
+feasibility: over the deterministic 24-hour profile and a single connection-consistent
+evaluator, a communication-free local proxy and a coordinated loss-minimizing
+reference lowered daily loss by \SIrange{2.2}{5.1}{\percent} versus fixed output,
+while an equal-nominal-kvar capacitor satisfied the operational band but failed the
+\SI{0.006}{pu} planning reserve, at higher loss, because its output falls with
+$V^2$. Every device case lowered the maximum voltage unbalance, though a residual near
+\SI{4}{\percent} remains as a structural limit of balanced three-phase compensation.
+Two checks bound the result: a near-peak scalar-load sensitivity still violated in
+\SI{7}{\percent} of realizations, and the peak head-line loading stayed at
+\SIrange{114.8}{116.3}{\percent} of ampacity (from \SI{122.1}{\percent} in the base
+case), so the outcome is a \emph{voltage-feasible reactive-support design}, not a
+complete network-feasible plan. Applied with native controls active, the same
+evaluator found the regulated IEEE 123-node feeder not undervoltage-limited
+(connection-consistent minimum \SI{0.9657}{pu}), a no-action transfer case. Future
+work should add the converter $P$--$Q$ capability and active-power dispatch,
+state-of-charge modeling, measured data, correlated uncertainty scenarios, and a
+mixed-integer optimality bound.
+
+\section*{Data Availability}
+The source code, the OpenDSS feeder models, the input data, and representative output
+files required to reproduce the main results---the canonical two-stage enumeration,
+the metric ablation, the 24-hour operating comparison, and the IEEE 123-node
+connection audit, regenerated from the listed OpenDSS models and the exact \num{24}
+hourly load multipliers---are publicly available through the accompanying GitHub
+repository at \url{https://github.com/Junseok-Lim-HY/dstatcom-connection-consistent}.
+The version used for this article is archived under Release
+\texttt{v1.0-ieee-access-submission}. The per-script roles and the artifacts checked
+are itemized in Supplementary Table~S4 and the repository README. An automated
+consistency test verifies cross-file numerical identities against the stored outputs
+and is \emph{not} a substitute for rerunning the optimization. Only transient solver
+logs and large intermediate power-flow dumps are withheld and are not required to
+reproduce any reported result. The IEEE 37- and 123-node feeder OpenDSS models are the
+IEEE PES distribution test feeders \cite{ieee37feeder,ieee123feeder} as distributed
+with OpenDSS \cite{opendss}.
+
+% ======================= REFERENCES =======================
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{jslim.jpg}}]{JUNSEOK LIM}
+received the B.S. degree in electrical engineering from Hanyang University,
+Ansan, South Korea, in 2019. He is currently working toward the Ph.D.
+degree in the Department of Electrical Engineering at Hanyang University.
+His research interests include power system planning and operation,
+energy storage integration, and resilience enhancement in renewable-rich
+distribution networks.
+\end{IEEEbiography}
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{swbae.jpg}}]{SUNGWOO BAE}
+(Member, IEEE) received the B.S. degree from Hanyang University, Seoul,
+Korea, and the M.S.E. and Ph.D. degrees from the University of Texas at
+Austin, USA, all in electrical engineering, in 2006, 2009, and 2011,
+respectively. From 2012 to 2013, he was a senior research engineer with
+Power Center at Samsung Advanced Institute of Technology. From 2013 to
+2017, he was with Yeungnam University. He has been a Professor in the
+Department of Electrical Engineering at Hanyang University in Korea
+since 2017. In 2005, Dr.\ Bae was awarded the Grand Prize at the
+national electrical engineering design contest by the Minister of
+Commerce, Industry and Energy of the Republic of Korea.
+\end{IEEEbiography}
+
+\EOD
+
+\end{document}

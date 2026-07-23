@@ -1,0 +1,25 @@
+{
+  "n_load_terminals": 91,
+  "n_wye": 84,
+  "n_delta": 7,
+  "connsec_worst_min": 0.9657,
+  "connsec_binding": {
+    "terminal": "63.1",
+    "connection": "wye",
+    "hour": 19
+  },
+  "worst_wye_LN": {
+    "v": 0.9657,
+    "terminal": "63.1",
+    "hour": 19
+  },
+  "worst_delta_LL": {
+    "v": 0.9792,
+    "terminal": "65.ab",
+    "hour": 19
+  },
+  "aux_bus65_LN_node": {
+    "v": 0.9643,
+    "hour": 19
+  }
+}

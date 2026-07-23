@@ -1,0 +1,167 @@
+{
+  "LL_leading": {
+    "support": [
+      "711",
+      "735",
+      "740"
+    ],
+    "metric": "ll",
+    "budgets": [
+      {
+        "budget": "10/25/3",
+        "pop": 10,
+        "gen": 25,
+        "seeds": 3,
+        "feasible_runs": 2,
+        "best_total": 1043.6,
+        "best_vmin": 0.9568,
+        "best_vector": [
+          313.0,
+          360.7,
+          369.9
+        ],
+        "median_total": 1044.5
+      },
+      {
+        "budget": "20/40/8",
+        "pop": 20,
+        "gen": 40,
+        "seeds": 8,
+        "feasible_runs": 1,
+        "best_total": 1043.7,
+        "best_vmin": 0.9568,
+        "best_vector": [
+          315.6,
+          373.6,
+          354.5
+        ],
+        "median_total": 1043.7
+      },
+      {
+        "budget": "30/60/12",
+        "pop": 30,
+        "gen": 60,
+        "seeds": 12,
+        "feasible_runs": 8,
+        "best_total": 1043.0,
+        "best_vmin": 0.9568,
+        "best_vector": [
+          293.3,
+          387.7,
+          362.0
+        ],
+        "median_total": 1043.2
+      }
+    ]
+  },
+  "LL_runnerup": {
+    "support": [
+      "735",
+      "740",
+      "741"
+    ],
+    "metric": "ll",
+    "budgets": [
+      {
+        "budget": "10/25/3",
+        "pop": 10,
+        "gen": 25,
+        "seeds": 3,
+        "feasible_runs": 1,
+        "best_total": 1080.0,
+        "best_vmin": 0.9568,
+        "best_vector": [
+          413.1,
+          351.1,
+          315.8
+        ],
+        "median_total": 1080.0
+      },
+      {
+        "budget": "20/40/8",
+        "pop": 20,
+        "gen": 40,
+        "seeds": 8,
+        "feasible_runs": 3,
+        "best_total": 1043.0,
+        "best_vmin": 0.9568,
+        "best_vector": [
+          392.9,
+          441.0,
+          209.1
+        ],
+        "median_total": 1043.9
+      },
+      {
+        "budget": "30/60/12",
+        "pop": 30,
+        "gen": 60,
+        "seeds": 12,
+        "feasible_runs": 7,
+        "best_total": 1042.8,
+        "best_vmin": 0.9568,
+        "best_vector": [
+          394.3,
+          433.5,
+          215.0
+        ],
+        "median_total": 1043.2
+      }
+    ]
+  },
+  "LG_winner": {
+    "support": [
+      "711",
+      "737",
+      "740"
+    ],
+    "metric": "lg",
+    "budgets": [
+      {
+        "budget": "10/25/3",
+        "pop": 10,
+        "gen": 25,
+        "seeds": 3,
+        "feasible_runs": 3,
+        "best_total": 1288.8,
+        "best_vmin": 0.9568,
+        "best_vector": [
+          423.9,
+          417.0,
+          447.9
+        ],
+        "median_total": 1289.7
+      },
+      {
+        "budget": "20/40/8",
+        "pop": 20,
+        "gen": 40,
+        "seeds": 8,
+        "feasible_runs": 8,
+        "best_total": 1288.3,
+        "best_vmin": 0.9568,
+        "best_vector": [
+          441.7,
+          445.1,
+          401.5
+        ],
+        "median_total": 1289.2
+      },
+      {
+        "budget": "30/60/12",
+        "pop": 30,
+        "gen": 60,
+        "seeds": 12,
+        "feasible_runs": 12,
+        "best_total": 1288.4,
+        "best_vmin": 0.9568,
+        "best_vector": [
+          392.5,
+          449.0,
+          446.9
+        ],
+        "median_total": 1289.7
+      }
+    ]
+  }
+}

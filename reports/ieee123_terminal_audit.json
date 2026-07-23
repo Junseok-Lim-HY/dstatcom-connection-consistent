@@ -1,0 +1,30 @@
+{
+  "n_loads": 91,
+  "connection_split": {
+    "wye": 84,
+    "delta": 7
+  },
+  "phase_split": {
+    "1ph": 89,
+    "3ph": 2
+  },
+  "delta_load_buses": [
+    "35",
+    "65",
+    "76"
+  ],
+  "bus_65_load_connection": [
+    "delta"
+  ],
+  "bus_83_load_connection": [
+    "wye"
+  ],
+  "bus_65_ln_ll_at_peak": [
+    0.9643,
+    0.9792
+  ],
+  "bus_83_ln_ll_at_peak": [
+    1.0408,
+    1.0371
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "thermal_peak": {
+    "load_mult": 1.34,
+    "base_max_line_loading_pct": 122.1,
+    "design_max_line_loading_pct": 114.8,
+    "max_converter_current_a": 48.7,
+    "converter_rating_a": 57.0,
+    "note": "peak line overload is present in the base case and is a feeder reinforcement issue independent of the shunt reactive support, which mildly relieves it; every converter current is within rating."
+  },
+  "robustness": {
+    "nominal_lambda": 1.28,
+    "n": 200,
+    "sigma": 0.05,
+    "droop": {
+      "mean_Ev": 0.003,
+      "p95_Ev": 0.002,
+      "max_Ev": 0.1841,
+      "frac_violating": 0.07
+    },
+    "coordinated_forecast": {
+      "mean_Ev": 0.003,
+      "p95_Ev": 0.002,
+      "max_Ev": 0.1841,
+      "frac_violating": 0.07
+    },
+    "fixed": {
+      "mean_Ev": 0.003,
+      "p95_Ev": 0.002,
+      "max_Ev": 0.1841,
+      "frac_violating": 0.07
+    }
+  }
+}

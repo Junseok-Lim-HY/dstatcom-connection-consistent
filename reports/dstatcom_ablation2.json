@@ -1,0 +1,55 @@
+{
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "base_worst": {
+    "line_to_ground": 0.8803,
+    "line_to_line": 0.8986,
+    "overstatement_pu": 0.0183
+  },
+  "lg_total_kvar": {
+    "median": 1280.6,
+    "iqr": [
+      1279.5,
+      1282.4
+    ],
+    "min": 1279.2,
+    "max": 1289.8
+  },
+  "ll_total_kvar": {
+    "median": 1062.7,
+    "iqr": [
+      1054.0,
+      1062.8
+    ],
+    "min": 1035.6,
+    "max": 1063.2
+  },
+  "median_relative_increase_pct": 20.7,
+  "lg_support_freq": {
+    "711,737,738": 1,
+    "711,737,740": 4,
+    "711,738,740": 2,
+    "711,737,741": 1
+  },
+  "ll_support_freq": {
+    "711,740,741": 5,
+    "711,735,741": 2,
+    "711,738,741": 1
+  },
+  "lg_design_cross": {
+    "lg_min": 0.9562,
+    "ll_min": 0.9647
+  },
+  "ll_design_cross": {
+    "lg_min": 0.9433,
+    "ll_min": 0.9562
+  }
+}

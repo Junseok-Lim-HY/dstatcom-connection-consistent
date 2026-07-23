@@ -1,0 +1,67 @@
+{
+  "design_buses": [
+    "735",
+    "740",
+    "741"
+  ],
+  "total_kvar": 1041.3,
+  "proxy_setting": {
+    "epsQ": 0.05,
+    "max_sweeps": 400,
+    "init_spread_kvar": 0.067,
+    "init_independent": true
+  },
+  "proxy_capture_vs_reserve_preserving_pct": 44,
+  "base": {
+    "worst_min": 0.8986,
+    "max_v": 1.0312,
+    "Ev": 4.2126,
+    "energy_loss_kwh": 3331.0,
+    "max_vuf_pct": 5.27,
+    "max_lvur_pct": 5.14,
+    "max_line_loading_pct": 122.1
+  },
+  "fixed": {
+    "worst_min": 0.9565,
+    "max_v": 1.0322,
+    "Ev": 0.0,
+    "energy_loss_kwh": 2995.4,
+    "max_vuf_pct": 4.27,
+    "max_lvur_pct": 4.17,
+    "max_line_loading_pct": 114.8
+  },
+  "cap": {
+    "worst_min": 0.9502,
+    "max_v": 1.0311,
+    "Ev": 0.0,
+    "energy_loss_kwh": 3024.2,
+    "max_vuf_pct": 4.56,
+    "max_lvur_pct": 4.42,
+    "max_line_loading_pct": 116.3
+  },
+  "droop": {
+    "worst_min": 0.9565,
+    "max_v": 1.0312,
+    "Ev": 0.0,
+    "energy_loss_kwh": 2928.3,
+    "max_vuf_pct": 4.27,
+    "max_lvur_pct": 4.17,
+    "max_line_loading_pct": 114.8
+  },
+  "coord": {
+    "worst_min": 0.9526,
+    "max_v": 1.0318,
+    "Ev": 0.0,
+    "energy_loss_kwh": 2843.5,
+    "max_vuf_pct": 4.31,
+    "max_lvur_pct": 4.2,
+    "max_line_loading_pct": 115.0
+  },
+  "coordrp": {
+    "worst_min": 0.9562,
+    "max_v": 1.031,
+    "Ev": 0.0,
+    "energy_loss_kwh": 2843.5,
+    "max_line_loading_pct": 114.8
+  }
+}

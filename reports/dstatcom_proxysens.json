@@ -1,0 +1,265 @@
+{
+  "base_setting": {
+    "v_down": 1.0,
+    "v_up": 1.03,
+    "beta": 0.4
+  },
+  "base_row": {
+    "v_down": 1.0,
+    "v_up": 1.03,
+    "beta": 0.4,
+    "Ev": 0.0,
+    "loss_kwh": 2928.3,
+    "mean_iters": 3.3,
+    "pct_coord_capture": 43.8
+  },
+  "n_settings": 27,
+  "all_feasible": true,
+  "capture_pct_min": 9.7,
+  "capture_pct_max": 79.7,
+  "rows": [
+    {
+      "v_down": 1.0,
+      "v_up": 1.03,
+      "beta": 0.4,
+      "Ev": 0.0,
+      "loss_kwh": 2928.3,
+      "mean_iters": 3.3,
+      "pct_coord_capture": 43.8
+    },
+    {
+      "v_down": 0.99,
+      "v_up": 1.02,
+      "beta": 0.2,
+      "Ev": 0.0,
+      "loss_kwh": 2877.3,
+      "mean_iters": 11.2,
+      "pct_coord_capture": 77.6
+    },
+    {
+      "v_down": 0.99,
+      "v_up": 1.02,
+      "beta": 0.4,
+      "Ev": 0.0,
+      "loss_kwh": 2877.0,
+      "mean_iters": 6.4,
+      "pct_coord_capture": 77.8
+    },
+    {
+      "v_down": 0.99,
+      "v_up": 1.02,
+      "beta": 0.6,
+      "Ev": 0.0,
+      "loss_kwh": 2874.2,
+      "mean_iters": 22.2,
+      "pct_coord_capture": 79.7
+    },
+    {
+      "v_down": 0.99,
+      "v_up": 1.03,
+      "beta": 0.2,
+      "Ev": 0.0,
+      "loss_kwh": 2889.4,
+      "mean_iters": 10.4,
+      "pct_coord_capture": 69.6
+    },
+    {
+      "v_down": 0.99,
+      "v_up": 1.03,
+      "beta": 0.4,
+      "Ev": 0.0,
+      "loss_kwh": 2889.4,
+      "mean_iters": 5.9,
+      "pct_coord_capture": 69.6
+    },
+    {
+      "v_down": 0.99,
+      "v_up": 1.03,
+      "beta": 0.6,
+      "Ev": 0.0,
+      "loss_kwh": 2888.9,
+      "mean_iters": 7.8,
+      "pct_coord_capture": 69.9
+    },
+    {
+      "v_down": 0.99,
+      "v_up": 1.04,
+      "beta": 0.2,
+      "Ev": 0.0,
+      "loss_kwh": 2897.6,
+      "mean_iters": 11.1,
+      "pct_coord_capture": 64.2
+    },
+    {
+      "v_down": 0.99,
+      "v_up": 1.04,
+      "beta": 0.4,
+      "Ev": 0.0,
+      "loss_kwh": 2897.6,
+      "mean_iters": 5.8,
+      "pct_coord_capture": 64.2
+    },
+    {
+      "v_down": 0.99,
+      "v_up": 1.04,
+      "beta": 0.6,
+      "Ev": 0.0,
+      "loss_kwh": 2897.6,
+      "mean_iters": 5.5,
+      "pct_coord_capture": 64.2
+    },
+    {
+      "v_down": 1.0,
+      "v_up": 1.02,
+      "beta": 0.2,
+      "Ev": 0.0,
+      "loss_kwh": 2916.4,
+      "mean_iters": 5.7,
+      "pct_coord_capture": 51.7
+    },
+    {
+      "v_down": 1.0,
+      "v_up": 1.02,
+      "beta": 0.4,
+      "Ev": 0.0,
+      "loss_kwh": 2913.8,
+      "mean_iters": 5.7,
+      "pct_coord_capture": 53.5
+    },
+    {
+      "v_down": 1.0,
+      "v_up": 1.02,
+      "beta": 0.6,
+      "Ev": 0.0,
+      "loss_kwh": 2909.8,
+      "mean_iters": 126.5,
+      "pct_coord_capture": 56.1
+    },
+    {
+      "v_down": 1.0,
+      "v_up": 1.03,
+      "beta": 0.2,
+      "Ev": 0.0,
+      "loss_kwh": 2928.3,
+      "mean_iters": 5.3,
+      "pct_coord_capture": 43.8
+    },
+    {
+      "v_down": 1.0,
+      "v_up": 1.03,
+      "beta": 0.6,
+      "Ev": 0.0,
+      "loss_kwh": 2927.5,
+      "mean_iters": 10.1,
+      "pct_coord_capture": 44.4
+    },
+    {
+      "v_down": 1.0,
+      "v_up": 1.04,
+      "beta": 0.2,
+      "Ev": 0.0,
+      "loss_kwh": 2937.4,
+      "mean_iters": 5.4,
+      "pct_coord_capture": 37.8
+    },
+    {
+      "v_down": 1.0,
+      "v_up": 1.04,
+      "beta": 0.4,
+      "Ev": 0.0,
+      "loss_kwh": 2937.3,
+      "mean_iters": 3.0,
+      "pct_coord_capture": 37.8
+    },
+    {
+      "v_down": 1.0,
+      "v_up": 1.04,
+      "beta": 0.6,
+      "Ev": 0.0,
+      "loss_kwh": 2936.3,
+      "mean_iters": 4.0,
+      "pct_coord_capture": 38.5
+    },
+    {
+      "v_down": 1.01,
+      "v_up": 1.02,
+      "beta": 0.2,
+      "Ev": 0.0,
+      "loss_kwh": 2971.6,
+      "mean_iters": 5.2,
+      "pct_coord_capture": 15.2
+    },
+    {
+      "v_down": 1.01,
+      "v_up": 1.02,
+      "beta": 0.4,
+      "Ev": 0.0,
+      "loss_kwh": 2971.4,
+      "mean_iters": 72.0,
+      "pct_coord_capture": 15.3
+    },
+    {
+      "v_down": 1.01,
+      "v_up": 1.02,
+      "beta": 0.6,
+      "Ev": 0.0,
+      "loss_kwh": 2976.6,
+      "mean_iters": 100.8,
+      "pct_coord_capture": 11.8
+    },
+    {
+      "v_down": 1.01,
+      "v_up": 1.03,
+      "beta": 0.2,
+      "Ev": 0.0,
+      "loss_kwh": 2977.9,
+      "mean_iters": 4.9,
+      "pct_coord_capture": 11.0
+    },
+    {
+      "v_down": 1.01,
+      "v_up": 1.03,
+      "beta": 0.4,
+      "Ev": 0.0,
+      "loss_kwh": 2977.9,
+      "mean_iters": 3.5,
+      "pct_coord_capture": 11.0
+    },
+    {
+      "v_down": 1.01,
+      "v_up": 1.03,
+      "beta": 0.6,
+      "Ev": 0.0,
+      "loss_kwh": 2974.5,
+      "mean_iters": 68.5,
+      "pct_coord_capture": 13.3
+    },
+    {
+      "v_down": 1.01,
+      "v_up": 1.04,
+      "beta": 0.2,
+      "Ev": 0.0,
+      "loss_kwh": 2979.8,
+      "mean_iters": 4.7,
+      "pct_coord_capture": 9.7
+    },
+    {
+      "v_down": 1.01,
+      "v_up": 1.04,
+      "beta": 0.4,
+      "Ev": 0.0,
+      "loss_kwh": 2979.8,
+      "mean_iters": 3.0,
+      "pct_coord_capture": 9.7
+    },
+    {
+      "v_down": 1.01,
+      "v_up": 1.04,
+      "beta": 0.6,
+      "Ev": 0.0,
+      "loss_kwh": 2979.8,
+      "mean_iters": 4.5,
+      "pct_coord_capture": 9.7
+    }
+  ]
+}

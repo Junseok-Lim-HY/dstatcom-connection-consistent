@@ -1,0 +1,257 @@
+%% Supplementary Material for
+%% "Connection-Consistent Support Selection, Sizing, and Hourly Reactive-Power
+%%  Dispatch of D-STATCOMs in an Unbalanced IEEE 37-Node Distribution Feeder"
+%% Auxiliary analyses and detail tables that are summarized in the main article.
+\documentclass[journal]{IEEEtran}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+\usepackage{siunitx}
+\sisetup{detect-weight=true,detect-family=true,list-units=single,list-final-separator={, and }}
+\usepackage{placeins}
+\newcommand{\kvar}{\text{kvar}}
+\newcommand{\Qmax}{Q^{\max}}
+\graphicspath{{figs/}}
+
+% Real S-prefix numbering for supplementary sections, tables, and figures.
+\renewcommand{\thesection}{S-\Roman{section}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+
+\begin{document}
+\title{Supplementary Material:\\ Connection-Consistent Planning and Volt/VAR Control
+of D-STATCOMs in Unbalanced Delta Feeders}
+\author{Junseok Lim and Sungwoo Bae,~\IEEEmembership{Member,~IEEE}}
+\markboth{IEEE Access --- Supplementary Material}{}
+\maketitle
+
+This supplement collects analyses that support, but do not select or validate, the
+canonical D-STATCOM design of the main article. Section~\ref{ssec:opt} holds the
+auxiliary optimizer-sensitivity study moved out of the main text;
+Section~\ref{ssec:top} the single-evaluator two-stage enumeration of
+the top supports; Section~\ref{ssec:screen} current/thermal detail;
+and Section~\ref{ssec:manifest} the reproduction manifest.
+
+\section{Auxiliary Optimizer-Sensitivity Study}
+\label{ssec:opt}
+The main article selects the canonical support by full enumeration of the 120
+three-device supports; the five-optimizer comparison here is an \emph{auxiliary}
+score-sensitivity check on the mixed-unit composite objective and does \emph{not}
+select or validate the canonical support.
+
+This auxiliary study uses the composite search score
+\begin{equation}
+\begin{split}
+F(\mathbf{Q}^{\max}) ={}&
+\frac{1}{|\Lambda_s|}\sum_{\lambda\in\Lambda_s}
+\Bigl[w_1\,V_{\mathrm{viol}}(\lambda) + w_2\sum_{m}(v_m(\lambda)-1)^2 \\
+&{}+ w_3\, P_{\mathrm{loss}}(\lambda)\Bigr]
++ w_4\sum_{i}\Qmax_i
+\end{split}
+\label{eq:objective_supp}
+\end{equation}
+where $\Lambda_s=\{1.00,1.17,1.34\}$ spans nominal to peak demand and the weights are
+$w_1=2000$, $w_2=20$, $w_3=0.01$, $w_4=0.02$. The four terms carry different physical
+units, so $F$ is a scale-dependent \emph{search heuristic}: it is deliberately
+\emph{not} claimed to be mathematically equivalent to the planning problem, and the
+installed design is never read off from $F$. It is used here only to compare how
+different metaheuristics traverse the continuous-sizing score on one deterministic
+instance.
+
+\emph{Implementation check.} On four standard 10-dimensional benchmark functions
+(sphere, Rastrigin, Ackley, Rosenbrock) under a common budget (population~30,
+150~iterations, 10~seeds), the implementations produced the numerical ordering in
+Table~\ref{tab:benchmarks}. On these four functions and this budget alone, the
+ordering serves only as a basic sanity check, not a general ranking validation, and
+does not support the canonical design.
+
+\begin{table}[!t]
+\caption{Optimizer Implementation Check: Mean Best Objective on 10-D Benchmark
+Functions (10 Seeds; Lower Is Better)}
+\label{tab:benchmarks}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\columnwidth}{@{}l R R R R@{}}
+\toprule
+\textbf{Alg.} & \textbf{Sphere} & \textbf{Rastrigin} & \textbf{Ackley} & \textbf{Rosenbrock} \\
+\midrule
+HHO   & \num{4.5e-67} & \num{0.00}  & \num{4.4e-16} & \num{9.6e-4} \\
+SHADE & \num{2.6e-9}  & \num{6.48}  & \num{5.8e-4}  & \num{6.03} \\
+GWO   & \num{7.4e-20} & \num{12.76} & \num{2.9e-9}  & \num{6.82} \\
+PSO   & \num{1.0e-7}  & \num{9.72}  & \num{3.5e-3}  & \num{16.51} \\
+RIME  & \num{9.5e-4}  & \num{8.46}  & \num{0.61}    & \num{50.91} \\
+\midrule
+\multicolumn{5}{@{}l}{\footnotesize Mean ranks: HHO 1.00, SHADE 2.50, GWO 3.00, PSO 4.00, RIME 4.50.} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\emph{Sizing-score comparison.} On the connection-consistent sizing score, the ten
+continuous pool capacities were optimized over ten seeds by each metaheuristic
+(population~15, 40~iterations). Because sharing a seed index does not produce matched
+observations across algorithms, the seed-wise objectives are treated as independent
+samples: a Kruskal--Wallis omnibus test, followed where warranted by Holm-adjusted
+Mann--Whitney tests against the best-mean optimizer with Cliff's $\delta$, tests only
+whether a difference is detectable on this single instance. The means are numerically
+close (Table~\ref{tab:optcompare}, Figs.~\ref{fig:meanobj}--\ref{fig:convergence}),
+but the omnibus test detects a difference ($H=13.0$, $p=0.011$), concentrated in the
+SHADE--HHO contrast; this is \emph{not} evidence of optimizer equivalence. Because
+the ``best-mean'' baseline is chosen after observing the data, the pairwise
+comparison is exploratory. All tabulated solutions reach a peak line-to-line minimum
+near \SI{0.955}{pu}, below the \SI{0.9562}{pu} planning acceptance, and are therefore
+infeasible for the planning problem---they only characterize the score landscape.
+
+\begin{table}[!t]
+\caption{Sizing-Optimizer Comparison on the Connection-Consistent Objective
+(10 Seeds, Ten-Bus Pool)}
+\label{tab:optcompare}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabularx}{\columnwidth}{@{}c l *{3}{R} c@{}}
+\toprule
+\textbf{Rank} & \textbf{Alg.} & \textbf{Mean obj.} & \textbf{Std} & \textbf{Mean kvar} & \textbf{$\delta$ vs.\ best} \\
+\midrule
+1 & SHADE & 23.238 & 0.092 & 1021.5 & --- \\
+2 & PSO   & 23.319 & 0.175 & 1026.0 & $-0.24$ \\
+3 & GWO   & 23.329 & 0.165 & 1027.3 & $-0.32$ \\
+4 & HHO   & 23.506 & 0.163 & 1036.9 & $-0.94^\ast$ \\
+5 & RIME  & 23.567 & 0.411 & 1036.4 & $-0.54$ \\
+\bottomrule
+\multicolumn{6}{@{}p{0.97\columnwidth}}{\footnotesize Kruskal--Wallis $H=13.0$,
+$p=0.011$; Cliff's $\delta$ vs.\ SHADE; $^\ast$Holm Mann--Whitney $p<0.01$. All rows
+give $\min v\approx\SI{0.955}{pu}$, below the \SI{0.9562}{pu} acceptance---infeasible
+for planning; score-sensitivity only.} \\
+\end{tabularx}
+\end{table}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{Fig3.pdf}
+\caption{Mean sizing objective (10 seeds) with standard-deviation error bars; the
+detectable difference is concentrated in the SHADE--HHO comparison.}
+\label{fig:meanobj}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{Fig4.pdf}
+\caption{Representative best-objective convergence histories of the five optimizers.}
+\label{fig:convergence}
+\end{figure}
+
+\section{Two-Stage Enumeration: Top Supports (Single Evaluator)}
+\label{ssec:top}
+Each of the 120 three-device supports is sized by the two-stage procedure of the main
+text (Stage~A: a feasible-point search that penalizes \emph{both} voltage bounds;
+Stage~B: minimize total kvar from that point) with a \emph{full feeder recompilation
+at every objective evaluation}, so all 120 supports---and both voltage metrics---are
+compared under one identical evaluator, the same used by the 24-hour operation.
+Table~\ref{tab:topdist} lists the five lowest-capacity supports under each metric
+(\num{120} line-to-line and \num{98} line-to-ground supports returned a verified
+feasible vector under the stated budget; the remaining supports are unresolved
+numerical-search outcomes, not infeasibility certificates). The line-to-line totals
+cluster within a few kvar, confirming that the top supports are numerically
+near-equivalent.
+
+\begin{table}[!t]
+\caption{Five Lowest-Capacity Two-Stage Supports Under Each Metric
+(Full-Recompile Evaluator)}
+\label{tab:topdist}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\footnotesize
+\begin{tabularx}{\columnwidth}{@{}L C L C@{}}
+\toprule
+\textbf{LL support} & \textbf{kvar} & \textbf{LG support} & \textbf{kvar} \\
+\midrule
+735,\,740,\,741 & 1041.3 & 711,\,737,\,740 & 1287.4 \\
+711,\,735,\,740 & 1041.4 & 737,\,740,\,741 & 1288.0 \\
+710,\,740,\,741 & 1042.9 & 711,\,737,\,741 & 1290.1 \\
+711,\,735,\,741 & 1043.0 & 711,\,738,\,740 & 1290.6 \\
+710,\,711,\,740 & 1043.3 & 711,\,738,\,741 & 1290.8 \\
+\bottomrule
+\multicolumn{4}{@{}p{0.97\columnwidth}}{\footnotesize Totals from the two-stage
+sizing with a full feeder recompilation at every evaluation, over all 120 supports;
+a support is accepted only if a full recompile converges within the
+\numrange{0.9562}{1.0438}~pu band after \SI{0.1}{\kvar} rounding.} \\
+\end{tabularx}
+\end{table}
+
+Because every objective evaluation performs a full feeder recompilation, the ranking
+is not an artefact of a faster surrogate evaluator. The lowest-capacity accepted
+line-to-line support is $\{735,740,741\}$ at \SI{1041.3}{\kvar}
+($v_{\min}=\SI{0.9565}{pu}$), with the next accepted support $\{711,735,740\}$ only
+\SI{0.1}{\kvar} higher and the rest within about \SI{2}{\kvar}; the line-to-ground
+winner is $\{711,737,740\}$ at \SI{1287.4}{\kvar}. The exact ordering among the top
+line-to-line supports is therefore \emph{not numerically resolved} under the stated
+two-seed budget; the \SI{23.6}{\percent} metric gap between the line-to-line and
+line-to-ground designs is large relative to the few-kvar spread among the top
+returned support totals, so its \emph{direction} is stable even though the exact
+winners are not seed-certified.
+
+\section{Current and Thermal Screens}
+\label{ssec:screen}
+The per-device converter currents are reported as \emph{operating currents} only; no
+independent hardware current or apparent-power limit is imposed in the planning model,
+so the derived benchmark $I^{\mathrm{ben}}_i$ (from the installed kvar at
+\SI{0.95}{pu}) is a reporting reference rather than a nameplate verification---a device
+sized in kvar satisfies it almost automatically above \SI{0.95}{pu}. At the peak the
+per-device operating currents are \SIlist{48.2;30.6;48.8}{A} against the derived
+benchmarks \SIlist{49.8;31.6;50.5}{A}, matching Table~4 of the main article
+(maximum operating \SI{48.8}{A} versus benchmark \SI{50.5}{A}); a
+converter whose nameplate must guarantee its rating down to \SI{0.95}{pu} would carry
+a nominal apparent-power rating $S^{\mathrm{rated}}_i\ge Q^{\max}_i/0.95$, an input to
+the hardware-constrained extension noted as future work. The binding thermal quantity is the
+maximum phase-conductor RMS current of the head-line segment (L35, 799r--701) at the
+peak hour: line loading falls from \SI{122.1}{\percent} of the model's normal
+ampacity in the base case to \SI{114.8}{\percent} with the design---so the shunt
+reactive support mildly relieves, but does not eliminate, the overload. The residual
+overload therefore requires feeder reinforcement or a joint re-optimization of line
+capacity and reactive support.
+
+\section{Data-Availability Manifest}
+\label{ssec:manifest}
+Table~\ref{tab:manifest} lists the analysis steps, what each regenerates from raw
+inputs, and the artifacts the consistency test checks (without re-optimizing). The
+corresponding scripts and their exact filenames are provided in the accompanying
+GitHub repository (see the main article's Data Availability statement).
+
+\begin{table*}[!t]
+\caption{Reproduction Manifest (Main-Article Tables/Figures)}
+\label{tab:manifest}
+\centering
+\renewcommand{\arraystretch}{1.3}
+\setlength{\tabcolsep}{4pt}
+\scriptsize
+\begin{tabular}{@{}>{\scriptsize\raggedright\arraybackslash}p{0.365\textwidth} >{\raggedright\arraybackslash}p{0.30\textwidth} >{\raggedright\arraybackslash}p{0.24\textwidth}@{}}
+\toprule
+\textbf{Analysis step} & \textbf{Regenerates from raw inputs} & \textbf{Checked by consistency test} \\
+\midrule
+Two-stage LL/LG enumeration (single numerical source) & LL/LG two-stage enumeration (Table~\ref{tab:topdist}) & Adopted \SI{1041.3}{\kvar}; 120/98 counts; 23.6\% gap \\
+Canonical/ablation report assembly & Assembles the adopted canonical and ablation results (design table, LL/LG gap) from the two-stage output & Design buses, per-bus/total kvar, 23.6\% gap \\
+Stand-alone ablation enumerator (cross-check) & Legacy cross-check ablation enumerator (not the source of record) & LG/LL totals, feasible counts \\
+Minimum-count search & Minimum feasible device-count search & 1-/2-device $\hat v_{\mathrm{best}}$ \\
+24-hour operating comparison & Regenerates both coordinated references and all six strategy rows; 24-h comparison; VUF/LVUR; loss; head-line loading & Six-strategy minima/maxima, unrounded losses, reserve-band feasibility, capture ratio, per-strategy head-line loading, VUF/LVUR \\
+Near-peak sensitivity and thermal screen & Exploratory near-peak scalar-load sensitivity; base/design head-line loading & 7\% violations; 122.1\% base vs 114.8\% design \\
+Proxy knee/damping sensitivity & Proxy knee/damping sensitivity & 27-setting capture range \\
+IEEE 123 connection audit & IEEE 123 connection audit & 0.9657 pu, bus 63 \\
+Figure generation & All figures & Figure/table numbers \\
+Automated consistency test & \emph{Checks} stored outputs only & (runs all checks) \\
+\bottomrule
+\multicolumn{3}{@{}p{0.95\textwidth}}{\footnotesize The consistency test verifies
+cross-file numerical identities against stored outputs and is \emph{not} a substitute
+for rerunning the optimization. Withheld: only transient solver logs and large
+intermediate power-flow dumps, which are not required to reproduce any reported
+result.} \\
+\end{tabular}
+\end{table*}
+
+\end{document}

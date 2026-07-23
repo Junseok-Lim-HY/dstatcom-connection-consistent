@@ -1,0 +1,142 @@
+{
+  "method": "single-evaluator two-stage full enumeration under each metric; full feeder recompilation at every objective evaluation",
+  "seeds": [
+    1,
+    2
+  ],
+  "margin": 0.006,
+  "base_worst": {
+    "line_to_ground": 0.8803,
+    "line_to_line": 0.8986,
+    "overstatement_pu": 0.0183
+  },
+  "lg_design": {
+    "support": [
+      "711",
+      "737",
+      "740"
+    ],
+    "total_kvar": 1287.4,
+    "q_kvar": [
+      430.9,
+      443.2,
+      413.3
+    ],
+    "min_v_lg": 0.9567
+  },
+  "ll_design": {
+    "support": [
+      "735",
+      "740",
+      "741"
+    ],
+    "total_kvar": 1041.3,
+    "q_kvar": [
+      393.6,
+      249.2,
+      398.5
+    ],
+    "min_v_ll": 0.9565
+  },
+  "lg_design_cross": {
+    "lg_min": 0.9567,
+    "ll_min": 0.9652
+  },
+  "ll_design_cross": {
+    "lg_min": 0.9407,
+    "ll_min": 0.9565
+  },
+  "relative_increase_pct": 23.6,
+  "n_feasible_lg": 98,
+  "n_feasible_ll": 120,
+  "lg_top5": [
+    [
+      [
+        "711",
+        "737",
+        "740"
+      ],
+      1287.4
+    ],
+    [
+      [
+        "737",
+        "740",
+        "741"
+      ],
+      1288.0
+    ],
+    [
+      [
+        "711",
+        "737",
+        "741"
+      ],
+      1290.1
+    ],
+    [
+      [
+        "711",
+        "738",
+        "740"
+      ],
+      1290.6
+    ],
+    [
+      [
+        "711",
+        "738",
+        "741"
+      ],
+      1290.8
+    ]
+  ],
+  "ll_top5": [
+    [
+      [
+        "735",
+        "740",
+        "741"
+      ],
+      1041.3
+    ],
+    [
+      [
+        "711",
+        "735",
+        "740"
+      ],
+      1041.4
+    ],
+    [
+      [
+        "710",
+        "740",
+        "741"
+      ],
+      1042.9
+    ],
+    [
+      [
+        "711",
+        "735",
+        "741"
+      ],
+      1043.0
+    ],
+    [
+      [
+        "710",
+        "711",
+        "740"
+      ],
+      1043.3
+    ]
+  ],
+  "design_minmax": {
+    "ll_min": 0.9565,
+    "ll_max": 1.0418,
+    "lg_min": 0.9567,
+    "lg_max": 1.0372
+  }
+}

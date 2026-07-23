@@ -1,0 +1,115 @@
+OK   canonical support ['735', '740', '741']
+OK   design buses in text
+OK   total kvar 1041.3
+OK   per-bus kvar in Table V
+OK   fixed min 0.9565
+OK   cap min 0.9502
+OK   coord min 0.9526
+OK   fixed max 1.0322
+OK   base Ev 4.2126
+OK   loss reductions 2.2%/5.1%
+OK   proxy capture ~44%
+OK   VUF base 5.27
+OK   VUF fixed 4.27
+OK   VUF cap 4.56
+OK   VUF coord 4.31
+OK   1-dev vbest 0.9266
+OK   2-dev vbest 0.949
+OK   min-count 3 verified in report
+OK   no global-minimum claim
+OK   global-minimum mentions bounded (2)
+OK   enum ablation increase 23.6%
+OK   LG enum kvar 1287.4
+OK   LL enum kvar 1041.3
+OK   LL enumeration selects the canonical design
+OK   LG base 0.8803
+OK   enum LL design clears 0.9562 (LL min 0.9565)
+OK   no residual 'greedy support selection' as primary method
+OK   enumeration named as primary method
+OK   no 'greedy forward selection' as primary method in Contributions
+OK   no 'minimum-capacity design' claim
+OK   no 'service limit' phrasing (use study-band lower limit)
+OK   no 'by either definition' VUF/NEMA claim
+OK   no DOI/TAG/HASH placeholders
+OK   Data Availability states partial disclosure
+OK   NEMA LVUR computed and reported
+OK   study-band lower limit phrasing present
+OK   optimizer feasibility caveat present (supplement S-I)
+OK   composite objective + optimizer study moved out of main body
+OK   feature-comparison Table I removed (prose comparison)
+OK   v_best reported as largest value found (not global)
+OK   top-support ranking softened (P0-5)
+OK   lambda=1.28 relabelled as near-peak sensitivity (P0-7)
+OK   ablation feasible counts 98/120 in Table VIII
+OK   IEEE 123 no-action transfer framing (P1-6)
+OK   line-to-ground 'meaningless' claim removed (P0-2)
+OK   canonical scoped to stated enumeration budget (P0-1)
+OK   single full-recompile evaluator stated (16th P0-1)
+OK   current benchmark reframed as operating-only (16th P0-2)
+OK   two-stage Stage A/B equations given (16th P0-3)
+OK   robustness stated as 5% standard deviation (16th P1-9)
+OK   stale proxy 0.5 kvar/40 iterations removed (17th P0-1)
+OK   proxy tolerance unified to 0.05 kvar/400 sweeps in IV-J (17th P0-1)
+OK   Stage B sizing uses installed rating Q^max over support S (17th P0-2)
+OK   penalty coefficient/buffer defined for two-stage (17th P0-3)
+OK   capacitor comparison reframed to equal nominal kvar / idealized (17th P0-4)
+OK   Fig. 1 caption stale legend text removed (17th P0-5)
+OK   one-/two-device search uses same evaluator (17th P1-3)
+OK   no unsupported 'statistically' claim (P0-2)
+OK   ranking described as numerically resolved (P0-2)
+OK   funding statement present (verbatim per author)
+OK   wye line-to-neutral metric added (P0-4)
+OK   conclusion min-count softened to protocol (P0-7)
+OK   data-availability documented/checked separation (P0-8)
+OK   LVUR magnitude notation (P1-1)
+OK   ablation 'unnecessarily large' softened (P1-3)
+OK   ablation 'wasted margin' softened (P1-3)
+OK   optimizer study moved to supplement (P1-1)
+OK   optimizer tables no longer in main body (P1-1)
+OK   near-equivalent top supports within ~2 kvar reported
+OK   reserve-preserving coordinated reference (18th P0-4)
+OK   min-count phrased as protocol-limited (P0-3)
+OK   two-stage procedure is the design-sizing method (Version B)
+OK   production eps_Q=0.05/400 stated explicitly (16th P0-6)
+OK   proxy initialization-independence reported (16th P0-6)
+OK   optimizer Contribution removed (P0-2)
+OK   research gap (iv) removed (P0-2)
+OK   Table 1 canonical/auxiliary load sets split (P0-5)
+OK   design table title budget-specific (P0-4)
+OK   canonical enumeration cost reported (P0-3)
+OK   beta-invariance quantified (P0-6)
+OK   undefined forecast-fixed schedule removed (P1-5)
+OK   123 connsec min 0.9657
+OK   123 binding bus 63
+OK   robust 7% of realizations
+OK   proxy 27 settings (report 27)
+OK   abstract <=250 words (got ~190)
+OK   coordinated-references subsection labeled (19th P0-3)
+OK   band-only coordinated row/label present (19th P0-4)
+OK   reserve-preserving coordinated row/label present (19th P0-4)
+OK   reserve-preserving Ev==0 (got 0.0)
+OK   reserve-preserving worst min ~0.9562 (got 0.9562)
+OK   reserve-preserving min 0.9562 in text
+OK   fixed worst_min 0.9565 in text
+OK   fixed head-line loading 114.8% in text
+OK   cap worst_min 0.9502 in text
+OK   cap head-line loading 116.3% in text
+OK   droop worst_min 0.9565 in text
+OK   droop head-line loading 114.8% in text
+OK   coord worst_min 0.9526 in text
+OK   coord head-line loading 115.0% in text
+OK   coordrp worst_min 0.9562 in text
+OK   coordrp head-line loading 114.8% in text
+OK   reserve-preserving capture ratio ~44% in text
+OK   unrounded coordinated losses (band-only/reserve-preserving) cited (19th P0-2)
+OK   current 48.2 A in main
+OK   current 30.6 A in main
+OK   current 48.8 A in main
+OK   current 49.8 A in main
+OK   current 31.6 A in main
+OK   current 50.5 A in main
+OK   supplement S-III max currents 48.8/50.5 A match main
+OK   supplement S-III stale currents (48.7/57.0 A) removed (19th P0-1)
+OK   manifest renamed rebuild_16th->build_canonical_reports (19th P0-6)
+
+PASS: 0 failing checks

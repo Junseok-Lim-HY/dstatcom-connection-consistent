@@ -1,0 +1,14 @@
+name: dstatcom-connection-consistent
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+      - -r requirements.txt
+# Reproducibility environment for the IEEE Access manuscript
+# "Connection-Consistent Planning and Volt/VAR Control of D-STATCOMs in Unbalanced
+#  Delta Feeders."
+# Verified on Python 3.9; the pinned dependencies are listed in requirements.txt.
+# Regenerate the reported results and figures by following the run order in README.md
+# (there is no single regenerate-all entry point; run the scripts in the documented order).

@@ -1,0 +1,35 @@
+{
+  "alt_1042p9": {
+    "fixed_min": 0.9568,
+    "fixed_max": 1.0321,
+    "fixed_loss": 2991.8,
+    "fixed_vuf": 4.26,
+    "fixed_lvur": 4.17,
+    "droop_min": 0.9568,
+    "droop_loss": 2924.9,
+    "coord_min": 0.9529,
+    "coord_loss": 2840.3
+  },
+  "canonical_1043p1": {
+    "fixed_min": 0.9563,
+    "fixed_max": 1.0327,
+    "fixed_loss": 3014.8,
+    "fixed_vuf": 4.26,
+    "fixed_lvur": 4.17,
+    "droop_min": 0.9563,
+    "droop_loss": 2941.6,
+    "coord_min": 0.951,
+    "coord_loss": 2844.9
+  },
+  "deltas": {
+    "fixed_min": 0.0005,
+    "fixed_max": -0.0006,
+    "fixed_loss": -23.0,
+    "fixed_vuf": 0.0,
+    "fixed_lvur": 0.0,
+    "droop_min": 0.0005,
+    "droop_loss": -16.7,
+    "coord_min": 0.0019,
+    "coord_loss": -4.6
+  }
+}
