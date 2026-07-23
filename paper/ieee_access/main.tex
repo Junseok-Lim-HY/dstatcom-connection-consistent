@@ -172,8 +172,8 @@ delta buses, line-to-neutral for wye buses).
 \section{Introduction}
 \label{sec:intro}
 \IEEEPARstart{M}{aintaining} feeder voltages within an acceptable band is a binding
-operational constraint under high penetration of renewable generation and
-electrified demand, particularly on unbalanced feeders where phase asymmetry
+operational constraint under high penetration of renewable generation,
+particularly on unbalanced feeders where phase asymmetry
 produces uneven voltage stress \cite{keane2013dgplanning,kashem2004dgvoltage}. On a
 three-wire delta feeder the loads and compensators are connected phase-to-phase, so
 the voltage they actually experience is the \emph{line-to-line} magnitude, not the
@@ -298,17 +298,17 @@ selection \cite{statcom2025cmes}, coordinated PV and D-STATCOM compensation unde
 fixed versus variable reactive-power modes \cite{pvdstatcom2025fixedvar},
 multi-objective Pareto integration of distributed generation and compensation
 \cite{pareto2024dgcomp}, and uncertainty-aware D-STATCOM sizing
-\cite{estatcom2024egwo}. A metaheuristic ranking alone does not bound the distance
-to the global optimum \cite{wolpert1997nfl}; the present paper therefore selects the
-final design by enumerating and sizing all candidate three-device supports rather
-than by a single solver's global search. An auxiliary five-optimizer
+\cite{estatcom2024egwo}. Because the simulator-based continuous sizing procedure
+does not provide a certified global optimality gap, the discrete three-device
+supports are fully enumerated and only the ratings within each fixed support are
+obtained numerically. An auxiliary five-optimizer
 sensitivity check on the continuous-sizing score is reported only in the
 supplementary material and neither selects nor validates the design.
 
 \subsection{Energy-Storage-Backed Converters}
 Energy-storage-backed converters and coordinated battery/PV reactive control
 have been studied for voltage regulation under high DER penetration
-\cite{zeraati2018bess,kabir2014pvbess,molina2011statcom_ess}. These works
+\cite{zeraati2018bess,kabir2014pvbess}. These works
 highlight the value of controllable, storage-capable converters but generally
 emphasize the active-power or dynamic-control layer. The present study does not
 model an energy-storage-backed converter; it isolates the steady-state
@@ -331,9 +331,10 @@ causal local Volt/VAR proxy (a steady-state law, without converter dynamics) so
 that the reported benefit is not an artefact of perfect foresight.
 
 \subsection{Research Gap}
-Building on established distribution-network and power-system modeling
-\cite{baran1989reconfig,sallam2011distribution,kundur1994stability}, three gaps
-motivate this work: (i) when raw node-voltage outputs are used without
+The framework builds on established distribution-network and power-system modeling
+\cite{baran1989reconfig,sallam2011distribution,kundur1994stability}. Based on the
+studies reviewed in Section~\ref{sec:related}, three gaps remain within the scope
+considered here: (i) when raw node-voltage outputs are used without
 connection-aware post-processing, a three-wire delta feeder can be assessed using
 line-to-ground magnitudes that are not the voltages applied across its phase-to-phase
 loads; (ii) placement, sizing, and
@@ -377,7 +378,7 @@ accompanying GitHub repository (see Data Availability).
 \textbf{Voltage quantity} & \textbf{Joint siting/sizing} &
 \textbf{Time-varying dispatch} \\
 \midrule
-\cite{statcom2025cmes}        & Balanced radial test systems      & No  & Bus magnitude (not explicitly reported) & Yes & No \\
+\cite{statcom2025cmes}        & IEEE 14-bus system with SCIG wind & No  & Bus magnitude (not explicitly reported) & Yes & No \\
 \cite{pvdstatcom2025fixedvar} & Balanced radial distribution      & No  & Bus magnitude (not explicitly reported) & Yes & Yes \\
 \cite{pareto2024dgcomp}       & Balanced radial distribution      & No  & Bus magnitude (not explicitly reported) & Yes & Yes \\
 \cite{estatcom2024egwo}       & Radial distribution, load unc.\   & No  & Bus magnitude (not explicitly reported) & Yes & No \\
