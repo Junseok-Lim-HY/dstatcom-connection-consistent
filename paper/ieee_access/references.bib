@@ -1,0 +1,472 @@
+% ============================================================
+%  References for the IEEE Access manuscript
+%  "Connection-Consistent Planning and Volt/VAR Control of
+%   D-STATCOMs in Unbalanced Delta Feeders"
+% ============================================================
+
+% ---------- Test system / tools ----------
+@misc{ieee37feeder,
+  author       = {{IEEE PES Distribution System Analysis Subcommittee}},
+  title        = {{IEEE} 37-Node Test Feeder},
+  howpublished = {IEEE Power \& Energy Society Distribution Test Feeders},
+  year         = {2010},
+  note         = {[Online]. Available: https://cmte.ieee.org/pes-testfeeders/. Accessed: Jul. 10, 2026.}
+}
+
+@misc{ieee123feeder,
+  author       = {{IEEE PES Distribution System Analysis Subcommittee}},
+  title        = {{IEEE} 123-Node Test Feeder},
+  howpublished = {IEEE Power \& Energy Society Distribution Test Feeders},
+  year         = {2010},
+  note         = {[Online]. Available: https://cmte.ieee.org/pes-testfeeders/. Accessed: Jul. 10, 2026.}
+}
+
+@misc{opendss,
+  author       = {Dugan, R. C. and {EPRI}},
+  title        = {{OpenDSS}: The Open Distribution System Simulator},
+  howpublished = {Electric Power Research Institute},
+  note         = {[Online]. Available: https://sourceforge.net/projects/electricdss/. Accessed: Jul. 10, 2026.}
+}
+
+@inproceedings{opendss_platform,
+  author    = {Dugan, R. C. and McDermott, T. E.},
+  title     = {An open source platform for collaborating on smart grid research},
+  booktitle = {Proc. IEEE Power Energy Soc. Gen. Meeting},
+  pages     = {1--7},
+  year      = {2011},
+  doi       = {10.1109/PES.2011.6039829}
+}
+
+@misc{ieee37dss,
+  author       = {{ElectricDSS}},
+  title        = {{IEEE} 37 Node Test Feeder {OpenDSS} model (ieee37.dss), distributed with the {OpenDSS} example circuits},
+  howpublished = {ElectricDSS repository, Test Feeders/IEEE 37 Bus},
+  year         = {2024},
+  note         = {[Online]. Available: https://sourceforge.net/projects/electricdss/files/. Accessed: Jul. 10, 2026.}
+}
+
+% (Removed: the authors' earlier E-STATCOM manuscript was not ultimately
+%  published, so it is not cited; the introduction states the research gap
+%  directly rather than as an extension of an unpublished prior work.)
+
+% ---------- FACTS / STATCOM / reactive support ----------
+@book{hingorani2000facts,
+  author    = {Hingorani, N. G. and Gyugyi, L.},
+  title     = {Understanding {FACTS}: Concepts and Technology of Flexible {AC} Transmission Systems},
+  publisher = {IEEE Press/Wiley},
+  address   = {Piscataway, NJ, USA},
+  year      = {2000}
+}
+
+@article{edris1997facts,
+  author  = {Edris, A. and others},
+  title   = {Proposed terms and definitions for flexible {AC} transmission system ({FACTS})},
+  journal = {IEEE Trans. Power Del.},
+  volume  = {12},
+  number  = {4},
+  pages   = {1848--1853},
+  year    = {1997},
+  doi     = {10.1109/61.634216}
+}
+
+@article{singh2009statcom,
+  author  = {Singh, B. and Saha, R. and Chandra, A. and Al-Haddad, K.},
+  title   = {Static synchronous compensators ({STATCOM}): a review},
+  journal = {IET Power Electron.},
+  volume  = {2},
+  number  = {4},
+  pages   = {297--324},
+  year    = {2009},
+  doi     = {10.1049/iet-pel.2008.0034}
+}
+
+% ---------- DG / planning / voltage support ----------
+@article{keane2013dgplanning,
+  author  = {Keane, A. and others},
+  title   = {State-of-the-art techniques and challenges ahead for distributed generation planning and optimization},
+  journal = {IEEE Trans. Power Syst.},
+  volume  = {28},
+  number  = {2},
+  pages   = {1493--1502},
+  year    = {2013},
+  doi     = {10.1109/TPWRS.2012.2214406}
+}
+
+@article{kashem2004dgvoltage,
+  author  = {Kashem, M. A. and Ledwich, G.},
+  title   = {Distributed generation as voltage support for single wire earth return systems},
+  journal = {IEEE Trans. Power Del.},
+  volume  = {19},
+  number  = {3},
+  pages   = {1002--1011},
+  year    = {2004},
+  doi     = {10.1109/TPWRD.2003.822977}
+}
+
+% ---------- Load-flow / voltage-stability indices ----------
+@article{haque1996loadflow,
+  author  = {Haque, M. H.},
+  title   = {Efficient load flow method for distribution systems with radial or mesh configuration},
+  journal = {IEE Proc. Gener. Transm. Distrib.},
+  volume  = {143},
+  number  = {1},
+  pages   = {33--38},
+  year    = {1996},
+  doi     = {10.1049/ip-gtd:19960045}
+}
+
+@article{chakravorty2001vsi,
+  author  = {Chakravorty, M. and Das, D.},
+  title   = {Voltage stability analysis of radial distribution networks},
+  journal = {Int. J. Electr. Power Energy Syst.},
+  volume  = {23},
+  number  = {2},
+  pages   = {129--135},
+  year    = {2001},
+  doi     = {10.1016/S0142-0615(00)00040-5}
+}
+
+@article{baran1989reconfig,
+  author  = {Baran, M. E. and Wu, F. F.},
+  title   = {Network reconfiguration in distribution systems for loss reduction and load balancing},
+  journal = {IEEE Trans. Power Del.},
+  volume  = {4},
+  number  = {2},
+  pages   = {1401--1407},
+  year    = {1989},
+  doi     = {10.1109/61.25627}
+}
+
+% ---------- Books ----------
+@book{sallam2011distribution,
+  author    = {Sallam, A. A. and Malik, O. P.},
+  title     = {Electric Distribution Systems},
+  publisher = {Wiley-IEEE Press},
+  address   = {Hoboken, NJ, USA},
+  year      = {2011}
+}
+
+@book{kundur1994stability,
+  author    = {Kundur, P.},
+  title     = {Power System Stability and Control},
+  publisher = {McGraw-Hill},
+  address   = {New York, NY, USA},
+  year      = {1994}
+}
+
+@article{ackermann2001dg,
+  author  = {Ackermann, T. and Andersson, G. and S\"{o}der, L.},
+  title   = {Distributed generation: a definition},
+  journal = {Electr. Power Syst. Res.},
+  volume  = {57},
+  number  = {3},
+  pages   = {195--204},
+  year    = {2001},
+  doi     = {10.1016/S0378-7796(01)00101-8}
+}
+
+% ---------- Metaheuristics ----------
+@inproceedings{kennedy1995pso,
+  author    = {Kennedy, J. and Eberhart, R.},
+  title     = {Particle swarm optimization},
+  booktitle = {Proc. IEEE Int. Conf. Neural Netw. (ICNN)},
+  volume    = {4},
+  pages     = {1942--1948},
+  year      = {1995},
+  doi       = {10.1109/ICNN.1995.488968}
+}
+
+@article{heidari2019hho,
+  author  = {Heidari, A. A. and Mirjalili, S. and Faris, H. and Aljarah, I. and Mafarja, M. and Chen, H.},
+  title   = {Harris hawks optimization: algorithm and applications},
+  journal = {Future Gener. Comput. Syst.},
+  volume  = {97},
+  pages   = {849--872},
+  year    = {2019},
+  doi     = {10.1016/j.future.2019.02.028}
+}
+
+@inproceedings{tanabe2013shade,
+  author    = {Tanabe, R. and Fukunaga, A.},
+  title     = {Success-history based parameter adaptation for differential evolution},
+  booktitle = {Proc. IEEE Congr. Evol. Comput. (CEC)},
+  pages     = {71--78},
+  year      = {2013},
+  doi       = {10.1109/CEC.2013.6557555}
+}
+
+@article{mirjalili2014gwo,
+  author  = {Mirjalili, S. and Mirjalili, S. M. and Lewis, A.},
+  title   = {Grey wolf optimizer},
+  journal = {Adv. Eng. Softw.},
+  volume  = {69},
+  pages   = {46--61},
+  year    = {2014},
+  doi     = {10.1016/j.advengsoft.2013.12.007}
+}
+
+@article{su2023rime,
+  author  = {Su, H. and Zhao, D. and Heidari, A. A. and Liu, L. and Zhang, X. and Mafarja, M. and Chen, H.},
+  title   = {{RIME}: a physics-based optimization},
+  journal = {Neurocomputing},
+  volume  = {532},
+  pages   = {183--214},
+  year    = {2023},
+  doi     = {10.1016/j.neucom.2023.02.010}
+}
+
+@article{storn1997de,
+  author  = {Storn, R. and Price, K.},
+  title   = {Differential evolution---a simple and efficient heuristic for global optimization over continuous spaces},
+  journal = {J. Glob. Optim.},
+  volume  = {11},
+  number  = {4},
+  pages   = {341--359},
+  year    = {1997},
+  doi     = {10.1023/A:1008202821328}
+}
+
+% ============================================================
+%  Reactive-power support, capacitor / D-STATCOM allocation,
+%  and energy-storage-backed converters
+% ============================================================
+
+@article{wolpert1997nfl,
+  author  = {Wolpert, D. H. and Macready, W. G.},
+  title   = {No free lunch theorems for optimization},
+  journal = {IEEE Trans. Evol. Comput.},
+  volume  = {1},
+  number  = {1},
+  pages   = {67--82},
+  year    = {1997},
+  doi     = {10.1109/4235.585893}
+}
+
+@article{derrac2011nonparametric,
+  author  = {Derrac, J. and Garc\'{i}a, S. and Molina, D. and Herrera, F.},
+  title   = {A practical tutorial on the use of nonparametric statistical tests as a methodology for comparing evolutionary and swarm intelligence algorithms},
+  journal = {Swarm Evol. Comput.},
+  volume  = {1},
+  number  = {1},
+  pages   = {3--18},
+  year    = {2011},
+  doi     = {10.1016/j.swevo.2011.02.002}
+}
+
+@article{georgilakis2013dgplacement,
+  author  = {Georgilakis, P. S. and Hatziargyriou, N. D.},
+  title   = {Optimal distributed generation placement in power distribution networks: models, methods, and future research},
+  journal = {IEEE Trans. Power Syst.},
+  volume  = {28},
+  number  = {3},
+  pages   = {3420--3428},
+  year    = {2013},
+  doi     = {10.1109/TPWRS.2012.2237043}
+}
+
+@article{ng2000capacitor,
+  author  = {Ng, H. N. and Salama, M. M. A. and Chikhani, A. Y.},
+  title   = {Classification of capacitor allocation techniques},
+  journal = {IEEE Trans. Power Del.},
+  volume  = {15},
+  number  = {1},
+  pages   = {387--392},
+  year    = {2000},
+  doi     = {10.1109/61.847278}
+}
+
+@article{sirjani2017dstatcom,
+  author  = {Sirjani, R. and Rezaee Jordehi, A.},
+  title   = {Optimal placement and sizing of distribution static compensator ({D-STATCOM}) in electric distribution networks: A review},
+  journal = {Renew. Sustain. Energy Rev.},
+  volume  = {77},
+  pages   = {688--694},
+  year    = {2017},
+  doi     = {10.1016/j.rser.2017.04.035}
+}
+
+@article{devi2014dstatcom,
+  author  = {Devi, S. and Geethanjali, M.},
+  title   = {Optimal location and sizing determination of distributed generation and {DSTATCOM} using particle swarm optimization algorithm},
+  journal = {Int. J. Electr. Power Energy Syst.},
+  volume  = {62},
+  pages   = {562--570},
+  year    = {2014},
+  doi     = {10.1016/j.ijepes.2014.05.015}
+}
+
+@article{taher2014dstatcom,
+  author  = {Taher, S. A. and Afsari, S. A.},
+  title   = {Optimal location and sizing of {DSTATCOM} in distribution systems by immune algorithm},
+  journal = {Int. J. Electr. Power Energy Syst.},
+  volume  = {60},
+  pages   = {34--44},
+  year    = {2014},
+  doi     = {10.1016/j.ijepes.2014.02.020}
+}
+
+@article{zeraati2018bess,
+  author  = {Zeraati, M. and Hamedani Golshan, M. E. and Guerrero, J. M.},
+  title   = {Distributed control of battery energy storage systems for voltage regulation in distribution networks with high {PV} penetration},
+  journal = {IEEE Trans. Smart Grid},
+  volume  = {9},
+  number  = {4},
+  pages   = {3582--3593},
+  year    = {2018},
+  doi     = {10.1109/TSG.2016.2636217}
+}
+
+@article{kabir2014pvbess,
+  author  = {Kabir, M. N. and Mishra, Y. and Ledwich, G. and Dong, Z. Y. and Wong, K. P.},
+  title   = {Coordinated control of grid-connected photovoltaic reactive power and battery energy storage systems to improve the voltage profile of a residential distribution feeder},
+  journal = {IEEE Trans. Ind. Informat.},
+  volume  = {10},
+  number  = {2},
+  pages   = {967--977},
+  year    = {2014},
+  doi     = {10.1109/TII.2014.2299336}
+}
+
+@article{molina2011statcom_ess,
+  author  = {Molina, M. G. and Mercado, P. E.},
+  title   = {Power flow stabilization and control of microgrid with wind generation by superconducting magnetic energy storage},
+  journal = {IEEE Trans. Power Electron.},
+  volume  = {26},
+  number  = {3},
+  pages   = {910--922},
+  year    = {2011},
+  doi     = {10.1109/TPEL.2010.2097609}
+}
+
+@misc{ieee1547_2018,
+  author       = {{IEEE}},
+  title        = {{IEEE} Standard for Interconnection and Interoperability of Distributed Energy Resources with Associated Electric Power Systems Interfaces},
+  howpublished = {IEEE Std 1547-2018},
+  year         = {2018},
+  doi          = {10.1109/IEEESTD.2018.8332112}
+}
+
+@misc{ieee1159,
+  author       = {{IEEE}},
+  title        = {{IEEE} Recommended Practice for Monitoring Electric Power Quality},
+  howpublished = {IEEE Std 1159-2019},
+  year         = {2019},
+  doi          = {10.1109/IEEESTD.2019.8796486}
+}
+
+@misc{nema_mg1,
+  author       = {{National Electrical Manufacturers Association}},
+  title        = {Motors and Generators},
+  howpublished = {NEMA Standards Publication MG 1-2021, Part~14 (Effect of unbalanced voltage on the performance of polyphase induction motors)},
+  year         = {2021}
+}
+
+@article{ansi_c84,
+  author       = {{American National Standards Institute}},
+  title        = {American National Standard for Electric Power Systems and Equipment---Voltage Ratings (60~Hz)},
+  journal      = {ANSI C84.1},
+  year         = {2020}
+}
+
+
+% ============================================================
+%  Recent distribution Volt/VAR control and reactive-power
+%  planning literature (2023-2026)
+% ============================================================
+
+@article{rahman2024mpc,
+  author  = {Rahman, D. M. and Ganguly, S.},
+  title   = {Voltage regulation and energy loss minimization for distribution networks with high {PV} penetration and {EV} charging stations using dual-stage model predictive control},
+  journal = {Sustain. Energy Grids Netw.},
+  volume  = {40},
+  pages   = {101529},
+  year    = {2024},
+  doi     = {10.1016/j.segan.2024.101529}
+}
+
+@article{dar2024ccmpc,
+  author  = {Dar, M. and Ganguly, S.},
+  title   = {Voltage regulation and loss minimization of active distribution networks with uncertainties using chance-constrained model predictive control},
+  journal = {IEEE Trans. Power Syst.},
+  volume  = {40},
+  number  = {3},
+  pages   = {2737--2749},
+  year    = {2025},
+  doi     = {10.1109/TPWRS.2024.3504532}
+}
+
+@article{zhan2024ofo,
+  author  = {Zhan, S. and Paterakis, N. G. and van den Akker, W. and van der Molen, A. and Morren, J. and Slootweg, H.},
+  title   = {Distributed online feedback optimization for real-time distribution system voltage regulation},
+  journal = {IEEE Trans. Power Syst.},
+  volume  = {40},
+  number  = {6},
+  pages   = {5325--5336},
+  year    = {2025},
+  doi     = {10.1109/TPWRS.2025.3585607}
+}
+
+@article{hua2025safedrl,
+  author  = {Hua, D. and Peng, F. and Liu, S. and Lin, Q. and Fan, J. and Li, Q.},
+  title   = {Coordinated {Volt/VAR} control in distribution networks considering demand response via safe deep reinforcement learning},
+  journal = {Energies},
+  volume  = {18},
+  number  = {2},
+  pages   = {333},
+  year    = {2025},
+  doi     = {10.3390/en18020333}
+}
+
+@article{zheng2025marl,
+  author  = {Zheng, X. and Yu, S. and Cao, H. and Shi, T. and Xue, S. and Ding, T.},
+  title   = {Sensitivity-based heterogeneous ordered multi-agent reinforcement learning for distributed {Volt-Var} control in active distribution network},
+  journal = {IEEE Trans. Smart Grid},
+  volume  = {16},
+  number  = {3},
+  pages   = {2115--2126},
+  year    = {2025},
+  doi     = {10.1109/TSG.2025.3540416}
+}
+
+@article{estatcom2024egwo,
+  author  = {Mohammedi, R. D. and Kouzou, A. and Mosbah, M. and Souli, A. and Rodriguez, J. and Abdelrahem, M.},
+  title   = {Allocation and sizing of {DSTATCOM} with renewable energy systems and load uncertainty using enhanced gray wolf optimization},
+  journal = {Appl. Sci.},
+  volume  = {14},
+  number  = {2},
+  pages   = {556},
+  year    = {2024},
+  doi     = {10.3390/app14020556}
+}
+
+@article{pvdstatcom2025fixedvar,
+  author  = {Montoya, O. D. and Grisales-Nore\~{n}a, L. F. and Giral-Ram\'{i}rez, D. A.},
+  title   = {Enhancing distribution network performance with coordinated {PV} and {D-STATCOM} compensation under fixed and variable reactive power modes},
+  journal = {Technologies},
+  volume  = {14},
+  number  = {4},
+  pages   = {234},
+  year    = {2026},
+  doi     = {10.3390/technologies14040234}
+}
+
+@article{statcom2025cmes,
+  author  = {Hafaiedh, H. and Mahjoub, A. and Saoudi, Y. and Benamor, A. and Taouali, O. and Zidi, K. and Ghaban, W.},
+  title   = {Optimal location, sizing and technology selection of {STATCOM} for power loss minimization and voltage profile using multiple optimization methods},
+  journal = {Comput. Model. Eng. Sci.},
+  volume  = {145},
+  number  = {1},
+  pages   = {571--596},
+  year    = {2025},
+  doi     = {10.32604/cmes.2025.071642}
+}
+
+@article{pareto2024dgcomp,
+  author  = {Fettah, K. and others},
+  title   = {A {Pareto} strategy based on multi-objective optimal integration of distributed generation and compensation devices regarding weather and load fluctuations},
+  journal = {Sci. Rep.},
+  volume  = {14},
+  pages   = {10423},
+  year    = {2024},
+  doi     = {10.1038/s41598-024-61192-2}
+}
