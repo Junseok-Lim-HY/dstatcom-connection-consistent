@@ -124,7 +124,15 @@ to reproduce any reported result.
 The IEEE 37- and 123-node OpenDSS models under `data/raw/` are the IEEE PES
 distribution test feeders as distributed with OpenDSS.
 
+## Manuscript status
+
+The associated manuscript is **currently under review at IEEE Access** and has not yet
+been accepted or published. This repository is provided to support the peer-review
+process; the code, data, and reported numbers may still change as a result of review.
+A citable release will be tagged once the article is accepted.
+
 ## License and citation
 
 Released under the MIT License (see `LICENSE`). If you use this package, please cite
-the associated IEEE Access article; citation metadata is in `CITATION.cff`.
+the associated IEEE Access article — **currently under review** — using the citation
+metadata in `CITATION.cff`.

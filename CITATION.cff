@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this reproducibility package, please cite the associated article."
+message: "If you use this reproducibility package, please cite the associated article. NOTE: the article is currently under review at IEEE Access (not yet accepted or published)."
 title: "Connection-Consistent Planning and Volt/VAR Control of D-STATCOMs in Unbalanced Delta Feeders — reproducibility package"
 abstract: >-
   Source code, OpenDSS feeder models, input data, representative outputs, and an
@@ -45,5 +45,6 @@ preferred-citation:
       orcid: "https://orcid.org/0000-0001-5252-1455"
   journal: "IEEE Access"
   year: 2026
+  notes: "Manuscript under review at IEEE Access; not yet accepted or published."
   publisher:
     name: "IEEE"
