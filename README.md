@@ -131,10 +131,11 @@ distribution test feeders as distributed with OpenDSS.
 
 ## Manuscript status
 
-The associated manuscript is **currently under review at IEEE Access** and has not yet
-been accepted or published. This repository is provided to support the peer-review
-process; the code, data, and reported numbers may still change as a result of review.
-A citable release will be tagged once the article is accepted.
+The associated manuscript is **currently under review at IEEE Access**
+(manuscript ID **Access-2026-36958**, submitted July 2026) and has not yet been
+accepted or published. This repository is provided to support the peer-review process;
+the code, data, and reported numbers may still change as a result of review. A citable
+release will be tagged once the article is accepted.
 
 ## License and citation
 
