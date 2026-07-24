@@ -1,8 +1,13 @@
 # Connection-Consistent Planning and Volt/VAR Control of D-STATCOMs in Unbalanced Delta Feeders
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21535356.svg)](https://doi.org/10.5281/zenodo.21535356)
+
 Reproducibility package for the IEEE Access manuscript
 *"Connection-Consistent Planning and Volt/VAR Control of D-STATCOMs in Unbalanced
-Delta Feeders"* (J. Lim and S. Bae).
+Delta Feeders"* (J. Lim, S. Kang, and S. Bae).
+
+Archived on Zenodo — cite the concept DOI [10.5281/zenodo.21535356](https://doi.org/10.5281/zenodo.21535356),
+which always resolves to the latest version.
 
 The source code, the OpenDSS feeder models, the input data, and representative output
 files required to reproduce the reported results are provided here. An automated

@@ -19,7 +19,15 @@ authors:
     given-names: Sungwoo
     orcid: "https://orcid.org/0000-0001-5252-1455"
     affiliation: "Department of Electrical Engineering, Hanyang University, Seoul, South Korea"
-version: "1.0"
+version: "v1.0.1"
+doi: "10.5281/zenodo.21535356"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21535356"
+    description: "Concept DOI (always resolves to the latest version)"
+  - type: doi
+    value: "10.5281/zenodo.21535357"
+    description: "Version DOI for release v1.0.1"
 date-released: "2026-07-24"
 license: MIT
 url: "https://github.com/Junseok-Lim-HY/dstatcom-connection-consistent"
