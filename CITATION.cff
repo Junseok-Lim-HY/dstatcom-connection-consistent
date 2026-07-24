@@ -12,6 +12,9 @@ authors:
     given-names: Junseok
     orcid: "https://orcid.org/0009-0004-8400-6561"
     affiliation: "Department of Electrical Engineering, Hanyang University, Seoul, South Korea"
+  - family-names: Kang
+    given-names: Seungwan
+    affiliation: "Department of Electrical Engineering, Hanyang University, Seoul, South Korea"
   - family-names: Bae
     given-names: Sungwoo
     orcid: "https://orcid.org/0000-0001-5252-1455"
@@ -35,6 +38,8 @@ preferred-citation:
     - family-names: Lim
       given-names: Junseok
       orcid: "https://orcid.org/0009-0004-8400-6561"
+    - family-names: Kang
+      given-names: Seungwan
     - family-names: Bae
       given-names: Sungwoo
       orcid: "https://orcid.org/0000-0001-5252-1455"
