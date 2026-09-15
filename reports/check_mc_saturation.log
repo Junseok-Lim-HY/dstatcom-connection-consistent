@@ -1,0 +1,27 @@
+QMAX per device: [393.6, 249.2, 398.5] sum=1041.3
+monitored buses: 25
+
+=== sigma_phase=0.04 sigma_load=0.05  (400 draws) ===
+  violating draws: 11 (2.75%)
+  draws where all three controllers agree on violate/not: 400 / 400
+  in violating draws: droop at full output 11/11, schedule at full output 11/11
+  sample of violating draws:
+    hour 19 lam=1.340 | fixed 1041.3 (minv 0.94507) | sched 1041.3 (minv 0.94507) | droop 1041.3 (minv 0.94507)
+    hour 19 lam=1.340 | fixed 1041.3 (minv 0.94251) | sched 1041.3 (minv 0.94251) | droop 1041.3 (minv 0.94251)
+    hour 20 lam=1.260 | fixed 1041.3 (minv 0.94370) | sched 1041.3 (minv 0.94370) | droop 1041.3 (minv 0.94370)
+    hour 19 lam=1.340 | fixed 1041.3 (minv 0.94792) | sched 1041.3 (minv 0.94792) | droop 1041.3 (minv 0.94792)
+    hour 19 lam=1.340 | fixed 1041.3 (minv 0.94667) | sched 1041.3 (minv 0.94667) | droop 1041.3 (minv 0.94667)
+  draws where fixed and droop give a different min voltage: 177 / 400
+
+=== sigma_phase=0.06 sigma_load=0.08  (400 draws) ===
+  violating draws: 16 (4.00%)
+  draws where all three controllers agree on violate/not: 400 / 400
+  in violating draws: droop at full output 16/16, schedule at full output 16/16
+  sample of violating draws:
+    hour 18 lam=1.280 | fixed 1041.3 (minv 0.94584) | sched 1041.3 (minv 0.94584) | droop 1041.3 (minv 0.94584)
+    hour 20 lam=1.260 | fixed 1041.3 (minv 0.94709) | sched 1041.3 (minv 0.94709) | droop 1041.3 (minv 0.94709)
+    hour 20 lam=1.260 | fixed 1041.3 (minv 0.94722) | sched 1041.3 (minv 0.94723) | droop 1041.3 (minv 0.94723)
+    hour 19 lam=1.340 | fixed 1041.3 (minv 0.94426) | sched 1041.3 (minv 0.94426) | droop 1041.3 (minv 0.94426)
+    hour 19 lam=1.340 | fixed 1041.3 (minv 0.94003) | sched 1041.3 (minv 0.94003) | droop 1041.3 (minv 0.94003)
+  draws where fixed and droop give a different min voltage: 188 / 400
+

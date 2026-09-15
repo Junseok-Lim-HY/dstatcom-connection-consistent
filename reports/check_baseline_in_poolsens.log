@@ -1,0 +1,14 @@
+acceptance: min_LL >= 0.956, max_LL <= 1.044, converged
+
+[1] canonical design in the pool-sensitivity evaluator
+    support ['735', '740', '741']  q=[393.6, 249.2, 398.5]  total=1041.3 kvar
+    min_LL=0.956543  max_LL=1.041840  converged=True  -> FEASIBLE
+
+[2] pool-sensitivity DE search re-run on the canonical support
+    seed 1 -> q=[412.9, 296.3, 338.9] total=1048.1 min_LL=0.956937 FEASIBLE
+    seed 2 -> q=[363.5, 390.2, 290.9] total=1044.6 min_LL=0.956800 FEASIBLE
+    seed 3 -> q=[358.8, 378.6, 306.5] total=1043.9 min_LL=0.952189 infeasible
+    best over seeds: total=1044.6 kvar FEASIBLE
+
+[3] reported pool winner re-evaluated
+    support ['711', '735', '740']  total=1043.1 kvar  min_LL=0.956633  max_LL=1.041917 -> FEASIBLE

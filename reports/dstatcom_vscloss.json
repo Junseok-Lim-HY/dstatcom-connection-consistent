@@ -1,0 +1,93 @@
+{
+  "method": "VSC converter-loss post-processing over the 24-hour operation profile",
+  "loss_model": {
+    "split_sw_a_b": [
+      0.4,
+      0.2,
+      0.4
+    ],
+    "S_rated_kvar": 450.0,
+    "per_device_split": "proportional to nameplate QMAX",
+    "L_tot_sweep": [
+      0.01,
+      0.015,
+      0.02,
+      0.025
+    ]
+  },
+  "hours": 24,
+  "controls": {
+    "fixed": {
+      "mean_total_kvar": 1041.3,
+      "feeder_loss_reduction_kWh": 335.5,
+      "by_L_tot": {
+        "L_tot=0.01": {
+          "converter_energy_loss_kWh": 259.8,
+          "net_daily_energy_kWh": 75.8
+        },
+        "L_tot=0.015": {
+          "converter_energy_loss_kWh": 389.6,
+          "net_daily_energy_kWh": -54.1
+        },
+        "L_tot=0.02": {
+          "converter_energy_loss_kWh": 519.5,
+          "net_daily_energy_kWh": -184.0
+        },
+        "L_tot=0.025": {
+          "converter_energy_loss_kWh": 649.4,
+          "net_daily_energy_kWh": -313.9
+        }
+      },
+      "breakeven_L_tot_frac": 0.0129,
+      "breakeven_converter_efficiency_pct": 98.708
+    },
+    "droop": {
+      "mean_total_kvar": 964.9,
+      "feeder_loss_reduction_kWh": 402.6,
+      "by_L_tot": {
+        "L_tot=0.01": {
+          "converter_energy_loss_kWh": 245.7,
+          "net_daily_energy_kWh": 156.9
+        },
+        "L_tot=0.015": {
+          "converter_energy_loss_kWh": 368.6,
+          "net_daily_energy_kWh": 34.0
+        },
+        "L_tot=0.02": {
+          "converter_energy_loss_kWh": 491.5,
+          "net_daily_energy_kWh": -88.9
+        },
+        "L_tot=0.025": {
+          "converter_energy_loss_kWh": 614.4,
+          "net_daily_energy_kWh": -211.7
+        }
+      },
+      "breakeven_L_tot_frac": 0.0164,
+      "breakeven_converter_efficiency_pct": 98.362
+    },
+    "coord": {
+      "mean_total_kvar": 681.1,
+      "feeder_loss_reduction_kWh": 487.5,
+      "by_L_tot": {
+        "L_tot=0.01": {
+          "converter_energy_loss_kWh": 199.1,
+          "net_daily_energy_kWh": 288.4
+        },
+        "L_tot=0.015": {
+          "converter_energy_loss_kWh": 298.6,
+          "net_daily_energy_kWh": 188.9
+        },
+        "L_tot=0.02": {
+          "converter_energy_loss_kWh": 398.2,
+          "net_daily_energy_kWh": 89.3
+        },
+        "L_tot=0.025": {
+          "converter_energy_loss_kWh": 497.7,
+          "net_daily_energy_kWh": -10.2
+        }
+      },
+      "breakeven_L_tot_frac": 0.0245,
+      "breakeven_converter_efficiency_pct": 97.551
+    }
+  }
+}
