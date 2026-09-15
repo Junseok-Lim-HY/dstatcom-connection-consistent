@@ -70,6 +70,16 @@ python scripts/run_dstatcom_proxysens.py             # local-proxy knee/damping 
 python scripts/run_ieee123_connsec.py                # IEEE 123-node connection audit -> reports/ieee123_connsec.json
 ```
 
+Analyses added in the IEEE Access revision (release v1.2-ieee-access-revision):
+
+```bash
+python scripts/run_dstatcom_poolsens.py              # candidate-pool and device-count sensitivity (Fig. 4; long run)
+python scripts/check_baseline_in_poolsens.py         # canonical 1041.3 kvar design re-evaluated in the pool evaluator
+python scripts/run_dstatcom_montecarlo.py            # phase-independent and spatial load Monte-Carlo (Fig. 10, Table 8)
+python scripts/check_mc_saturation.py                # controller saturation audit of the violating draws
+python scripts/run_dstatcom_vscloss.py               # converter-loss post-processing of the 24-hour dispatch (Fig. 11)
+```
+
 Note: `run_dstatcom_twostage_fullrecompile.py` recompiles the feeder from source at
 every objective evaluation (order of 10^5–10^6 power-flow solves per metric) and is
 the long-running step; the other scripts complete in seconds to a few minutes.
@@ -91,6 +101,8 @@ Rebuild the figures:
 ```bash
 python scripts/make_fig1_overall.py
 python scripts/make_dstatcom_figures.py
+python scripts/make_fig4_poolsens.py      # Fig. 4 of the revised manuscript
+python scripts/make_revision_figures.py   # overview plots of the three revision analyses
 ```
 
 ## Consistency test
@@ -117,6 +129,9 @@ python scripts/check_consistency.py
 | Near-peak sensitivity and thermal screen | `reports/dstatcom_robust_thermal.json` |
 | Proxy knee/damping sensitivity | `reports/dstatcom_proxysens.json` |
 | IEEE 123 connection audit | `reports/ieee123_connsec.json`, `reports/ieee123_terminal_audit.csv`, `reports/ieee123_control_state.csv` |
+| Candidate-pool and device-count sensitivity (revision) | `reports/dstatcom_poolsens.json`, `reports/check_baseline_in_poolsens.log` |
+| Load-uncertainty Monte-Carlo (revision) | `reports/dstatcom_montecarlo.json`, `reports/check_mc_saturation.log` |
+| Converter-loss post-processing (revision) | `reports/dstatcom_vscloss.json` |
 | Automated consistency test | `scripts/check_consistency.py` (checks stored outputs only) |
 
 The consistency test verifies cross-file numerical identities against the stored

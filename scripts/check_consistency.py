@@ -91,7 +91,8 @@ check("service limit" not in TEX, "no 'service limit' phrasing (use study-band l
 check("by either definition" not in TEX, "no 'by either definition' VUF/NEMA claim")
 check(not any(p in TEX for p in ("[DOI]", "[TAG]", "[HASH]", "zenodo.0000000")),
       "no DOI/TAG/HASH placeholders")
-check(has("publicly available") and has("GitHub"), "Data Availability states public GitHub availability")
+check(has("publicly available") and "zenodo.21535356" in TEX,
+      "Data Availability states public availability through the archived Zenodo deposit")
 check(has("NEMA LVUR") and has("LVUR(t)") or has("\\mathrm{LVUR}"), "NEMA LVUR computed and reported")
 check(has("study-band lower limit"), "study-band lower limit phrasing present")
 check("infeasible for the planning problem" in SUPP or "infeasible for planning" in SUPP,
@@ -108,7 +109,7 @@ check(has("near-equivalent") and has("not numerically resolved"),
 check(has("near-peak"), "lambda=1.28 relabelled as near-peak sensitivity (P0-7)")
 check(has(str(abe["n_feasible_lg"])) and has(str(abe["n_feasible_ll"])),
       f"ablation feasible counts {abe['n_feasible_lg']}/{abe['n_feasible_ll']} in Table VIII")
-check(has("no-action transfer case"), "IEEE 123 no-action transfer framing (P1-6)")
+check(has("no-action case"), "IEEE 123 no-action framing, scoped to the undervoltage criterion (P1-6)")
 check(not has("not a meaningful security"), "line-to-ground 'meaningless' claim removed (P0-2)")
 # --- 12th review ---
 check("stated enumeration budget" in TEX, "canonical scoped to stated enumeration budget (P0-1)")
@@ -130,7 +131,7 @@ check(has("\\sum_{i\\in\\mathcal S}\\Qmax_i"),
       "Stage B sizing uses installed rating Q^max over support S (17th P0-2)")
 check(has("numerically approximated") and has("\\rho_V=10^{5}"),
       "penalty coefficient/buffer defined for two-stage (17th P0-3)")
-check(has("idealized device-model") and has("equal nominal"),
+check(has("idealized") and has("equal-nominal-kvar capacitor"),
       "capacitor comparison reframed to equal nominal kvar / idealized (17th P0-4)")
 check(not has("not achieved under budget"),
       "Fig. 1 caption stale legend text removed (17th P0-5)")
