@@ -11,6 +11,8 @@ monitored buses: 25
     hour 20 lam=1.260 | fixed 1041.3 (minv 0.94370) | sched 1041.3 (minv 0.94370) | droop 1041.3 (minv 0.94370)
     hour 19 lam=1.340 | fixed 1041.3 (minv 0.94792) | sched 1041.3 (minv 0.94792) | droop 1041.3 (minv 0.94792)
     hour 19 lam=1.340 | fixed 1041.3 (minv 0.94667) | sched 1041.3 (minv 0.94667) | droop 1041.3 (minv 0.94667)
+  hours of ALL violating draws (hour: count): {18: 1, 19: 9, 20: 1}
+  load multipliers of ALL violating draws: [1.26, 1.28, 1.34]
   draws where fixed and droop give a different min voltage: 177 / 400
 
 === sigma_phase=0.06 sigma_load=0.08  (400 draws) ===
@@ -23,5 +25,7 @@ monitored buses: 25
     hour 20 lam=1.260 | fixed 1041.3 (minv 0.94722) | sched 1041.3 (minv 0.94723) | droop 1041.3 (minv 0.94723)
     hour 19 lam=1.340 | fixed 1041.3 (minv 0.94426) | sched 1041.3 (minv 0.94426) | droop 1041.3 (minv 0.94426)
     hour 19 lam=1.340 | fixed 1041.3 (minv 0.94003) | sched 1041.3 (minv 0.94003) | droop 1041.3 (minv 0.94003)
+  hours of ALL violating draws (hour: count): {17: 1, 18: 3, 19: 9, 20: 3}
+  load multipliers of ALL violating draws: [1.16, 1.26, 1.28, 1.34]
   draws where fixed and droop give a different min voltage: 188 / 400
 

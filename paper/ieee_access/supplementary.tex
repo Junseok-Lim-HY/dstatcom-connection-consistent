@@ -202,8 +202,10 @@ winners are not seed-certified.
 The per-device converter currents are reported as \emph{operating currents} only; no
 independent hardware current or apparent-power limit is imposed in the planning model,
 so the derived benchmark $I^{\mathrm{ben}}_i$ (from the installed kvar at
-\SI{0.95}{pu}) is a reporting reference rather than a nameplate verification---a device
-sized in kvar satisfies it almost automatically above \SI{0.95}{pu}. At the peak the
+\SI{0.95}{pu}) is a reporting reference rather than a nameplate verification. In the balanced
+approximation a device operating within its kvar limit stays within it at line-to-line
+voltages of at least \SI{0.95}{pu}; this is a reference relation only, and the unbalanced
+per-conductor currents follow (3) of the main article. At the peak the
 per-device operating currents are \SIlist{48.2;30.6;48.8}{A} against the derived
 benchmarks \SIlist{49.8;31.6;50.5}{A}, matching Table~4 of the main article
 (maximum operating \SI{48.8}{A} versus benchmark \SI{50.5}{A}); a
@@ -220,11 +222,35 @@ capacity and reactive support.
 \section{Data-Availability Manifest}
 \label{ssec:manifest}
 Table~\ref{tab:manifest} lists the analysis steps, what each regenerates from raw
-inputs, and the artifacts the consistency test checks (without re-optimizing). The
-corresponding scripts and their exact filenames are provided in the accompanying
-GitHub repository (see the main article's Data Availability statement).
+inputs, and the artifacts or values it is checked against (without re-optimizing). The
+corresponding scripts, inputs, and outputs are archived in the reproducibility deposit
+cited in the main article's Data Availability statement (concept DOI
+10.5281/zenodo.21535356; the version underlying this revision is the archived release v1.3-ieee-access-revision).
+Table~\ref{tab:groups} lists the load-object-to-group mapping used by the Monte-Carlo of
+Fig.~10 of the main article.
+
+\begin{table}[!t]
+\setcounter{table}{4}
+\caption{Load-Object-to-Group Mapping Used in the Monte-Carlo (IEEE 37-Node)}
+\label{tab:groups}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{3pt}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.23\columnwidth} >{\raggedright\arraybackslash}p{0.73\columnwidth}@{}}
+\toprule
+\textbf{Group $g$} & \textbf{Load objects (bus connection)} \\
+\midrule
+1 (first node 1) & s701a, s714a, s718a, s729a, s733a, s737a, s738a, s742a, s744a (single-phase, branch $ab$); s728 (three-phase, whole object) \\
+2 (first node 2) & s701b, s714b, s722b, s724b, s725b, s731b, s736b, s742b (single-phase, branch $bc$) \\
+3 (first node 3) & s701c, s712c, s713c, s720c, s722c, s727c, s730c, s732c, s734c, s735c, s740c, s741c (single-phase, branch $ca$) \\
+\bottomrule
+\multicolumn{2}{@{}p{0.97\columnwidth}}{\footnotesize All 30 load objects are delta-connected. The group is the first node of the load's bus connection; each object carries one multiplier for its $P$ and $Q$, so the branches of the three-phase object are not perturbed separately. Source: \texttt{dstatcom\_mc\_load\_groups.csv}.} \\
+\end{tabular}
+\end{table}
 
 \begin{table*}[!t]
+\setcounter{table}{3}
 \caption{Reproduction Manifest (Main-Article Tables/Figures)}
 \label{tab:manifest}
 \centering
@@ -233,7 +259,7 @@ GitHub repository (see the main article's Data Availability statement).
 \scriptsize
 \begin{tabular}{@{}>{\scriptsize\raggedright\arraybackslash}p{0.365\textwidth} >{\raggedright\arraybackslash}p{0.30\textwidth} >{\raggedright\arraybackslash}p{0.24\textwidth}@{}}
 \toprule
-\textbf{Analysis step} & \textbf{Regenerates from raw inputs} & \textbf{Checked by consistency test} \\
+\textbf{Analysis step} & \textbf{Regenerates from raw inputs} & \textbf{Checked or key stored values} \\
 \midrule
 Two-stage LL/LG enumeration (single numerical source) & LL/LG two-stage enumeration (Table~\ref{tab:topdist}) & Adopted \SI{1041.3}{\kvar}; 120/98 counts; 23.6\% gap \\
 Canonical/ablation report assembly & Assembles the adopted canonical and ablation results (design table, LL/LG gap) from the two-stage output & Design buses, per-bus/total kvar, 23.6\% gap \\
@@ -243,6 +269,9 @@ Minimum-count search & Minimum feasible device-count search & 1-/2-device $\hat 
 Near-peak sensitivity and thermal screen & Exploratory near-peak scalar-load sensitivity; base/design head-line loading & 7\% violations; 122.1\% base vs 114.8\% design \\
 Proxy knee/damping sensitivity & Proxy knee/damping sensitivity & 27-setting capture range \\
 IEEE 123 connection audit & IEEE 123 connection audit & 0.9657 pu, bus 63 \\
+Candidate-pool and device-count sensitivity (Fig.~4) & \texttt{run\_dstatcom\_poolsens.py}: IEEE 37-node model; eligible buses $=$ all 37 three-phase buses except the source bus and bus 799, ranked by the worst line-to-line minimum over the screening load set; peak multiplier 1.34; DE seeds 1--3 (maxiter 25, population 10) $\rightarrow$ \texttt{dstatcom\_poolsens.json} (37-bus ranking and $n=1,2,3$ results). \texttt{check\_baseline\_in\_poolsens.py} $\rightarrow$ \texttt{check\_baseline\_in\_poolsens.log} (canonical design re-evaluated). Figure: \texttt{make\_fig4\_poolsens.py} & None found for $n=1,2$; 119/120, 359/455, 852/1140 supports with a feasible vector found; canonical \SI{1041.3}{\kvar} feasible in the pool evaluator; pool search \SI{1043.1}{\kvar} \\
+Load-object Monte-Carlo (Fig.~10) & \texttt{run\_dstatcom\_montecarlo.py}: 24-hour multipliers $\lambda(t)$ from \texttt{dstatcom\_operation\_24h.csv}, base hour sampled uniformly (1/24), $(\sigma_g,\sigma_\ell)=(0.04,0.05)$ and $(0.06,0.08)$, seed 2026, $N=2000$ $\rightarrow$ \texttt{dstatcom\_montecarlo.json} (per-control summaries; per-draw proxy minimum voltage and VUF). \texttt{dstatcom\_mc\_load\_groups.csv} (object-to-group mapping, Table~\ref{tab:groups}); \texttt{dstatcom\_mc\_schedule.csv} ($\lambda(t)$ and pre-computed schedule $Q_i(t)$). \texttt{check\_mc\_saturation.py} $\rightarrow$ \texttt{check\_mc\_saturation.log}. Figure: \texttt{make\_fig10\_fig11.py} & 1.95\% and 2.75\% band violations; worst VUF 4.85\% and 5.23\%; 400-draw re-run: violating draws at hours 17--20 with all controls at full output \\
+Converter-loss post-processing (Fig.~11) & \texttt{run\_dstatcom\_vscloss.py}: hourly dispatch from \texttt{dstatcom\_operation\_24h.csv} (fixed, proxy, band-only coordinated); assumed rating $S_r=450$~kVA per converter (sensitivity only); $(f_{\mathrm{sw}},f_a,f_b)=(0.4,0.2,0.4)$; $L_{\mathrm{tot}}=1$--2.5\% $\rightarrow$ \texttt{dstatcom\_vscloss.json} (daily totals, break-even) and \texttt{dstatcom\_vscloss\_hourly.csv} (hourly per-device output and converter loss). Figure: \texttt{make\_fig10\_fig11.py} & Break-even 2.45\%, 1.64\%, 1.29\% (coordinated, proxy, fixed); net $+189$, $+34$, $-54$~kWh at 1.5\% \\
 Figure generation & All figures & Figure/table numbers \\
 Automated consistency test & \emph{Checks} stored outputs only & (runs all checks) \\
 \bottomrule
@@ -253,5 +282,6 @@ intermediate power-flow dumps, which are not required to reproduce any reported
 result.} \\
 \end{tabular}
 \end{table*}
+
 
 \end{document}

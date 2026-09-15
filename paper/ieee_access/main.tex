@@ -141,9 +141,9 @@ shows that controllable reactive dispatch reduces daily loss by
 \SIrange{2.2}{5.1}{\%} relative to fixed output; the scope is steady-state,
 one-quadrant reactive support, and transferability is checked on the mixed IEEE
 123-node feeder. \rev{The design establishes voltage feasibility; feeder thermal reinforcement and
-independent converter current limits are outside the planning model. Its robustness to
-the candidate-pool size and to
-phase-independent, spatial load uncertainty, and the effect of converter switching
+independent converter current limits are outside the planning model. Its sensitivity to
+the candidate-pool size and to a load-object uncertainty model with group-shared and
+idiosyncratic components, and the effect of converter switching
 and conduction losses on the net benefit, are additionally quantified.}
 \end{abstract}
 
@@ -548,11 +548,11 @@ dispatched output $Q_i(t)$ is bounded by
 \label{eq:qbound}
 \end{equation}
 Because active power is set to zero in this planning model, $\Qmax_i$ is
-interpreted as the available reactive-power rating rather than as a full
-four-quadrant converter capability. Equation~\eqref{eq:qbound} restricts the
-device to \emph{one-quadrant} (capacitive) reactive support; a four-quadrant
-device that could also absorb reactive power ($-\Qmax_i\le Q_i\le\Qmax_i$)
-subject to an apparent-power limit is left to future work. Because $\mathrm{kW}=0$,
+interpreted as the available reactive-power rating. Equation~\eqref{eq:qbound} restricts the
+device to capacitive (injection-only) reactive support. \rev{Two extensions are distinct and
+both are left to future work: bidirectional reactive operation at \mbox{$P_i=0$}
+(\mbox{$-\Qmax_i\le Q_i\le\Qmax_i$}), and full \mbox{$P$--$Q$} four-quadrant operation subject
+to an apparent-power limit, which requires an energy-storage- or DC-source-backed converter.} Because $\mathrm{kW}=0$,
 holding a constant reactive output draws more current as the terminal voltage
 falls, so a kvar bound alone does not bound the current. For a balanced
 delta-connected reactive source the total output splits equally over the three
@@ -573,11 +573,13 @@ are read directly from the solved circuit; the balanced scalar
 $|I_i|=|Q_i|/(\sqrt3\,|V_{LL,i}|)$ is a secondary check. For each device we define a
 \emph{derived current benchmark} from its own installed output,
 $\Iben_i=\Qmax_i/(\sqrt3\,V_{\!\downarrow}V_{LL,i})$ at the lower band edge
-$V_{\!\downarrow}=\SI{0.95}{pu}$. Because the balanced current scales as
-$|Q_i|/(\sqrt3\,V_{LL,i})$, a device sized in kvar satisfies
-$\max_\phi|\underline I_{i,\phi}(t)|\le\Iben_i$ almost automatically at any voltage
-above \SI{0.95}{pu}; the check is therefore a near-trivial post-design sanity
-statement, \emph{not} a binding constraint and not a contribution. Consequently the
+$V_{\!\downarrow}=\SI{0.95}{pu}$. \rev{In the balanced approximation the current scales as
+\mbox{$|Q_i|/(\sqrt3\,V_{LL,i})$}, so a device operating within \mbox{$\Qmax_i$} at a
+line-to-line voltage of at least \mbox{\SI{0.95}{pu}} stays within \mbox{$\Iben_i$}. This
+is a reference relation for balanced conditions only, not a guarantee for unbalanced
+operation, whose per-conductor currents are evaluated with \mbox{\eqref{eq:iconv}}.} The
+check is therefore a post-design reporting statement, \emph{not} a binding constraint
+and not a contribution. Consequently the
 per-device currents reported in this paper are \emph{operating currents} only: no
 independent hardware current or apparent-power limit is imposed in the present
 planning model, and the derived benchmark is \emph{not} a nameplate-rating
@@ -783,7 +785,8 @@ count or the installed capacity. Accordingly, the reported three-device result s
 be interpreted as the smallest feasible count found within the prescreened ten-bus
 pool under the stated search protocol; \rev{an explicit candidate-pool sensitivity
 (Section~\mbox{\ref{sec:poolsens}}) confirms that widening the pool to fifteen or twenty
-buses changes neither the minimum device count nor the least-capacity support.}
+buses changes neither the minimum device count found under the stated protocol nor the
+best known least-capacity support.}
 
 \subsection{Support Selection and Sizing Optimization}
 \label{sec:sizing}
@@ -1443,7 +1446,7 @@ U_{\mathrm{avg}}&=\tfrac13\bigl(U_{ab}+U_{bc}+U_{ca}\bigr),\\
 
 \begin{table}[!t]
 	\caption{\rev{Maximum Sequence VUF and NEMA Line-Voltage-Unbalance Rate (LVUR) over the
-		24-Hour Profile (IEEE 37-Node, \mbox{\SI{1041.3}{\kvar}} Design)}}
+		Deterministic 24-Hour Profile (IEEE 37-Node, \mbox{\SI{1041.3}{\kvar}} Design)}}
 	\label{tab:vuf}
 	\centering
 	\renewcommand{\arraystretch}{1.2}
@@ -1494,8 +1497,8 @@ constant-$Q$ scope of this study.
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=\textwidth]{Fig10.pdf}
-\caption{\rev{Phase-independent and spatial Monte-Carlo (\mbox{$N=2000$}) at the
-stressed spread \mbox{$(\sigma_\phi,\sigma_\ell)=(0.06,0.08)$}.
+\caption{\rev{Load-object Monte-Carlo with group-shared and idiosyncratic components
+(\mbox{$N=2000$}) at the stressed spread \mbox{$(\sigma_g,\sigma_\ell)=(0.06,0.08)$}.
 (a) Minimum line-to-line voltage under the reactive local proxy; the band is breached
 in \mbox{2.75\%} of draws. (b) The three controls coincide on feasibility but differ
 in mean injected reactive power and mean feeder loss.}}
@@ -1521,54 +1524,61 @@ violating tail while the mean (\SI{0.003}{pu}) is lifted by a few large exceedan
 violating terminals at that realization, e.g.\ several terminals a few hundredths
 of a pu below the limit at the most stressed draw, not a daily energy).
 Because $\varepsilon_s$ scales the whole feeder uniformly, this is a single-scalar
-sensitivity, not a full stochastic validation---\rev{the phase-independent and
-spatial Monte-Carlo study described next removes the single-multiplier restriction,
+sensitivity, not a full stochastic validation---\rev{the load-object
+Monte-Carlo described next relaxes the single-multiplier restriction,
 while correlated temporal and DER-coupled scenarios remain future work}---so it
 bounds the peak-load capacity margin rather than guaranteeing robustness.
 
-\rev{Second, a phase-independent and spatial Monte-Carlo study removes the
-single-multiplier restriction by perturbing every load independently in space and
-phase. Each of \mbox{$N=2000$} draws multiplies load \mbox{$\ell$} by}
+\rev{Second, a load-object Monte-Carlo with group-shared and idiosyncratic components
+relaxes the single-multiplier restriction. Each of \mbox{$N=2000$} draws multiplies load
+object \mbox{$\ell$} by}
 \begin{equation}
-\reveq{m_\ell = 1 + e_{\phi(\ell)} + e_\ell,\qquad
-e_\phi\sim\mathcal N(0,\sigma_\phi^2),\ \ e_\ell\sim\mathcal N(0,\sigma_\ell^2)}
+\reveq{m_\ell = 1 + e_{g(\ell)} + e_\ell,\qquad
+e_g\sim\mathcal N(0,\sigma_g^2),\ \ e_\ell\sim\mathcal N(0,\sigma_\ell^2)}
 \label{eq:mcerr}
 \end{equation}
-\rev{with three phase-systematic terms \mbox{$e_\phi$} (one per phase, drawn
-independently of one another) and a per-load idiosyncratic term \mbox{$e_\ell$},
-sampled about base points drawn from the daily profile. The two terms are independent
-\emph{draws}, but loads are not mutually independent: those assigned to the same phase
-group share \mbox{$e_{\phi}$} and are therefore correlated, which is what produces
-group-wise unbalance rather than a uniform scaling. Each load object in the OpenDSS
-model carries one multiplier applied to its $P$ and $Q$ together; the phase index
-\mbox{$\phi(\ell)$} is taken from the first node of the load's bus connection, so for a
-delta-connected load the multiplier is attached to that terminal as a whole and the
-three branches of a three-phase object are not perturbed separately. Draws use a fixed
-seed (2026) with \mbox{$N=2000$} per uncertainty level, multipliers are floored at
-\mbox{0.05} to exclude non-physical negative load, and every controller is evaluated on
-the \emph{same} draw so the comparison is paired. Over the installed
-\mbox{$\{735,740,741\}$} design the connection-voltage band is violated in
-\mbox{1.95\%} of draws at \mbox{$(\sigma_\phi,\sigma_\ell)=(0.04,0.05)$} and
-\mbox{2.75\%} at the stressed \mbox{$(0.06,0.08)$}; the worst line-to-line minima are
-\mbox{0.934} and \mbox{0.925} pu---the latter \mbox{0.025} pu below the assessment
-limit---with the fifth-percentile minimum at or above \mbox{0.955} pu, and the worst
-sequence VUF stays at
-\mbox{4.85\%} and \mbox{5.23\%}, consistent with the deterministic audit. Three
-controls---fixed full output, an open-loop forecast schedule that applies the
-hour's pre-computed set-points without observing the realized error, and the reactive
-local proxy---return the \emph{same} violation probability and worst voltage. This is
-not a modelling artefact: auditing the individual draws shows that every violating
-draw occurs in the evening hours 18--20 (load multiplier \mbox{1.26--1.34}) and that in
-those draws the schedule and the proxy both sit at full output
-(\mbox{1041.3 kvar}), so all three controls apply the same injection and reach the same
-voltage. Away from that tail the controls do differ---roughly \mbox{45\%} of all draws
-give a different minimum voltage under fixed and proxy control---and over the day they
-differ in efficiency (mean injected reactive power \mbox{1041}, \mbox{1007}, and
-\mbox{999} kvar and mean feeder loss \mbox{123.4}, \mbox{122.0}, and \mbox{121.7} kW at
-the nominal spread, Fig.~\mbox{\ref{fig:mc}}). Feasibility in the binding tail is
-therefore governed by the installed capacity rather than the control law. The residual
-violation rate is reported as observed; the design was sized on a deterministic peak
-snapshot and is not certified against a chance constraint.}
+\rev{with a group-shared term \mbox{$e_g$}, drawn independently for each of three groups,
+and a per-object idiosyncratic term \mbox{$e_\ell$}. The group index \mbox{$g(\ell)$} is the
+first node listed in the load object's bus connection, which is a connection label rather
+than a physical phase. On this feeder all 30 load objects are delta-connected; for the 29
+single-phase objects the group coincides with the \mbox{$ab$}, \mbox{$bc$}, or \mbox{$ca$}
+branch to which the load is connected, whereas the one three-phase object is assigned to a
+single group as a whole. Loads in the same group share \mbox{$e_g$} and are therefore
+correlated, and each load object carries one multiplier applied to its \mbox{$P$} and
+\mbox{$Q$} together, so the three branches of a three-phase object are not perturbed
+separately. Fully phase- and branch-independent variation is therefore not validated here,
+and the request for phase-independent variation is addressed only partially; the
+object-to-group mapping is given in Supplementary Table~S5. For each draw the base hour is
+sampled uniformly (probability \mbox{1/24} per hour) from the 24-hour profile and its load
+multiplier \mbox{$\lambda(t)$} is applied; draws use a fixed seed (2026) with
+\mbox{$N=2000$} per uncertainty level, multipliers are floored at \mbox{0.05} to exclude
+non-physical negative load, and every controller is evaluated on the \emph{same} draw so the
+comparison is paired. Over the installed \mbox{$\{735,740,741\}$} design the
+connection-voltage band is violated in \mbox{1.95\%} of draws at
+\mbox{$(\sigma_g,\sigma_\ell)=(0.04,0.05)$} and \mbox{2.75\%} at the stressed
+\mbox{$(0.06,0.08)$}; the worst line-to-line minima are \mbox{0.934} and \mbox{0.925}
+pu---the latter \mbox{0.025} pu below the assessment limit---with the fifth-percentile
+minimum at or above \mbox{0.955} pu. Over all draws and all monitored three-phase buses the
+worst sequence VUF is \mbox{4.85\%} and \mbox{5.23\%} and the worst LVUR \mbox{4.57\%} and
+\mbox{5.02\%}, identical for the three controls below; Table~\mbox{\ref{tab:vuf}} reports the
+deterministic 24-hour values. The three controls are fixed full output; an open-loop
+schedule whose hourly set-points are pre-computed by applying the local Volt/VAR law to the
+error-free load of that hour and then held without observing the realized error; and the
+reactive local proxy. The schedule is therefore distinct from the coordinated
+loss-minimizing reference of Section~\mbox{\ref{sec:coordrefs}} (mean injection
+\mbox{1007} versus \mbox{681} kvar). The three controls return the \emph{same} violation
+probability and worst voltage. A 400-draw re-run of the same sampling shows why: every
+violating draw falls in the evening hours 17--20 (load multiplier \mbox{1.16--1.34}; 18 of
+the 27 at hour 19), and in each of them the schedule and the proxy both sit at full output
+(\mbox{1041.3 kvar}), so all three controls apply the same injection in the binding tail.
+Away from that tail the controls do differ: in \mbox{44--47\%} of the re-run draws the fixed
+and proxy minimum voltages differ by more than \mbox{$10^{-6}$} pu, and over the day they
+differ in efficiency (mean injected reactive power \mbox{1041}, \mbox{1007}, and \mbox{999}
+kvar and mean feeder loss \mbox{123.4}, \mbox{122.0}, and \mbox{121.7} kW at the nominal
+spread, Fig.~\mbox{\ref{fig:mc}}). Feasibility in the binding tail is therefore governed by
+the installed capacity rather than the control law. The residual violation rate is reported
+as observed; the design was sized on a deterministic peak snapshot and is not certified
+against a chance constraint.}
 
 Third, a thermal screen confirms that voltage
 feasibility does not imply thermal feasibility: at the peak ($\lambda=1.34$) the
@@ -1584,12 +1594,11 @@ converter's peak per-phase terminal current (\SIlist{48.2;30.6;48.8}{A}) is
 reported against its own derived benchmark (Table~\ref{tab:design}). Line
 reinforcement is thus a distinct, complementary planning action, treated separately
 from the reactive-support design. \rev{Sizing the reactive support at a thermally
-overloaded snapshot is deliberate rather than inconsistent: $\lambda=1.34$ is an
-upper stress case, and reconductoring the head line would raise its ampacity while
-lowering its series impedance, relieving the overload and reducing the voltage drop
-that feeds the remote terminals. The capacity reported here is therefore the support
-required \emph{before} any such reinforcement, and re-optimizing the two in sequence
-is expected to reduce rather than increase it.}
+overloaded snapshot is deliberate: \mbox{$\lambda=1.34$} is an upper stress case, and the
+capacity reported here is the support required \emph{before} any line reinforcement.
+Reconductoring would change both the line impedance and the voltage sensitivities, so
+the reactive support would have to be re-optimized after such reinforcement; no
+reduction of the required capacity is claimed.}
 
 \subsection{Discussion}
 \subsubsection{Practical Implications}
@@ -1631,7 +1640,7 @@ and any line reinforcement should be assessed jointly or re-optimized in sequenc
 \rev{The loss reductions above are \emph{feeder} losses; a converter also dissipates
 switching and conduction losses that scale with its own output and are not captured
 by the power flow. To gauge their effect, a three-term device-loss model is applied post hoc to the
-24-hour dispatch. For a device of nameplate rating $S_r$ delivering $S$,}
+24-hour dispatch. For a device of assumed nameplate rating $S_r$ delivering apparent power $S$,}
 \begin{equation}
 \reveq{P_{\mathrm{loss}}(S)=L_{\mathrm{tot}}\,S_r\!\left(f_{\mathrm{sw}}
 +f_a\frac{S}{S_r}+f_b\Big(\frac{S}{S_r}\Big)^{\!2}\right),}
@@ -1639,10 +1648,23 @@ by the power flow. To gauge their effect, a three-term device-loss model is appl
 \end{equation}
 \rev{with $(f_{\mathrm{sw}},f_a,f_b)=(0.4,0.2,0.4)$ summing to unity, so that
 $P_{\mathrm{loss}}(S_r)=L_{\mathrm{tot}}S_r$ and a standby term of
-$0.4\,L_{\mathrm{tot}}S_r$ remains at $S=0$. Each device is taken at its hardware
-nameplate $S_r=\mbox{450 kvar}$ (three devices, \mbox{1350 kvar} installed), not at the
-dispatched total, and $S/S_r$ is used as a proxy for the current ratio, which neglects
-the terminal-voltage variation. The total loss at rating $L_{\mathrm{tot}}$ is swept
+$0.4\,L_{\mathrm{tot}}S_r$ remains at $S=0$. For the loss sensitivity analysis only, each
+converter is assigned an assumed nameplate rating of \mbox{$S_r=450$ kVA}. The
+reactive-power limits remain those in Table~\mbox{\ref{tab:design}}, summing to
+\mbox{1041.3 kvar}. This hardware-rating assumption is not an output of the
+placement-and-sizing optimization. Because \mbox{$P=0$} in this post-processing model, the
+apparent power is \mbox{$S=|Q|$} in kVA, taken from the hourly dispatch of
+Section~\mbox{\ref{sec:operation}}: fixed full output uses the per-device limits of
+Table~\mbox{\ref{tab:design}}, and for the controllable laws the hourly total is
+apportioned to the devices in proportion to those limits. The coordinated trajectory is
+the band-only reference of Section~\mbox{\ref{sec:coordrefs}}; the reserve-preserving
+trajectory differs from it in 4 of the 24 hours (by at most \mbox{53.5 kvar}) and is not
+used here. \mbox{$S/S_r$} is used as a proxy for the current ratio, which neglects the
+terminal-voltage variation. The \mbox{23.6\%} gap of Section~\mbox{\ref{sec:certify}}
+compares continuous reactive-capacity designs (\mbox{1287.4} versus \mbox{1041.3 kvar});
+if both designs were built from three \mbox{450 kVA} converters their purchased ratings
+would be equal, so that gap is not a difference in purchased hardware rating or equipment
+cost. The total loss at rating $L_{\mathrm{tot}}$ is swept
 from 1 to 2.5\% (Fig.~\mbox{\ref{fig:vscloss}}); no device datasheet is used to
 calibrate it, so the sweep is a sensitivity band rather than a manufacturer-specific
 figure. Because the coordinated and proxy laws inject far
@@ -1655,8 +1677,9 @@ the net daily energy is \mbox{$+189$} kWh for the coordinated reference and
 the break-even converter loss is \mbox{2.45\%} coordinated, \mbox{1.64\%} proxy, and
 \mbox{1.29\%} fixed. The ordering favours controllable dispatch---the same
 controllability that lowers feeder loss also limits the converter's own loss, and
-holding full output continuously is the first strategy to turn net-negative---but the
-net benefit is not positive across the whole swept range: within \mbox{1--2.5\%} the
+holding full output continuously is the first strategy to turn net-negative.
+Controllable dispatch preserves a positive net benefit over a wider range of assumed
+converter losses than fixed output, but not over the entire \mbox{1--2.5\%} range: the
 proxy turns negative above \mbox{1.64\%} and the coordinated reference above
 \mbox{2.45\%}. The absolute figures depend on the assumed loss
 split and rating and are reported to establish the sign and ordering of the effect,
@@ -1722,9 +1745,10 @@ Several limitations are stated explicitly, each pointing to a concrete extension
 consistent with current practice \cite{dar2024ccmpc,pvdstatcom2025fixedvar,statcom2025cmes}.
 \emph{Device model.} The study is limited to steady-state, reactive-support
 (STATCOM-mode) operation; active-power dispatch, the voltage- and
-active-power-dependent $P$--$Q$ capability curve, DC-link state of charge, and
+active-power-dependent $P$--$Q$ capability curve, \rev{DC-link voltage and energy dynamics}, and
 converter dynamics are not modeled, so the constant-$Q$ device is a lower-fidelity
-proxy for a full four-quadrant energy-storage converter.
+proxy \rev{for a D-STATCOM with its full dynamic behavior; energy-storage-backed operation
+with a battery state of charge is a separate extension.}
 \emph{\rev{Converter losses.}} \rev{Switching and conduction losses are not captured
 by the power flow; a post-hoc device-loss model (Fig.~\mbox{\ref{fig:vscloss}}) moves
 the net-benefit break-even to a converter loss of \mbox{1.3--2.5\%} depending on the
@@ -1734,10 +1758,10 @@ work.}
 single deterministic 24-hour profile scaled by one scalar multiplier is the sizing
 basis, so it omits phase-specific, spatial, and load/PV-correlated variation; the absolute
 violation magnitudes are illustrative, and a stochastic treatment with correlated,
-held-out scenarios is the natural next step. \rev{The phase-specific and spatial
-components are addressed directly by the phase-independent Monte-Carlo of
-Section~\mbox{\ref{sec:robust}} (\mbox{2--3\%} band violations), leaving correlated
-temporal and DER-coupled variation and scenario-based sizing as the remaining gap.} The voltage dependence $Q_{\mathrm{cap}}\propto V^2$ in \eqref{eq:cap} is a general
+held-out scenarios is the natural next step. \rev{A load-object Monte-Carlo with
+group-shared and idiosyncratic components is reported in Section~\mbox{\ref{sec:robust}}
+(\mbox{2--3\%} band violations); fully phase- and delta-branch-independent variation,
+correlated temporal and DER-coupled variation, and scenario-based sizing remain open.} The voltage dependence $Q_{\mathrm{cap}}\propto V^2$ in \eqref{eq:cap} is a general
 device-model property; however, the comparative voltage margins, loss reductions,
 and control benefits reported here remain specific to the feeder, load profile,
 device ratings, and native control states used in this case study.
@@ -1749,7 +1773,7 @@ generalization claim.
 \emph{Controller tuning.} The local-proxy knee $(V_\downarrow,V_\uparrow)=(1.00,1.03)$
 is a conventional Volt/VAR setting evaluated on the same profile. A
 $(V_\downarrow,V_\uparrow,\beta)$ sensitivity is reported in
-Section~\ref{sec:operation}: the band is held in all \num{27} settings, while the
+\rev{Section~\mbox{\ref{sec:certify}}}: the band is held in all \num{27} settings, while the
 loss-capture ratio ranges over \SIrange{9.7}{79.7}{\percent}, so the reported capture
 is knee-specific. Selecting the knee on held-out data is left for future work, as are
 measurement delay, filtering, converter inner-loop dynamics, \rev{switching
@@ -1841,16 +1865,18 @@ Two checks bound the result: a near-peak scalar-load sensitivity still violated 
 \SIrange{114.8}{116.3}{\percent} of ampacity (from \SI{122.1}{\percent} in the base
 case), so the outcome is a \emph{voltage-feasible reactive-support design}, not a
 complete network-feasible plan. \rev{Widening the candidate pool to twenty buses
-left the minimum device count and the best known least-capacity support unchanged,
-and a phase-independent, spatial load Monte-Carlo violated the band in \mbox{2--3\%}
-of draws, so the selection is insensitive to the pool cut-off while the residual
+left the minimum device count found under the stated protocol and the best known
+least-capacity support unchanged, and a load-object Monte-Carlo with group-shared and
+idiosyncratic components (not a fully phase-independent test) violated the band in
+\mbox{2--3\%} of draws, so the selection is insensitive to the pool cut-off while the residual
 violation rate reflects sizing on a deterministic peak snapshot rather than on a
 chance constraint. Once converter switching and conduction losses are included, the
 ordering of the control laws is preserved but the net benefit is not unconditional:
 the break-even converter loss is \mbox{2.45\%} for the coordinated reference and
 \mbox{1.64\%} for the local proxy, while fixed full output is already net-negative at
-\mbox{1.5\%}, so controllable dispatch is what keeps the net benefit positive over the
-swept range.} Applied with native controls active, the same
+\mbox{1.5\%}, so controllable dispatch preserves a positive net benefit over a wider
+range of assumed converter losses than fixed output, but not over the entire
+\mbox{1--2.5\%} range.} Applied with native controls active, the same
 evaluator found the regulated IEEE 123-node feeder not undervoltage-limited
 (connection-consistent minimum \SI{0.9657}{pu}), a no-action case for undervoltage
 support; a residual overvoltage of \SI{1.052}{pu} remains outside the scope of the
@@ -1868,7 +1894,7 @@ hourly load multipliers---are publicly available in an archived, citable deposit
 \mbox{\url{https://doi.org/10.5281/zenodo.21535356}} (concept DOI, always resolving to the
 latest version). \rev{The version underlying this revision---including the three
 analyses added here: candidate-pool sensitivity, the load-uncertainty Monte-Carlo, and
-the converter-loss post-processing---is the archived release v1.2-ieee-access-revision under the concept DOI above, which is
+the converter-loss post-processing---is the archived release v1.3-ieee-access-revision under the concept DOI above, which is
 the single deposit that reproduces the results reported in this article.} The per-script roles and the artifacts checked
 are itemized in Supplementary Table~S4 and the repository README. An automated
 consistency test verifies cross-file numerical identities against the stored outputs

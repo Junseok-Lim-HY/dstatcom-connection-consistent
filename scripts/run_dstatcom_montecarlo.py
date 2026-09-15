@@ -1,26 +1,29 @@
-"""Phase-independent, spatial Monte-Carlo robustness (resubmission, Reviewer 1-6 & 3-3).
+"""Load-object Monte-Carlo with group-shared and idiosyncratic components
+(resubmission, Reviewer 1-6 & 3-3).
 
-The submitted robustness study varied a single global load multiplier (one scalar
-per draw), which cannot answer the reviewers' request for INDEPENDENT PER-PHASE and
-SPATIAL load uncertainty. Here each load is perturbed by a two-component multiplier
+Each OpenDSS load object l is scaled by one multiplier applied to its P and Q together,
 
-    m_load = 1 + e_phase[phase(load)] + e_load ,
-    e_phase ~ N(0, sigma_phase)  (three independent phase-systematic draws A/B/C),
-    e_load  ~ N(0, sigma_load)   (per-load idiosyncratic / spatial),
+    m_l = 1 + e_g[g(l)] + e_l ,   e_g ~ N(0, sigma_g) for three groups,  e_l ~ N(0, sigma_l),
 
-so different phases and different feeder locations move independently (creating real
-unbalance), unlike the single-scalar model. Loads are edited in place (no per-sample
-recompile). For the fixed installed design {735,740,741} we compare three controls:
+where the group index g(l) is the first node listed in the load's bus connection (a connection
+label, not a physical phase). On the IEEE 37-node feeder all 30 load objects are delta-connected;
+for the 29 single-phase objects the group coincides with the ab / bc / ca branch, while the one
+three-phase object is scaled as a whole (reports/dstatcom_mc_load_groups.csv). Loads in a group
+are therefore correlated, and fully phase- or branch-independent variation is not tested.
+(The variable names e_phase / sigma_phase below refer to this group term.)
 
-    fixed      : Q held at nameplate (QMAX)
-    schedule   : Q fixed on the nominal (error-free) forecast (coordinated, open-loop)
-    droop      : local Volt/VAR reacting to each sample's measured line-to-line voltage
+For each draw the base hour is sampled uniformly (1/24) from the 24-hour profile. For the fixed
+installed design {735,740,741} three controls are compared on the same draw:
 
-For each control we report over N draws: line-to-line violation probability
-(min V < 0.95 pu), mean / worst / p95 / p99 minimum voltage, and the worst-bus line
-voltage unbalance rate LVUR and true unbalance factor VUF. A second sigma is run as a
-stress case. Assumptions (sigma values, control parameters) are stated; results are
-reported as-is.
+    fixed      : Q held at the per-device limits (QMAX)
+    schedule   : open-loop set-points pre-computed by applying the local Volt/VAR law to the
+                 error-free load of that hour (reports/dstatcom_mc_schedule.csv); this is not
+                 the coordinated loss-minimizing reference
+    droop      : local Volt/VAR law reacting to each draw's measured line-to-line voltage
+
+Reported over N draws: line-to-line violation probability, mean / worst / p05 minimum voltage,
+worst LVUR and sequence VUF over the monitored three-phase buses, mean injected reactive power
+and mean feeder loss. Assumptions are stated; results are reported as-is.
 """
 from __future__ import annotations
 import json

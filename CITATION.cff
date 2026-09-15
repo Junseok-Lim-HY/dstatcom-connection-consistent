@@ -19,7 +19,7 @@ authors:
     given-names: Sungwoo
     orcid: "https://orcid.org/0000-0001-5252-1455"
     affiliation: "Department of Electrical Engineering, Hanyang University, Seoul, South Korea"
-version: "v1.2-ieee-access-revision"
+version: "v1.3-ieee-access-revision"
 doi: "10.5281/zenodo.21535356"
 identifiers:
   - type: doi
@@ -27,8 +27,6 @@ identifiers:
     description: "Concept DOI (always resolves to the latest version)"
 date-released: "2026-09-15"
 license: MIT
-url: "https://github.com/Junseok-Lim-HY/dstatcom-connection-consistent"
-repository-code: "https://github.com/Junseok-Lim-HY/dstatcom-connection-consistent"
 keywords:
   - D-STATCOM
   - unbalanced distribution feeder

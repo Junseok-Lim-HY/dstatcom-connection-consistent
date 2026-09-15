@@ -91,7 +91,13 @@ def main():
                       % (r["hour"], r["lam"], r["fixed"]["qtot"], r["fixed"]["minv"],
                          r["schedule"]["qtot"], r["schedule"]["minv"],
                          r["droop"]["qtot"], r["droop"]["minv"]))
-        # how often do the controllers differ at all?
+        if viol:
+            hours = {}
+            for r in viol:
+                hours[r["hour"]] = hours.get(r["hour"], 0) + 1
+            print("  hours of ALL violating draws (hour: count): %s" % dict(sorted(hours.items())))
+            print("  load multipliers of ALL violating draws: %s" % sorted(set(round(r["lam"], 3) for r in viol)))
+        # how often do the controllers differ at all? (tolerance 1e-6 pu on the minimum line-to-line voltage)
         diff = sum(1 for r in rows if abs(r["fixed"]["minv"] - r["droop"]["minv"]) > 1e-6)
         print("  draws where fixed and droop give a different min voltage: %d / %d" % (diff, len(rows)))
         print()
