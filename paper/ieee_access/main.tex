@@ -1575,7 +1575,8 @@ Away from that tail the controls do differ: in \mbox{44--47\%} of the re-run dra
 and proxy minimum voltages differ by more than \mbox{$10^{-6}$} pu, and over the day they
 differ in efficiency (mean injected reactive power \mbox{1041}, \mbox{1007}, and \mbox{999}
 kvar and mean feeder loss \mbox{123.4}, \mbox{122.0}, and \mbox{121.7} kW at the nominal
-spread, Fig.~\mbox{\ref{fig:mc}}). Feasibility in the binding tail is therefore governed by
+spread; Fig.~\mbox{\ref{fig:mc}}(b) presents the corresponding comparison at the stressed
+spread). Feasibility in the binding tail is therefore governed by
 the installed capacity rather than the control law. The residual violation rate is reported
 as observed; the design was sized on a deterministic peak snapshot and is not certified
 against a chance constraint.}
@@ -1656,7 +1657,9 @@ placement-and-sizing optimization. Because \mbox{$P=0$} in this post-processing 
 apparent power is \mbox{$S=|Q|$} in kVA, taken from the hourly dispatch of
 Section~\mbox{\ref{sec:operation}}: fixed full output uses the per-device limits of
 Table~\mbox{\ref{tab:design}}, and for the controllable laws the hourly total is
-apportioned to the devices in proportion to those limits. The coordinated trajectory is
+apportioned to the devices in proportion to those limits. This proportional allocation is a
+post-processing approximation; the estimated converter losses may differ from those
+calculated using the actual device-level dispatch trajectories. The coordinated trajectory is
 the band-only reference of Section~\mbox{\ref{sec:coordrefs}}; the reserve-preserving
 trajectory differs from it in 4 of the 24 hours (by at most \mbox{53.5 kvar}) and is not
 used here. \mbox{$S/S_r$} is used as a proxy for the current ratio, which neglects the
@@ -1882,7 +1885,8 @@ evaluator found the regulated IEEE 123-node feeder not undervoltage-limited
 support; a residual overvoltage of \SI{1.052}{pu} remains outside the scope of the
 capacitive design. Future
 work should add the converter $P$--$Q$ capability and active-power dispatch,
-state-of-charge modeling, measured data, correlated uncertainty scenarios, and a
+\rev{DC-link voltage and energy dynamics, and battery state-of-charge modeling for an
+energy-storage-backed extension}, measured data, correlated uncertainty scenarios, and a
 mixed-integer optimality bound.
 
 \section*{Data Availability}
